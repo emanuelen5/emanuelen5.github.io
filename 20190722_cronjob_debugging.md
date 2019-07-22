@@ -18,9 +18,9 @@ This will then open up the crontab in an editor. Add the following to run a scri
 * * * * * /home/emaus/service_pi_led_function.sh
 ```
 
-**NB:** The cronjob is not updated until you *exit* the crontab editor. <br>
-**NB2:** Make sure the script to be run is executable 🤓 (`chmod +x <script>`)
-**NB3:** Make sure that the crontab has the correct PATH set up ([see](https://stackoverflow.com/a/2409369/4713758))
+**N.B. 1:** Make sure the script to be run is executable 🤓 (`chmod +x <script>`). [Debugged by using text logging](#logging-program-output). <br>
+**N.B. 2:** The cronjob is not updated until you *exit* the crontab editor. [Debugged by using crontab service logger](#enabling-crontab-service-logging). <br>
+**N.B. 3:** Make sure that the crontab has the correct PATH set up ([see this SO answer](https://stackoverflow.com/a/2409369/4713758), or [my final crontab](#crontab))
 
 ## Sunrise/sunset
 
@@ -53,7 +53,7 @@ A service like [iplocation.net](https://www.iplocation.net/) could then be used 
 
 ## Debugging
 
-### Simple echo
+### Logging program output
 
 Get the output of the command:
 
@@ -68,7 +68,7 @@ This might reveal the following:
 /home/emaus/service_pi_led_function.sh: 1: [: =: unexpected operator
 ```
 
-### Logging
+### Enabling crontab service logging
 Enable logging so you can see each time the command is invoked ([credits to this SO-answer](https://stackoverflow.com/a/34872041/4713758)).
 
 Ensuring the following line is in `/etc/rsyslog.conf`:
@@ -102,7 +102,7 @@ Jul 22 23:42:01 Emaus-pi3 CRON[17896]: (root) CMD (/home/emaus/service_pi_led_fu
 
 ## Crontab:
 ```crontab
-# crontab
+# sudo crontab -e
 
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
@@ -113,9 +113,13 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 ## Script for setting Raspberry Pi LED function at day/night
 
 ```bash
+# service_pi_led_function.sh
+
+# At day, user regular LED functionality
 if [ $(sunwait poll 59.3520323N 50.9725342E) = "DAY" ]; then
     sudo sh -c "echo mmc0 > /sys/class/leds/led0/trigger"
     sudo sh -c "echo input > /sys/class/leds/led1/trigger"
+# Turn of LEDs at night so they do not disturb my girlfriend
 else
     sudo sh -c "echo gpio > /sys/class/leds/led0/trigger"
     sudo sh -c "echo 0 > /sys/class/leds/led0/brightness"
