@@ -1,3 +1,7 @@
+---
+finished: true
+---
+
 # Controlling Raspberry Pi LEDs
 Taken from [Jeff Geerling: Controlling PWR and ACT LEDs on the Raspberry Pi](https://www.jeffgeerling.com/blogs/jeff-geerling/controlling-pwr-act-leds-raspberry-pi). I have tested this on my Raspberry Pi B+.
 

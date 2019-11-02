@@ -1,3 +1,7 @@
+---
+finished: true
+---
+
 # Resizing a Virtual Box image
 I decided to upgrade my Ubuntu installation from 16 to 18 but realized I had quite limited memory left on the disk. So I had to inevitably increase the size of the disk :)
 

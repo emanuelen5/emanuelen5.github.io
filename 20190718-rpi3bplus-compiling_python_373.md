@@ -1,3 +1,7 @@
+---
+finished: true
+---
+
 # Compiling Python 3.7.3 on Rasbperry Pi Jessie
 
 Building Python can be a breeze! [This guide has helped me in the past](https://www.scivision.dev/compile-install-python-beta-raspberry-pi/).
