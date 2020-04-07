@@ -5,7 +5,7 @@ I will set it up to have a user called `emaus` and hostname as `emaus-pi3`, but 
 
 ## SD card
 1. Write an image to the SD card with [Balena etcher](https://www.balena.io/etcher/) on Windows or [`dd`](https://www.raspberrypi.org/documentation/installation/installing-images/linux.md) on Linux.
-2. Add a file called *ssh* to the root of the boot partition to enable SSH directly after boot
+2. Add a file called *ssh* to the root of the **boot partition** to enable SSH directly after boot
 
 ## Raspberry Pi config
 3. SSH into pi with default user and password:
@@ -64,10 +64,55 @@ I will set it up to have a user called `emaus` and hostname as `emaus-pi3`, but 
     userdel: pi mail spool (/var/mail/pi) not found
     ```
 
+## SSH security
+13. Copy your public SSH keys to the file *.ssh/authorized_keys*:
+    ```bash
+    emaus@emaus-pi4:~ $ ssh-copy-id -i .ssh/id_rsa emaus@emaus-pi3.local
+    ```
+14. Make sure that SSH password authentication is disabled by editing the configuration file */etc/ssh/sshd_config*:
+    ```sshd
+    PermitRootLogin no
+    MaxAuthTries 1
+    PubkeyAuthentication yes
+    [...]
+
+    # To disable tunneled clear text passwords, change to no here!
+    PasswordAuthentication no
+    ```
+
+## Setting up additional security (fail2ban)
+15. Install fail2ban:
+    ```bash
+    emaus@emaus-pi3:~ $ sudo apt install fail2ban
+    emaus@emaus-pi3:~ $ sudo fail2ban-client status
+    Status
+    |- Number of jail:      1
+    `- Jail list:   sshd
+    emaus@emaus-pi3:~ $ sudo fail2ban-client status sshd
+    Status for the jail: sshd
+    |- Filter
+    |  |- Currently failed: 0
+    |  |- Total failed:     0
+    |  `- File list:        /var/log/auth.log
+    `- Actions
+       |- Currently banned: 0
+       |- Total banned:     0
+       `- Banned IP list:
+    ```
+16. Configure ssh filter by editing the file */etc/fail2ban/jail.d/defaults-debian.conf*:
+    ```ini
+    [sshd]
+    enabled = true
+    bantime = -1
+    findtime = 600
+    maxretry = 3
+    ignoreip = 192.168.0.0/24
+    ```
+
 ## Restoring files from an old Pi's SD card
 By attaching the old SD card to another Pi, through an USB to SD card reader, I can copy old files to my new Pi.
 
-13. Mount the partition that corresponds to the old root filesystem on the SD card as read-only ([see also previous post](20200405_backing_up_sd_card_from_crashed_pi.md)):
+17. Mount the partition that corresponds to the old root filesystem on the SD card as read-only ([see also previous post](20200405_backing_up_sd_card_from_crashed_pi.md)):
     ```bash
     emaus@emaus-pi4:~ $ lsblk
     NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -80,7 +125,7 @@ By attaching the old SD card to another Pi, through an USB to SD card reader, I 
     emaus@emaus-pi4:~ $ mkdir mounttest
     emaus@emaus-pi4:~ $ sudo mount -o ro /dev/sda2 mounttest/
     ```
-14. SCP files from the computer with the card reader (emaus-pi4) to the new pi (emaus-pi3):
+18. SCP files from the computer with the card reader (emaus-pi4) to the new pi (emaus-pi3):
     ```bash
     emaus@emaus-pi4:~/mounttest/home/emaus $ cd mounttest/home/emaus
     emaus@emaus-pi4:~/mounttest/home/emaus $ scp -r .ssh emaus@emaus-pi3.local:/home/emaus/.ssh
