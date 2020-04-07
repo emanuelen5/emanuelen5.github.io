@@ -57,11 +57,17 @@ I will set it up to have a user called `emaus` and hostname as `emaus-pi3`, but 
     [2020-04-06 20:31.58]  ~
     [Emanu.Emaus-XPS] ➤ ssh -X emaus@emaus-pi3.local
     ```
+12. Remove the `pi` user (all sessions with that user must first be logged out, including GUI if using regular Raspbian):
+    ```bash
+    emaus@emaus-pi3:~ $ sudo userdel -r pi
+    [sudo] password for emaus:
+    userdel: pi mail spool (/var/mail/pi) not found
+    ```
 
 ## Restoring files from an old Pi's SD card
 By attaching the old SD card to another Pi, through an USB to SD card reader, I can copy old files to my new Pi.
 
-12. Mount the partition that corresponds to the old root filesystem on the SD card as read-only ([see also previous post](20200405_backing_up_sd_card_from_crashed_pi.md)):
+13. Mount the partition that corresponds to the old root filesystem on the SD card as read-only ([see also previous post](20200405_backing_up_sd_card_from_crashed_pi.md)):
     ```bash
     emaus@emaus-pi4:~ $ lsblk
     NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -74,7 +80,7 @@ By attaching the old SD card to another Pi, through an USB to SD card reader, I 
     emaus@emaus-pi4:~ $ mkdir mounttest
     emaus@emaus-pi4:~ $ sudo mount -o ro /dev/sda2 mounttest/
     ```
-13. SCP files from the computer with the card reader (emaus-pi4) to the new pi (emaus-pi3):
+14. SCP files from the computer with the card reader (emaus-pi4) to the new pi (emaus-pi3):
     ```bash
     emaus@emaus-pi4:~/mounttest/home/emaus $ cd mounttest/home/emaus
     emaus@emaus-pi4:~/mounttest/home/emaus $ scp -r .ssh emaus@emaus-pi3.local:/home/emaus/.ssh
