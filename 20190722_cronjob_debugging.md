@@ -45,11 +45,27 @@ This could be combined with getting approximate location of your own IP address 
 E.g. [ipfy.org](https://www.ipfy.org) has an API for getting your public IP address, e.g.:
 
 ```bash
-echo $(curl 'https://api.ipify.org?format=text' -s)
+$ echo $(curl 'https://api.ipify.org?format=text' -s)
 80.216.68.127
 ```
 
-A service like [iplocation.net](https://www.iplocation.net/) could then be used for getting the actual approximate coordinates. However, I haven't managed to write any code for this yet.
+A service like [ipinfo.io](https://ipinfo.io/) can then be used for getting the approximate coordinates of the public IP. E.g.
+
+```bash
+$ curl ipinfo.io/8.8.8.8
+{
+  "ip": "8.8.8.8",
+  "hostname": "dns.google",
+  "city": "Mountain View",
+  "region": "California",
+  "country": "US",
+  "loc": "37.3860,-122.0838",
+  "org": "AS15169 Google LLC",
+  "postal": "94035",
+  "timezone": "America/Los_Angeles",
+  "readme": "https://ipinfo.io/missingauth"
+}
+```
 
 ## Debugging
 
