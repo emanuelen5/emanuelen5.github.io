@@ -1,0 +1,3 @@
+permalink: /:year-:week-:slug
+source: site
+destination: .build
