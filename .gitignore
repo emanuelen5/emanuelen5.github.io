@@ -1,1 +1,4 @@
 *.html
+_site/
+.jekyll-cache
+.build/
