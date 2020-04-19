@@ -27,6 +27,7 @@ jobs:
     - name: Create a commit
       run: |
         cd build
+        touch .nojekyll
         git init
         git config --local user.name "${GITHUB_ACTOR}"
         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
