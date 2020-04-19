@@ -30,7 +30,8 @@ jobs:
         git init
         git config --local user.name "${GITHUB_ACTOR}"
         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-        git commit -m "Built site fom commit $GITHUB_SHA" -a
+        git add .
+        git commit -m "Built site fom commit $GITHUB_SHA"
         git remote add github https://github.com/${GITHUB_REPOSITORY}.git
         git branch -u github/master
     - name: Push to master
