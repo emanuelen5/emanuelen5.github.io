@@ -2,7 +2,10 @@ name: Build and deploy site to Github Pages
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ gh-pages-deploy ]
+
+env:
+    BUILD_DIR: .build
 
 jobs:
   build:
@@ -13,7 +16,7 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    - name: Set up Ruby 2.6
+    - name: Set up Ruby
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.6
@@ -35,13 +38,12 @@ jobs:
         bundle install --jobs 4 --retry 3
     - name: Build site
       run: |
-        bundle exec jekyll build -d build
-    - name: Create a commit
+        make gh-pages
+    - name: 
       run: |
-        cd build
-        touch .nojekyll
+        cd ${BUILD_DIR}
         git init
-        git config --local user.name "Github Action autobuilder"
+        git config --local user.name "Github action builder"
         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
         git add .
         git commit -m "Built site fom commit $GITHUB_SHA"
@@ -55,4 +57,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: master
         force: true
-        directory: build
+        directory: ${BUILD_DIR}
