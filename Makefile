@@ -1,6 +1,6 @@
 build:
-	jekyll build
+	bundle exec jekyll build
 serve:
-	jekyll serve -w -H '*'
+	bundle exec jekyll serve -H '*'
 
 .PHONY:build serve
