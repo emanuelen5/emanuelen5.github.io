@@ -57,4 +57,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: master
         force: true
-        directory: ${BUILD_DIR}
+        directory: ${{ env.BUILD_DIR }}
