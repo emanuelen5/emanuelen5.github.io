@@ -13,24 +13,24 @@ The instructions below are split into separate parts depending on your host OS:
 1. Install PuTTY
 2. Configure a PuTTY session
     1. Add a new PuTTY session that points to the public IP/host name and port of your server that runs SSH. <br>
-       ![Adding a new PuTTY session](2020-04-14-proxy-putty-session.png)
+       ![Adding a new PuTTY session](proxy-putty-session.png)
     2. Set up the session to forward a port (e.g. 9001) to the server. Type in the local port that it should use, set it to dynamic (i.e. using the SSH tunnel's IP), and press **Add**. <br>
-       ![Configuring the session tunnel](2020-04-14-proxy-putty-tunnels.png)
+       ![Configuring the session tunnel](proxy-putty-tunnels.png)
     3. Make sure to save the session if you want to reuse it. Press **Open** to connect and authenticate. <br>
-       ![The session is now connected](2020-04-14-proxy-putty-connected.png)
+       ![The session is now connected](proxy-putty-connected.png)
     4. The tunnel is now set up and will stay open for as long as the PuTTY session is alive.
 
 ### Global proxy setup
 The proxy settings can be set globally through the *Internet Options* control panel
 
 1. Open the start menu and type **Internet Options** to find it. <br>
-   ![Internet Options](2020-04-14-proxy-internet-properties.png)
+   ![Internet Options](proxy-internet-properties.png)
 2. Go to **Connections** ➡️ **LAN settings**.
 3. Under **Proxy server**, check the box ☒ **Use a proxy server for your LAN**. <br>
-   ![Enable proxy server](2020-04-14-proxy-lan-settings.png)
+   ![Enable proxy server](proxy-lan-settings.png)
 4. Go to **Advanced**.
 5. Uncheck the box ☐ **Use the same proxy server for all protocols** and remove all pre-filled fields under the other protocols. Add `localhost:<port>` (i.e. `localhost:9001` in our example) to the **Socks** row. <br>
-   ![Proxy settings](2020-04-14-proxy-advanced-settings.png)
+   ![Proxy settings](proxy-advanced-settings.png)
 
 ## Linux local machine
 
