@@ -1,9 +1,5 @@
 ---
-layout: posts
-title:  "Blog posts"
+title: Emaus' blogsite
 ---
 
-{% for p in site.posts %}
-## [{{p.title}}]({{p.url}})
-
-{% endfor %}
+Welcome to my site.

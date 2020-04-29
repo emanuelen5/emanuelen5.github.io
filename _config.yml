@@ -3,6 +3,10 @@ source: site
 destination: .build
 defaults:
   - scope:
-      path: "" # an empty string here means all files in the project
+      path: ""
     values:
-      layout: "posts"
+      layout: "default"
+  - scope:
+      path: "_posts"
+    values:
+      layout: "post"
