@@ -1,5 +1,6 @@
 FLAGS?=
 BUILD_DIR?=.build
+PORT?=4000
 
 init: .install
 .install: Gemfile.lock Gemfile
@@ -16,6 +17,6 @@ clean:
 	rm -rf "${BUILD_DIR}" .jekyll-*
 
 serve:
-	bundle exec jekyll serve -H '*' ${FLAGS}
+	bundle exec jekyll serve -H '*:${PORT}' ${FLAGS}
 
 .PHONY:build serve gh-pages clean
