@@ -1,6 +1,11 @@
 FLAGS?=
 BUILD_DIR?=.build
 
+init: .install
+.install: Gemfile.lock Gemfile
+	bundle install
+	touch $@
+
 build:
 	bundle exec jekyll build -d ${BUILD_DIR} ${FLAGS}
 gh-pages: build
