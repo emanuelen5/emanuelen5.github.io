@@ -1,6 +1,14 @@
 permalink: /posts/:year-:month-:slug
 source: site
 destination: .build
+livereload: true
+url: "blog.cedernaes.com"
+timezone: Sweden/Stockholm
+strict_front_matter: True
+
+feed:
+    max_posts: 10
+
 defaults:
   - scope:
       path: ""
