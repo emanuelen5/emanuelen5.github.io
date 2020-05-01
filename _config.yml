@@ -5,6 +5,7 @@ livereload: true
 url: "blog.cedernaes.com"
 timezone: Sweden/Stockholm
 strict_front_matter: True
+title: "Emaus' blogsite"
 
 feed:
     max_posts: 10
