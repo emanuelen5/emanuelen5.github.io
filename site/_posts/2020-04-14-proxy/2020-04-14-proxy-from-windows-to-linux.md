@@ -53,6 +53,6 @@ export NO_PROXY=localhost,127.0.0.1,*.my.lan.domain
 
 ## Sources
 
-[1] https://itblogsec.com/how-to-make-socks-proxy-server-by-using-raspberry-pi/ <br>
-[2] https://www.reddit.com/r/raspberry_pi/comments/5ltq3h/rpi_as_a_socks_proxy_and_ssh_file_server_tutorial/ <br>
-[3] https://www.reddit.com/r/techsupport/comments/4j0l35/windows_10_route_all_traffic_through_socks5_proxy/ <br>
+[1] <https://itblogsec.com/how-to-make-socks-proxy-server-by-using-raspberry-pi/> <br>
+[2] <https://www.reddit.com/r/raspberry_pi/comments/5ltq3h/rpi_as_a_socks_proxy_and_ssh_file_server_tutorial/> <br>
+[3] <https://www.reddit.com/r/techsupport/comments/4j0l35/windows_10_route_all_traffic_through_socks5_proxy/> <br>

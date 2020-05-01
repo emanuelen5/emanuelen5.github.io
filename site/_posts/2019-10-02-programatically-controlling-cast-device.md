@@ -40,5 +40,5 @@ CastStatus(is_active_input=False, is_stand_by=True, volume_level=0.3000000119209
 ```
 
 ## MP4 link for youtube video
-If you want to get the mp4 link for a video on youtube, then you can use the following service http://youlink.epizy.com/?url=https://www.youtube.com/watch?v=%5BID%5D (taken from [this SO answer](https://stackoverflow.com/a/49687760/4713758)). These can be casted to home devices as well (only sound).
+If you want to get the mp4 link for a video on youtube, then you can use the following service <http://youlink.epizy.com/?url=https://www.youtube.com/watch?v=%5BID%5D> (taken from [this SO answer](https://stackoverflow.com/a/49687760/4713758)). These can be casted to home devices as well (only sound).
 

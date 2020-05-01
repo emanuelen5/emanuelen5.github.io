@@ -32,7 +32,7 @@ $ VBoxManage modifymedium "Ubuntu 18.04 LTS.vdi" --resize 30000
 This is the most complex step and where things can go wrong. We will use the GParted live CD to modify the newly created image.
 
 ### GParted live CD
-This is done using a GParted live CD. Download it from e.g. https://gparted.sourceforge.io/livecd.php and set up a new virtual machine that starts with it and the newly created image mounted.
+This is done using a GParted live CD. Download it from e.g. <https://gparted.sourceforge.io/livecd.php> and set up a new virtual machine that starts with it and the newly created image mounted.
 
 ### Remove SWAP partition
 First we will have to move the SWAP partition that is located after the main partition. We will completely remove it and then recreate it as it is otherwise blocking us from expanding the main paritition.
