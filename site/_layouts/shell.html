@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{{ page.title }}</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/default.css">
+    </head>
+    <body>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/posts/">Posts</a>
+        </nav>
+    </body>
+        {{ content }}
+    <footer>
+        &copy; {{site.time | date: "%Y" }} Erasmus Cedernaes
+    </footer>
+</html>

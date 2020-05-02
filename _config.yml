@@ -1,3 +1,12 @@
 permalink: /:year-:month-:slug
 source: site
 destination: .build
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+  - scope:
+      path: "_posts"
+    values:
+      layout: "post"

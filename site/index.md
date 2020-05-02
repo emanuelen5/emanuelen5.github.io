@@ -1,4 +1,5 @@
 ---
+title: Emaus' blogsite
 ---
 
-# Hello world
+Welcome to my site.
