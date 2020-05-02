@@ -17,6 +17,6 @@ clean:
 	rm -rf "${BUILD_DIR}" .jekyll-*
 
 serve:
-	bundle exec jekyll serve -H '*:${PORT}' ${FLAGS}
+	bundle exec jekyll serve -H '*' -P ${PORT} ${FLAGS}
 
 .PHONY:build serve gh-pages clean
