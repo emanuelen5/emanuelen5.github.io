@@ -10,12 +10,8 @@ Last updated: {{ page.last-modified-date | date: "%F %R" }}
     {{ content }}
 </section>
 <div class="container">
-	<div class="row justify-content-center">
-    {% if page.next %}
-        <div class="col-2"><a href="{{page.next.url}}">Newer post</a></div>
-    {% endif %}
-    {% if page.previous %}
-        <div class="col-2"><a href="{{page.previous.url}}">Older post</a></div>
-    {% endif %}
+	<div class="d-flex justify-content-center btn-group">
+		<a href="{{page.next.url}}"><label rel="next" class="btn btn-secondary {% if page.next == nil %}disabled{% endif %}">Newer post</label></a>
+		<a href="{{page.previous.url}}"><label rel="previous" class="btn btn-secondary {% if page.previous == nil %}disabled{% endif %}">Older post</label></a>
 	</div>
 </div>
