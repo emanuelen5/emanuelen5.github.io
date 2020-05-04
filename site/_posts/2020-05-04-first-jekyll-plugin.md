@@ -31,3 +31,10 @@ contents.xpath('//a').foreach { |a|
 # Escape the content of each each entry
 contents.children = CGI.escapeHTML(contents.children.to_s)
 ```
+
+[Modifying XML nodes]: https://nokogiri.org/tutorials/modifying_an_html_xml_document.html#modifying-nodes-and-attributes
+[Selecting nodes with XPath]: https://www.w3schools.com/xml/xpath_syntax.asp
+[Iterate through an array in Ruby]: https://stackoverflow.com/questions/310634/what-is-the-right-way-to-iterate-through-an-array-in-ruby
+[Suppress irb prints]: https://stackoverflow.com/questions/4678732/how-to-suppress-rails-console-irb-outputs
+[HTML codec]: https://stackoverflow.com/questions/1600526/how-do-i-encode-decode-html-entities-in-ruby
+[HTML a@rel attribute]: https://www.w3schools.com/tags/att_a_rel.asp
