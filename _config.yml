@@ -3,7 +3,7 @@ source: site
 destination: .build
 livereload: true
 url: "blog.cedernaes.com"
-timezone: Sweden/Stockholm
+timezone: Europe/Stockholm
 strict_front_matter: True
 title: "Emaus' blogsite"
 
