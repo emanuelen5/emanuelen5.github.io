@@ -2,7 +2,7 @@ permalink: /posts/:year-:month-:slug
 source: site
 destination: .build
 livereload: true
-url: "blog.cedernaes.com"
+url: "https://blog.cedernaes.com"
 timezone: Europe/Stockholm
 strict_front_matter: True
 title: "Emaus' blogsite"
