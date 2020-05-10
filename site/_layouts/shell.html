@@ -21,7 +21,7 @@
 		</nav>
     </body>
 	<div class="container-fluid">
-        {{ content }}
+		{% include anchor_headings.html anchorBody="#" beforeHeading=true html=content %}
 	</div>
 	<!-- Make sure that footer is at bottom of page -->
 	<div class="wrapper flex-grow-1"></div>
