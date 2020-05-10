@@ -11,7 +11,17 @@ Last updated: {{ page.last-modified-date | date: "%F %R" }}
 </section>
 <div class="container">
 	<div class="d-flex justify-content-center btn-group">
-		<a href="{{page.next.url}}"><label rel="next" class="btn btn-secondary {% if page.next == nil %}disabled{% endif %}">Newer post</label></a>
-		<a href="{{page.previous.url}}"><label rel="previous" class="btn btn-secondary {% if page.previous == nil %}disabled{% endif %}">Older post</label></a>
+		{%- if page.next == nil %}
+			{%- assign extra_class = "disabled" %}
+		{%- else %}
+			{%- assign extra_class = nil %}
+		{%- endif %}
+		<a href="{{page.next.url}}" class="{{extra_class}}" rel="next"><label class="btn btn-secondary {{extra_class}}">Newer post</label></a>
+		{%- if page.previous == nil %}
+			{%- assign extra_class = "disabled" %}
+		{%- else %}
+			{%- assign extra_class = nil %}
+		{%- endif %}
+		<a href="{{page.previous.url}}" class="{{extra_class}}" rel="previous"><label class="btn btn-secondary {{extra_class}}">Older post</label></a>
 	</div>
 </div>
