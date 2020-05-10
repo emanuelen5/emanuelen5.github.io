@@ -9,3 +9,4 @@ gem "jekyll"
 group :jekyll_plugins do
   gem 'jekyll-postfiles'
 end
+gem "html-proofer", "~> 3.15"
