@@ -1,0 +1,12 @@
+{%- if page.next == nil %}
+	{%- assign extra_class = "disabled" %}
+{%- else %}
+	{%- assign extra_class = nil %}
+{%- endif %}
+<a href="{{page.next.url}}" class="{{extra_class}}" rel="next"><label class="btn btn-secondary {{extra_class}}">Newer post</label></a>
+{%- if page.previous == nil %}
+	{%- assign extra_class = "disabled" %}
+{%- else %}
+	{%- assign extra_class = nil %}
+{%- endif %}
+<a href="{{page.previous.url}}" class="{{extra_class}}" rel="previous"><label class="btn btn-secondary {{extra_class}}">Older post</label></a>
