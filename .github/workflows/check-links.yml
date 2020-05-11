@@ -1,6 +1,11 @@
 name: Build site and check links
 
-on: push
+on:
+    push:
+        branches:
+            - '*'
+    schedule:
+        - cron: '12 0 * * 0' # Run every sunday at 12:00
 
 env:
     BUILD_DIR: .build
