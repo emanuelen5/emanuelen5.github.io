@@ -12,6 +12,8 @@ build:
 gh-pages: build
 	touch "${BUILD_DIR}/.nojekyll"
 	if [ -f README.md ]; then cp README.md "${BUILD_DIR}"; fi
+test: gh-pages
+	bundle exec htmlproofer --internal-domains localhost,blog.cedernaes.com --assume-extension ${BUILD_DIR}
 
 clean:
 	rm -rf "${BUILD_DIR}" .jekyll-*
@@ -19,4 +21,4 @@ clean:
 serve:
 	bundle exec jekyll serve -H '*' -P ${PORT} ${FLAGS}
 
-.PHONY:build serve gh-pages clean
+.PHONY:build serve gh-pages test clean
