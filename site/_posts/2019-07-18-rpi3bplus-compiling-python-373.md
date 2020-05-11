@@ -1,5 +1,6 @@
 ---
 finished: true
+tags: rpi
 ---
 
 # Compiling Python 3.7.3 on Rasbperry Pi Jessie
