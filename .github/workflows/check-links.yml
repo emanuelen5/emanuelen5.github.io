@@ -1,4 +1,4 @@
-name: Build site and check links
+name: Build site and check links with htmlproofer
 
 on:
     push:
@@ -11,7 +11,7 @@ env:
     BUILD_DIR: .build
 
 jobs:
-  test:
+  htmlproofer:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -39,6 +39,9 @@ jobs:
       if: steps.gems.outputs.cache-hit != 'true'
       run: |
         bundle install --jobs 4 --retry 3
-    - name: Test links
-      run: |
-        make test
+    - name: Build site
+      run: make build
+    - name: Test external links (no fail)
+      run: FLAGS="--log-level=debug --external-only" make htmlproofer || true
+    - name: Test internal links
+      run: FLAGS="--log-level=debug --disable-external" make htmlproofer
