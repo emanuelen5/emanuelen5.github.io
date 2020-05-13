@@ -12,8 +12,16 @@ sortindex: 1
 		<h5 class="card-title">
 			<a href="{{p.url}}">{{p.title}}</a>
 			<div>
-				<span class="tags"></span>
-				<span class="categories"></span>
+				<span class="tags">
+				{%- for t in p.tags -%}
+					<span class="badge badge-dark">{{t}}</span>
+				{%- endfor -%}
+				</span>
+				<span class="categories">
+				{%- for c in p.categories -%}
+					<span class="badge badge-info">{{c}}</span>
+				{%- endfor -%}
+				</span>
 			</div>
 		</h5>
 		<div class="card-subtitle">{{p.date | date: "%Y-%m-%d"}}</div>
