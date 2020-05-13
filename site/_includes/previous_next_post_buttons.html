@@ -1,12 +1,16 @@
 {%- if page.next == nil %}
 	{%- assign extra_class = "disabled" %}
+	{%- assign extra_btn_class = "btn-secondary disabled" %}
 {%- else %}
 	{%- assign extra_class = nil %}
+	{%- assign extra_btn_class = "btn-dark" %}
 {%- endif %}
-<a href="{{page.next.url}}" class="{{extra_class}}" rel="next"><label class="btn btn-secondary {{extra_class}}">Newer post</label></a>
+<a href="{{page.next.url}}" class="{{extra_class}}" rel="next"><label class="btn {{extra_btn_class}}">Newer post</label></a>
 {%- if page.previous == nil %}
 	{%- assign extra_class = "disabled" %}
+	{%- assign extra_btn_class = "btn-secondary disabled" %}
 {%- else %}
 	{%- assign extra_class = nil %}
+	{%- assign extra_btn_class = "btn-dark" %}
 {%- endif %}
-<a href="{{page.previous.url}}" class="{{extra_class}}" rel="previous"><label class="btn btn-secondary {{extra_class}}">Older post</label></a>
+<a href="{{page.previous.url}}" class="{{extra_class}}" rel="previous"><label class="btn {{extra_btn_class}}">Older post</label></a>
