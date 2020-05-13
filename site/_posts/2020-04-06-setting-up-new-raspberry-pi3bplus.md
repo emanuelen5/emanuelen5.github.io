@@ -118,7 +118,7 @@ I will set it up to have a user called `emaus` and hostname as `emaus-pi3`, but 
 ## Restoring files from an old Pi's SD card
 By attaching the old SD card to another Pi, through an USB to SD card reader, I can copy old files to my new Pi.
 
-17. Mount the partition that corresponds to the old root filesystem on the SD card as read-only ([see also previous post](20200405_backing_up_sd_card_from_crashed_pi.md)):
+17. Mount the partition that corresponds to the old root filesystem on the SD card as read-only ([see also previous post]({% link _posts/2020-04-05-backing-up-sd-card-from-crashed-pi.md %})):
     ```bash
     emaus@emaus-pi4:~ $ lsblk
     NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT

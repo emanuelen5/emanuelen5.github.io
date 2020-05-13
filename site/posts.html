@@ -14,12 +14,12 @@ sortindex: 1
 			<div>
 				<span class="tags">
 				{%- for t in p.tags -%}
-					<span class="badge badge-dark">{{t}}</span>
+					<button class="btn badge badge-dark">{{t}}</button>
 				{%- endfor -%}
 				</span>
 				<span class="categories">
 				{%- for c in p.categories -%}
-					<span class="badge badge-info">{{c}}</span>
+					<button class="btn badge badge-info">{{c}}</button>
 				{%- endfor -%}
 				</span>
 			</div>
