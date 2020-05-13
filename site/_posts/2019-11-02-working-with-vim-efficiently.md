@@ -1,4 +1,10 @@
-# Working with VIM efficiently
+---
+finished: false
+title: Working with VIM efficiently
+date: 2019-11-02
+tags: [vim]
+categories: [tips, tools]
+---
 
 ## Multiple windows
 

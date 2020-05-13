@@ -1,4 +1,10 @@
-# Controlling Google cast devices programmatically (e.g. Chromecast and Home)
+---
+finished: true
+title: Controlling Google cast devices programmatically (Chromecast and Home)
+date: 2019-10-02
+tags: [google, cast, ha]
+categories: [miniguide]
+---
 
 [pychromecast](https://github.com/balloob/pychromecast) has the code for controlling the cast device. It becomes very simple with it, just install it from pip `pip install pychromecast` and then follow along:
 

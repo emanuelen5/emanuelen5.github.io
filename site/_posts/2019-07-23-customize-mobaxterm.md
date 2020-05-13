@@ -1,4 +1,10 @@
-# Customizing MobaXterm
+---
+finished: false
+title: Customizing MobaXterm
+date: 2019-07-23
+tags: [terminal]
+categories: [tools]
+---
 
 [terminal.sexy](https://terminal.sexy)
 

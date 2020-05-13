@@ -1,4 +1,10 @@
-# Frameworks for blogs
+---
+finished: true
+title: Frameworks for blogs
+date: 2019-07-28
+tags: [blog]
+categories: [meta, tools]
+---
 
 So you want to create your own blog/website, and need to decide what framework/tool to use for it? Me too, so here are the info I collected on some popular options: Hugo, [Jekyll](https://jekyllrb.com/), Pandoc, Pelican, Sphinx, Squarespace, Wordpress
 

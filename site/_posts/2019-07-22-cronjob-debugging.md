@@ -1,4 +1,10 @@
-# Cronjobs - timely done
+---
+finished: true
+title: Cronjobs - timely done
+date: 2019-07-22
+tags: [cron, bash, linux, debugging]
+categories: miniguide
+---
 
 If you want something done at a specific time (down to a minute's resolution) with a repetition, then cron is the best.
 

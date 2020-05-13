@@ -1,4 +1,10 @@
-# Setting up a Raspberry Pi 3B plus from scratch
+---
+finished: true
+title: Setting up a Raspberry Pi 3B plus from scratch
+date: 2020-04-06
+tags: [rpi, ssh, fail2ban]
+categories: [guide]
+---
 
 Here I will show you basically all of the steps that are needed for installing a Raspberry Pi and setting up a new user on it.
 I will set it up to have a user called `emaus` and hostname as `emaus-pi3`, but you can modify that to whatever you want and follow along.

@@ -1,4 +1,11 @@
-# Comments on blogs
+---
+finished: false
+title: Comments on blogs
+date: 2019-07-29
+tags: [disqus, isso]
+categories: [meta, frameworks]
+---
+
 [Alternativs to Disqus](https://alternativeto.net/software/disqus/)
 
 ## [Isso](https://posativ.org/isso/docs/#what-s-wrong-with-disqus)

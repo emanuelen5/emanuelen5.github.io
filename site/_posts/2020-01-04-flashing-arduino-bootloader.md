@@ -1,4 +1,10 @@
-# Flashing Arduino bootloader
+---
+finished: false
+title: Flashing Arduino bootloader
+date: 2020-01-04
+tags: [arduino]
+categories: [miniguide]
+---
 
 It is quite common that the cheap Chinese Arduino clones are missing the Arduino bootloader and therefore cannot be programmed through the Arduino IDE directly. Fortunately, it is quite simple to fix this if you have access to another Arduino for a couple of minutes.
 

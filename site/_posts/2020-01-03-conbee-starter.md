@@ -1,4 +1,10 @@
-# Getting started with Conbee II
+---
+finished: false
+title: Getting started with Conbee II
+date: 2020-01-03
+tags: [deCONZ, conbee, ha]
+categories: [miniguide]
+---
 
 This page shows you how to get started with Conbee together with Home assistant: [deCONZ with home assistant]
 

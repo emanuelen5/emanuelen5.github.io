@@ -1,12 +1,10 @@
 ---
 finished: true
-title: "Compiling Python 3.7.3 on Raspberry Pi Jessie"
+title: Compiling Python 3.7.3 on Raspberry Pi Jessie
 date: 2019-07-18
 tags: [rpi, python]
-categories: guide
+categories: miniguide, build
 ---
-
-# Compiling Python 3.7.3 on Raspberry Pi Jessie
 
 Building Python can be a breeze! [This guide has helped me in the past](https://www.scivision.dev/compile-install-python-beta-raspberry-pi/).
 ```bash

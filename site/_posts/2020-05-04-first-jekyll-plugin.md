@@ -1,9 +1,11 @@
 ---
+finished: true
 title: Jekyll plugin for escaping Atom feed content
 date: 2020-05-04 20:01
---- 
+tags: [jekyll, ruby]
+categories: [meta]
+---
 
-# Creating the first Jekyll plugin
 So I had some trouble getting correct links in my Atom feed. The links are written as relative in my posts, while feed apps expect them to be absolute.
 
 I was looking for any plugins that would transform them easily to absolute links, but fell short. I therefore started looking at how hard it would be to develop my own Ruby plugin to Jekyll. Having no previous experience with Ruby, than typing `bundle install` and `bundle exec jekyll serve`, I felt that I had some reading to do.

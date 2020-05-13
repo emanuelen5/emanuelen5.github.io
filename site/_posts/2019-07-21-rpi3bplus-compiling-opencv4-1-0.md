@@ -1,8 +1,10 @@
 ---
 finished: true
+title: Compiling OpenCV 4.1 on Raspberry Pi Jessie for Python 3.7.3
+date: 2019-07-21
+tags: [rpi, python, opencv]
+categories: [miniguide, build]
 ---
-
-# Compiling OpenCV 4.1 on Raspberry Pi Jessie for Python 3.7.3
 
 Download [OpenCV](https://github.com/opencv/opencv/releases) and the [contributed functionality](https://github.com/opencv/opencv_contrib/releases) (extra modules), and extract them (will be placed in `opencv-4.1.0` and `opencv_contrib-4.1.0`:
 ```bash

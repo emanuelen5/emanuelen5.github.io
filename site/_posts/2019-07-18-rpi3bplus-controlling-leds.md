@@ -1,8 +1,11 @@
 ---
 finished: true
+title: Controlling Raspberry Pi LEDs
+date: 2019-07-18
+tags: [rpi, linux]
+categories: miniguide
 ---
 
-# Controlling Raspberry Pi LEDs
 Taken from [Jeff Geerling: Controlling PWR and ACT LEDs on the Raspberry Pi](https://www.jeffgeerling.com/blogs/jeff-geerling/controlling-pwr-act-leds-raspberry-pi). I have tested this on my Raspberry Pi B+.
 
 Luckily, with the Pi 2 model B, B+, A+, and Zero, you can control the LEDs in software, in a few different ways. The simplest way to change the way these LEDs work is to modify the trigger for each LED by setting it in `/sys/class/leds/led[LED_ID]/trigger`, where you replace `[LED_ID]` with 0 for the green ACT LED, and 1 for the red PWR LED.
@@ -21,10 +24,8 @@ echo input | sudo -c sh "cat > /sys/class/leds/led1/trigger"
 echo cpu0 | sudo -c sh "cat > /sys/class/leds/led0/trigger"
 ```
 
-Turn off leds:
+Turn off LEDs at boot by adding the following to `/boot/config.txt`:
 ```bash
-#/boot/config.txt
-
 # Disable the ACT LED.
 dtparam=act_led_trigger=none
 dtparam=act_led_activelow=off

@@ -1,4 +1,10 @@
-# Backing up an SD card from a crashed Raspberry Pi
+---
+finished: true
+title: Backing up an SD card from a crashed Raspberry Pi
+date: 2020-04-05
+tags: [backup, virtualbox, rpi]
+categories: [miniguide]
+---
 
 So, yay. The Raspberry Pi has had a kernel panic and won't start again. So, I guess I'll have to just recover the files and copy them to a new SD card.
 

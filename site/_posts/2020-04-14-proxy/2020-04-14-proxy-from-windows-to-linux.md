@@ -1,4 +1,10 @@
-# Setting up a proxy to a Linux server
+---
+finished: true
+title: Setting up a proxy to a Linux server
+date: 2020-05-04 20:01
+tags: [ssh, proxy, PuTTY]
+categories: [tools, security, guide]
+---
 
 It is really simple to set up a proxy through a Linux server that runs SSH. The simplest way is to use the SOCKS5 procol which utilizes an open SSH tunnel and forwards all traffic through it.
 
