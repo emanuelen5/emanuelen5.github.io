@@ -14,8 +14,15 @@
 			<div class="navbar-brand">Emaus</div>
 			<div class="" id="navbarNav">
 				<ul class="navbar-nav">
-					<a class="nav-link" href="/">Home</a>
-					<a class="nav-link" href="/posts/">Posts</a>
+					{% assign navlink_pages = site.pages | where: "navlink", true | sort: "sortindex" %}
+					{%- for p in navlink_pages %}
+					{%- if p.url == page.url %}
+						{%- assign extracls = "active" %}
+					{%- else %}
+						{%- assign extracls = nil %}
+					{%- endif %}
+					<a class="nav-link {{ extracls }}" href="{{ p.url }}">{{ p.shortname }}</a>
+					{%- endfor %}
 				</ul>
 			</div>
 		</nav>
@@ -30,12 +37,6 @@
 			<div class="navbar-brand">&copy; {{site.time | date: "%Y" }} Erasmus Cedernaes</div>
 			<a class="nav-link" href="/atom.xml">⚛ atom feed</a>
 		</nav>
-		<script>
-			for (h of document.getElementsByClassName("nav-link")) {
-				if (new URL(h.href).pathname == "{{ page.url }}") {
-					h.classList.add("active");
-				}
-			}
-		</script>
+		<script src="/assets/js/shell.js"></script>
     </footer>
 </html>
