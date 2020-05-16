@@ -1,9 +1,10 @@
 ---
 finished: false
-title: Setting up Nginx for Jekyll
+title: >
+    <img style="height: 1em;" alt="Nginx logo" title="Nginx logo" src="/assets/images/nginx_logo.png"/> Setting up Nginx for Jekyll
 date: 2020-05-16 10:33
 tags: [nginx]
-categories: [meta]
+categories: [miniguide, meta]
 ---
 
 # Installing
