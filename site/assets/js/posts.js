@@ -16,28 +16,42 @@ let cards = {
 {%- endfor -%}
 };
 
-TYPE_TAG = "tag";
-TYPE_CATEGORY = "category";
+TYPE_TAG = "tags";
+TYPE_CATEGORY = "categories";
 
-function filter(type, name, filters) {
-	console.log(type + " clicked!: " + name);
+function set_visibility(elem, visible) {
+	if (visible) {
+		elem.style.removeProperty("height");
+		elem.style.removeProperty("visibility");
+	} else {
+		elem.style.height = 0;
+		elem.style.visibility = "hidden";
+	}
+}
+
+function update_visibility(type, name, filters) {
 	for (let cardname in cards) {
 		const card = cards[cardname];
-		if (type == TYPE_TAG && card.tags.indexOf(name) >= 0 ||
-			type == TYPE_CATEGORY && card.categories.indexOf(name) >= 0) {
-			if (filters.indexOf(name) >= 0) {
-			}
-			const elem = document.getElementById(cardname);
-			card.visible = !card.visible;
-			if (card.visible) {
-				elem.style.height = 0;
-				elem.style.visibility = "hidden";
-			} else {
-				elem.style.removeProperty("height");
-				elem.style.removeProperty("visibility");
-			}
+		const elem = document.getElementById(cardname);
+		if (filters.length == 0) {
+			console.log(cardname + " as visible");
+			set_visibility(elem, true);
+		} else {
+			console.log(cardname + " as hidden");
+			set_visibility(elem, card[type].indexOf(name) >= 0);
 		}
 	};
+}
+
+function filter(type, name, filters) {
+	let filter_index = filters.indexOf(name);
+	if (filter_index >= 0) {
+		filters.splice(filter_index, 1);
+	} else {
+		filters.push(name);
+	}
+	console.log(type + " clicked!: " + name + ". Filters active: " + filters);
+	update_visibility(type, name, filters);
 };
 
 let tag_filters = [], category_filters = [];
