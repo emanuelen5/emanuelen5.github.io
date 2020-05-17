@@ -10,7 +10,11 @@ sortindex: 1
 <div class="card" id="{{p.id}}">
 	<div class="card-body px-sm-3 px-1">
 		<h5 class="card-title">
-			<a href="{{p.url}}">{{p.title}}</a>
+			<a href="{{p.url}}">
+				{%- if p.thumbnail -%}
+				<span style="width:1.5em; text-align:center; display: inline-block; overflow: hidden;"><img style="height:1em;" src="{{p.thumbnail}}"/></span>
+				{%- endif -%}
+			{{p.title}}</a>
 			<div>
 				<span class="tags">
 				{%- for t in p.tags -%}

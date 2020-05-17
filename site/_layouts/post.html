@@ -10,7 +10,7 @@ layout: shell
 
 <h1 class="display-8">
 	{% if page.image == nil and page.thumbnail %}
-	<img alt="Post thumbnail" src="{{page.thumbnail}}">
+	<img style="height: 1em;" alt="Post thumbnail" src="{{page.thumbnail}}">
 	{% endif %}
 	{{ page.title }}
 </h1>
