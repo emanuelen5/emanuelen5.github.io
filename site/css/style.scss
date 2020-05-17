@@ -4,3 +4,35 @@
 a.disabled {
     pointer-events: none;
 }
+
+img.img-centered {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+$small: 575px;
+
+ol {
+	@media screen and (max-width: $small)  {
+		padding: 1em;
+	}
+
+	ol {
+
+		list-style-type: lower-roman;
+		ol {
+			list-style-type: lower-greek;
+			ol {
+				list-style-type: lower-latin;
+			}
+		}
+	}
+}
+
+ol ol {
+	@media screen and (max-width: $small) {
+		padding-left: 1em;
+		margin-left: -1em;
+	}
+}
