@@ -2,14 +2,23 @@
 layout: shell
 ---
 
-<h1>{{ page.title }}</h1>
-Published:    {{ page.date | date: "%F" }} <br>
-Last updated: {{ page.last-modified-date | date: "%F %R" }}
+{% if page.image %}
+<div class="jumbotron">
+	<img alt="Post image" src="{{page.image}}">
+</div>
+{% endif %}
 
-<hr/>
+<h1 class="display-8">{{ page.title }}</h1>
+{% if page.summary %}
+<p class="lead">{{ page.summary }}</p>
+{% endif %}
+
+<p class="lead">Published:    {{ page.date | date: "%F" }} <br/>
+Last updated: {{ page.last-modified-date | date: "%F %R" }}</p>
+<hr class="my-4">
 
 <section>
-    {{ content }}
+	{{ content }}
 </section>
 <div class="container">
 	<div class="d-flex justify-content-center btn-group">
