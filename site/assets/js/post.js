@@ -1,4 +1,7 @@
 for (img of document.querySelectorAll("section img")) {
-	img.classList.add("img-fluid");
-	img.classList.add("img-centered");
+	let cl = img.classList;
+	if (!cl.contains("img-inline")) {
+		img.classList.add("img-fluid");
+		img.classList.add("img-centered");
+	}
 }

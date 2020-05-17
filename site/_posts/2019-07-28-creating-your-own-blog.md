@@ -36,34 +36,34 @@ The Markdown language is truly splendid when it comes to documentation since it 
 **Supports Markdown:** Hugo, Jekyll, Pandoc, Pelican, Sphinx, Wordpress <br>
 **No Markdown:** Squarespace
 
-# <img style="height: 1em;" alt="Pelican logo" title="Pelican logo" src="/assets/images/pelican_logo.png"/> Pelican
+# <img style="height: 1em;" class="img-inline" alt="Pelican logo" title="Pelican logo" src="/assets/images/pelican_logo.png"/> Pelican
 Supports reStructuredText.
 
 [Pelican documentation]
-# <img style="height: 1em;" alt="Pandoc logo draft" title="Pandoc logo" src="/assets/images/pandoc_logo.svg"/> Pandoc
+# <img style="height: 1em;" class="img-inline" alt="Pandoc logo draft" title="Pandoc logo" src="/assets/images/pandoc_logo.svg"/> Pandoc
 Pandoc is really just a document conversion tool that can be used for creating static web sites from e.g. Markdown.
 
 [Scientific blogging with Pelican and Pandoc]
 
-# <img style="height: 1em;" alt="Sphinx logo" title="Sphinx logo" src="/assets/images/sphinx_logo.png"/> Sphinx
+# <img style="height: 1em;" class="img-inline" alt="Sphinx logo" title="Sphinx logo" src="/assets/images/sphinx_logo.png"/> Sphinx
 I ran into this on the documentation of the [VUnit project](https://github.com/vunit/Vunit) (a great tool by the way for anyone writing VHDL - and SystemVerilog I guess).
 
-# <img style="height: 1em;" alt="Jekyll logo" title="Jekyll logo" src="/assets/images/jekyll_logo.png"/> Jekyll
+# <img style="height: 1em;" class="img-inline" alt="Jekyll logo" title="Jekyll logo" src="/assets/images/jekyll_logo.png"/> Jekyll
 Jekyll is used for creating static websites from Markdown.
 
 Also see [Octopress](http://octopress.org/docs/) for coding related setups with Jekyll. It's basically an extension of it with several nice extra features.
 
-# <img style="height: 1em;" alt="Hugo logo" title="Hugo logo" src="/assets/images/hugo_logo.png"/> Hugo
+# <img style="height: 1em;" class="img-inline" alt="Hugo logo" title="Hugo logo" src="/assets/images/hugo_logo.png"/> Hugo
 Static site generator designed to be fast. Takes Markdown as input.
 
-# <img style="height: 1em;" alt="Wordpress logo" title="Wordpress logo" src="/assets/images/wordpress_logo.png"/> Wordpress
+# <img style="height: 1em;" class="img-inline" alt="Wordpress logo" title="Wordpress logo" src="/assets/images/wordpress_logo.png"/> Wordpress
 > Not to be confused with *Wordpress.com* which is the hosted variant.
 
 An open source framework for creating web sites with lots of plugins. This is quite tempting to use since it is so popular ([used by 32% of the Top 1 million websites as of July 2019 according to builtwith.com/cms](https://trends.builtwith.com/cms)). This gives several pros: I might have use of it in other cases (can help others), there exists an active community (there is help to get), it gets regular updates (it stays secure and fresh).
 
 It also seems very customizable.
 
-# <img style="height: 1em;" alt="Squarespace logo" title="Squarespace logo" src="/assets/images/squarespace_logo.png"/> Squarespace
+# <img style="height: 1em;" class="img-inline" alt="Squarespace logo" title="Squarespace logo" src="/assets/images/squarespace_logo.png"/> Squarespace
 Hosted and managed by Squarespace themselves. This means that you can set up the page once and really stop caring about it. They will keep updating it for you. So goodbye security theats, and needs of manually updating.
 
 The probably most notable feature of Squarespace is its design, and [that's their biggest sales pitch][Squarespace: Website design]:
