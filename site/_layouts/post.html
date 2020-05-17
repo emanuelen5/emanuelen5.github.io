@@ -8,7 +8,12 @@ layout: shell
 </div>
 {% endif %}
 
-<h1 class="display-8">{{ page.title }}</h1>
+<h1 class="display-8">
+	{% if page.image == nil and page.thumbnail %}
+	<img alt="Post thumbnail" src="{{page.thumbnail}}">
+	{% endif %}
+	{{ page.title }}
+</h1>
 {% if page.summary %}
 <p class="lead">{{ page.summary }}</p>
 {% endif %}
