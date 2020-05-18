@@ -33,10 +33,28 @@
 	<!-- Make sure that footer is at bottom of page -->
 	<div class="wrapper flex-grow-1"></div>
     <footer>
-		<nav class="navbar navbar-expand-sm navbar-light bg-light">
-			<div class="navbar-brand">&copy; {{site.time | date: "%Y" }} Erasmus Cedernaes</div>
-			<div class="navbar-text nav-link"><a href="{{site.repo}}/tree/blog/{{site.source}}/{{page.path}}">Source</a></div>
-			<div class="navbar-text nav-link"><a href="/atom.xml"><img alt="Atom feed icon" style="height: 2em;" src="/assets/images/atom.svg"/> atom feed</a></div>
+		<div class="container-fluid navbar navbar-light bg-light">
+			<div class="row d-flex justify-content-center min-vw-100">
+				<div class="col-md-auto col-12 navbar-brand text-center">&copy; {{site.time | date: "%Y" }} Erasmus Cedernaes</div>
+				<div class="col text-center text-nowrap navbar-link navbar-text">
+					<a href="{{site.repo}}/tree/blog/{{site.source}}/{{page.path}}">
+						<img alt="Source code icon" class="align-middle" style="height: 2em;" src="/assets/images/code.svg"/>
+						<span class="hide-sm"> Source</span>
+					</a>
+				</div>
+				<div class="col text-center text-nowrap navbar-link navbar-text">
+					<a href="https://github.com/emanuelen5">
+						<img alt="Github icon" class="align-middle" style="height: 2em;" src="/assets/images/github_icon.svg"/>
+						<span class="hide-sm"> Github profile</span>
+					</a>
+				</div>
+				<div class="col text-center text-nowrap navbar-link navbar-text">
+					<a href="/atom.xml">
+						<img alt="Atom feed icon" class="align-middle" style="height: 2em;" src="/assets/images/atom.svg"/>
+						<span class="hide-sm"> Atom feed</span>
+					</a>
+				</div>
+			</div>
 		</nav>
 		<script src="/assets/js/shell.js"></script>
     </footer>

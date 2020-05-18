@@ -3,15 +3,13 @@
 
 // Variables
 $small: 575px;
+$medium: 767px;
+$large: 991px;
+$extra-large: 1199px;
 
 
 a.disabled {
     pointer-events: none;
-}
-
-div.jumbotron.post {
-	padding: 0;
-	margin-bottom: 0.5em;
 }
 
 img.img-centered {
@@ -20,10 +18,24 @@ img.img-centered {
 	display: block;
 }
 
+// Post jumbotron
+div.jumbotron.post {
+	padding: 0;
+	margin-bottom: 0.5em;
+}
+
 img.img-post {
 	max-height: 6em;
 }
 
+// Footer
+span.hide-sm {
+	@media screen and (max-width: $small) {
+		display: none;
+	}
+}
+
+// Text lists
 ol {
 	@media screen and (max-width: $small)  {
 		padding: 1em;
