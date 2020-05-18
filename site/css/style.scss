@@ -1,8 +1,17 @@
 ---
 ---
 
+// Variables
+$small: 575px;
+
+
 a.disabled {
     pointer-events: none;
+}
+
+div.jumbotron.post {
+	padding: 0;
+	margin-bottom: 0.5em;
 }
 
 img.img-centered {
@@ -11,7 +20,9 @@ img.img-centered {
 	display: block;
 }
 
-$small: 575px;
+img.img-post {
+	max-height: 6em;
+}
 
 ol {
 	@media screen and (max-width: $small)  {
