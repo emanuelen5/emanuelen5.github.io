@@ -1,4 +1,4 @@
-permalink: /posts/:year-:month-:slug
+permalink: /posts/:year-:month-:slug/
 source: site
 destination: .build
 livereload: true
