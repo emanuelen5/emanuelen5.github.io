@@ -28,13 +28,6 @@ img.img-post {
 	max-height: 6em;
 }
 
-// Footer
-span.hide-sm {
-	@media screen and (max-width: $small) {
-		display: none;
-	}
-}
-
 // Text lists
 ol {
 	@media screen and (max-width: $small)  {
