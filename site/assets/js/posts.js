@@ -22,12 +22,10 @@ TYPE_CATEGORY = "categories";
 function set_visibility(elem, visible) {
 	if (visible) {
 		console.log(elem.id + " as visible");
-		elem.style.removeProperty("height");
-		elem.style.removeProperty("visibility");
+		elem.style.removeProperty("display");
 	} else {
 		console.log(elem.id + " as hidden");
-		elem.style.height = 0;
-		elem.style.visibility = "hidden";
+		elem.style.display = "none";
 	}
 }
 
