@@ -6,6 +6,33 @@ shortname: Posts
 sortindex: 1
 ---
 
+<div class="mb-4 small">
+	<div class="row" style="cursor: pointer;" collapsing-target="#filters">
+		<div class="col">
+			Filters
+		</div>
+		<div class="col-1">
+			⥍
+		</div>
+	</div>
+	<div class="row collapsing" id="filters">
+		<div class="col">
+			<span class="tags">
+			{%- for t in site.tags -%}
+				{% assign tag = t | first %}
+				<button class="btn badge badge-dark tag">{{tag}}</button>
+			{%- endfor -%}
+			</span>
+			<span class="categories">
+			{%- for c in site.categories -%}
+				{% assign category = c | first %}
+				<button class="btn badge badge-info category">{{category}}</button>
+			{%- endfor -%}
+			</span>
+		</div>
+	</div>
+</div>
+
 {%- for p in site.posts -%}
 <div class="card" id="{{p.id}}">
 	<div class="card-body">

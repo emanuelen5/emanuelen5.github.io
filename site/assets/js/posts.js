@@ -70,6 +70,23 @@ for (e of document.querySelectorAll("button.category")) {
 	e.addEventListener("click", page_filters.on_clicked_callback(TYPE_CATEGORY, e.innerHTML));
 }
 
+for (e of document.querySelectorAll("[collapsing-target]")) {
+	const target_selector = e.getAttribute("collapsing-target");
+	for (et of document.querySelectorAll(target_selector)) {
+		if (et.style.height == "")
+			et.style.height = "0px";
+		e.addEventListener("click", ((elem, selector) => {
+			return (event) => {
+				if (elem.style.height == "0px") {
+					elem.style.height = elem.scrollHeight + "px";
+				} else {
+					elem.style.height = "0px";
+				}
+			}
+		})(et, target_selector));
+	}
+}
+
 // Generated
 cards = {
 {%- for p in site.posts -%}
