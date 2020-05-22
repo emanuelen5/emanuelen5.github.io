@@ -30,6 +30,12 @@ class PageFilters {
 		}
 	}
 
+	is_active(type, name) {
+		let active = this.get_filter(type).indexOf(name) >= 0;
+		console.log("Filters: " + this.get_filter(type) + ", active: " + active);
+		return active;
+	}
+
 	is_visible(card) {
 		return this.tag_filters.every((filter) => card[TYPE_TAG].indexOf(filter) >= 0) &&
 			this.category_filters.every((filter) => card[TYPE_CATEGORY].indexOf(filter) >= 0)
@@ -37,9 +43,8 @@ class PageFilters {
 
 	on_clicked_callback(name, type) {
 		return (event) => {
-			console.log(type + " clicked!: (" + name + ")");
 			this.toggle(name, type);
-			render_visibility();
+			render_filters();
 		};
 	}
 };
@@ -54,12 +59,24 @@ function set_visibility(elem, visible) {
 	}
 }
 
-function render_visibility() {
+function render_filters() {
 	for (let cardname in cards) {
 		const card = cards[cardname];
 		const elem = document.getElementById(cardname);
 		set_visibility(elem, page_filters.is_visible(card));
 	};
+	for (let e of document.querySelectorAll("button.tag")) {
+		if (page_filters.is_active(TYPE_TAG, e.innerHTML))
+			e.classList.add("active");
+		else
+			e.classList.remove("active");
+	}
+	for (let e of document.querySelectorAll("button.category")) {
+		if (page_filters.is_active(TYPE_CATEGORY, e.innerHTML))
+			e.classList.add("active");
+		else
+			e.classList.remove("active");
+	}
 }
 
 for (e of document.querySelectorAll("button.tag")) {

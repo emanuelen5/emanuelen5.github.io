@@ -2,7 +2,7 @@
 finished: true
 title: Resizing a Virtual Box image
 date: 2019-10-27
-tags: [virtual box, parted, ubuntu]
+tags: [virtualbox, parted, ubuntu]
 categories: [miniguide, tools]
 ---
 
