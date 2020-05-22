@@ -2,8 +2,77 @@
 layout: none
 ---
 
-let cards = {
-{%- for p in site.posts %}
+let cards; // Generated at bottom
+
+const TYPE_TAG = "tags",
+	TYPE_CATEGORY = "categories";
+
+class PageFilters {
+	constructor () {
+		this.tag_filters = [];
+		this.category_filters = [];
+	};
+
+	get_filter(type) {
+		if (type == TYPE_TAG)
+			return this.tag_filters;
+		else if (type == TYPE_CATEGORY)
+			return this.category_filters;
+	}
+
+	toggle(type, name) {
+		let filters = this.get_filter(type);
+		let filter_index = filters.indexOf(name);
+		if (filter_index >= 0) {
+			filters.splice(filter_index, 1);
+		} else {
+			filters.push(name);
+		}
+	}
+
+	is_visible(card) {
+		return this.tag_filters.every((filter) => card[TYPE_TAG].indexOf(filter) >= 0) &&
+			this.category_filters.every((filter) => card[TYPE_CATEGORY].indexOf(filter) >= 0)
+	}
+
+	on_clicked_callback(name, type) {
+		return (event) => {
+			console.log(type + " clicked!: (" + name + ")");
+			this.toggle(name, type);
+			render_visibility();
+		};
+	}
+};
+
+const page_filters = new PageFilters();
+
+function set_visibility(elem, visible) {
+	if (visible) {
+		elem.style.removeProperty("display");
+	} else {
+		elem.style.display = "none";
+	}
+}
+
+function render_visibility() {
+	for (let cardname in cards) {
+		const card = cards[cardname];
+		const elem = document.getElementById(cardname);
+		set_visibility(elem, page_filters.is_visible(card));
+	};
+}
+
+for (e of document.querySelectorAll("button.tag")) {
+	e.addEventListener("click", page_filters.on_clicked_callback(TYPE_TAG, e.innerHTML));
+}
+
+for (e of document.querySelectorAll("button.category")) {
+	e.addEventListener("click", page_filters.on_clicked_callback(TYPE_CATEGORY, e.innerHTML));
+}
+
+// Generated
+cards = {
+{%- for p in site.posts -%}
 "{{p.id}}": {"tags": [
 	{%- for t in p.tags -%}
 		"{{t}}",
@@ -15,51 +84,3 @@ let cards = {
 	]},
 {%- endfor -%}
 };
-
-TYPE_TAG = "tags";
-TYPE_CATEGORY = "categories";
-
-function set_visibility(elem, visible) {
-	if (visible) {
-		console.log(elem.id + " as visible");
-		elem.style.removeProperty("display");
-	} else {
-		console.log(elem.id + " as hidden");
-		elem.style.display = "none";
-	}
-}
-
-let tag_filters = [], category_filters = [];
-
-function update_visibility() {
-	for (let cardname in cards) {
-		const card = cards[cardname];
-		const elem = document.getElementById(cardname);
-		set_visibility(elem,
-			tag_filters.every((elem) => card[TYPE_TAG].indexOf(elem) >= 0) &&
-			category_filters.every((elem) => card[TYPE_CATEGORY].indexOf(elem) >= 0));
-	};
-}
-
-function filter(type, name, filters) {
-	let filter_index = filters.indexOf(name);
-	if (filter_index >= 0) {
-		filters.splice(filter_index, 1);
-	} else {
-		filters.push(name);
-	}
-	console.log(type + " clicked!: " + name + ". Filters active: " + filters);
-	update_visibility();
-};
-
-function create_filter_callback(type, name, filters) {
-	return (event) => {filter(type, name, filters)};
-};
-
-for (e of document.querySelectorAll("button.tag")) {
-	e.addEventListener("click", create_filter_callback(TYPE_TAG, e.innerHTML, tag_filters));
-}
-
-for (e of document.querySelectorAll("button.category")) {
-	e.addEventListener("click", create_filter_callback(TYPE_CATEGORY, e.innerHTML, category_filters));
-}
