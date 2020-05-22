@@ -95,9 +95,19 @@ for (e of document.querySelectorAll("[collapsing-target]")) {
 			}
 		}
 	})(e, target_selector));
-	window.addEventListener('resize', ((elem) => {
+	window.addEventListener('resize', ((e) => {
 		return (event) => {
-			console.log("resize");
+			const collapsed = e.getAttribute("collapsed") == "true";
+			if (!collapsed) {
+				for (et of document.querySelectorAll(target_selector)) {
+					console.log("\n\nresize");
+					et.style.height = "0px";
+					// Make sure that overflow is computed in scroll-height
+					et.style.maxHeight = "0px";
+					et.style.height = et.scrollHeight + "px";
+					et.style.maxHeight = "";
+				}
+			}
 		}
 	})(e));
 }
