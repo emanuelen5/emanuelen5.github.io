@@ -6,6 +6,33 @@ shortname: Posts
 sortindex: 1
 ---
 
+<div class="mb-2 small">
+	<button class="btn btn-block p-0 m-0" collapsing-target="#filters">
+		<div class="row">
+			<div class="col-auto">
+				Filters
+			</div>
+			<div class="col"></div>
+			<div class="col-auto">
+				⥍ <!-- Up/down arrow symbol -->
+			</div>
+		</div>
+	</button>
+	<div class="collapsing" id="filters">
+		<div class="row no-gutters justify-content-center">
+			{%- for t in site.tags -%}
+				{% assign tag = t | first %}
+				<div class="col-auto"><button class="btn badge badge-dark tag mini-margin">{{tag}}</button></div>
+			{%- endfor -%}
+			{%- for c in site.categories -%}
+				{% assign category = c | first %}
+				<div class="col-auto"><button class="btn badge badge-info category mini-margin">{{category}}</button></div>
+			{%- endfor -%}
+		</div>
+		<div class="mb-2"></div>
+	</div>
+</div>
+
 {%- for p in site.posts -%}
 <div class="card" id="{{p.id}}">
 	<div class="card-body px-sm-3 px-1">
@@ -18,12 +45,12 @@ sortindex: 1
 			<div>
 				<span class="tags">
 				{%- for t in p.tags -%}
-					<button class="btn badge badge-dark">{{t}}</button>
+					<button class="btn badge badge-dark tag">{{t}}</button>
 				{%- endfor -%}
 				</span>
 				<span class="categories">
 				{%- for c in p.categories -%}
-					<button class="btn badge badge-info">{{c}}</button>
+					<button class="btn badge badge-info category">{{c}}</button>
 				{%- endfor -%}
 				</span>
 			</div>
