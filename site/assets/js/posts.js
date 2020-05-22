@@ -65,17 +65,20 @@ function render_filters() {
 		const elem = document.getElementById(cardname);
 		set_visibility(elem, page_filters.is_visible(card));
 	};
+	const no_filters = page_filters.get_filter(TYPE_TAG).length == 0 && page_filters.get_filter(TYPE_CATEGORY).length == 0;
 	for (let e of document.querySelectorAll("button.tag")) {
-		if (page_filters.is_active(TYPE_TAG, e.innerHTML))
-			e.classList.add("active");
-		else
-			e.classList.remove("active");
+		if (page_filters.is_active(TYPE_TAG, e.innerHTML) || no_filters) {
+			e.classList.remove("disabled");
+		} else {
+			e.classList.add("disabled");
+		}
 	}
 	for (let e of document.querySelectorAll("button.category")) {
-		if (page_filters.is_active(TYPE_CATEGORY, e.innerHTML))
-			e.classList.add("active");
-		else
-			e.classList.remove("active");
+		if (page_filters.is_active(TYPE_CATEGORY, e.innerHTML) || no_filters) {
+			e.classList.remove("disabled");
+		} else {
+			e.classList.add("disabled");
+		}
 	}
 }
 
