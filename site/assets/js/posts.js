@@ -72,19 +72,34 @@ for (e of document.querySelectorAll("button.category")) {
 
 for (e of document.querySelectorAll("[collapsing-target]")) {
 	const target_selector = e.getAttribute("collapsing-target");
+	// Check if collapsed; set attribute
 	for (et of document.querySelectorAll(target_selector)) {
-		if (et.style.height == "")
+		if (et.style.height == "") {
+			e.setAttribute("collapsed", true);
 			et.style.height = "0px";
-		e.addEventListener("click", ((elem, selector) => {
-			return (event) => {
-				if (elem.style.height == "0px") {
-					elem.style.height = elem.scrollHeight + "px";
-				} else {
-					elem.style.height = "0px";
-				}
-			}
-		})(et, target_selector));
+		} else {
+			e.setAttribute("collapsed", false);
+		}
 	}
+	// Add event listener for each button
+	e.addEventListener("click", ((e, target_selector) => {
+		return (event) => {
+			for (et of document.querySelectorAll(target_selector)) {
+				const collapsed = e.getAttribute("collapsed") == "true";
+				if (collapsed) {
+					et.style.height = et.scrollHeight + "px";
+				} else {
+					et.style.height = "0px";
+				}
+				e.setAttribute("collapsed", !collapsed);
+			}
+		}
+	})(e, target_selector));
+	window.addEventListener('resize', ((elem) => {
+		return (event) => {
+			console.log("resize");
+		}
+	})(e));
 }
 
 // Generated

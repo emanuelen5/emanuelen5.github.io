@@ -6,30 +6,31 @@ shortname: Posts
 sortindex: 1
 ---
 
-<div class="mb-4 small">
-	<div class="row" style="cursor: pointer;" collapsing-target="#filters">
-		<div class="col">
-			Filters
+<div class="mb-2 small">
+	<button class="btn btn-block p-0 m-0" collapsing-target="#filters">
+		<div class="row">
+			<div class="col-auto">
+				Filters
+			</div>
+			<div class="col"></div>
+			<div class="col-auto">
+				⥍ <!-- Up/down arrow symbol -->
+			</div>
 		</div>
-		<div class="col-1">
-			⥍
-		</div>
-	</div>
-	<div class="row collapsing" id="filters">
-		<div class="col">
-			<span class="tags">
+	</button>
+	<div class="collapsing" id="filters">
+		<div class="row no-gutters justify-content-between">
 			{%- for t in site.tags -%}
 				{% assign tag = t | first %}
-				<button class="btn badge badge-dark tag">{{tag}}</button>
+				<div class="col-auto"><button class="btn badge badge-dark tag mini-margin">{{tag}}</button></div>
 			{%- endfor -%}
-			</span>
-			<span class="categories">
 			{%- for c in site.categories -%}
 				{% assign category = c | first %}
-				<button class="btn badge badge-info category">{{category}}</button>
+				<div class="col-auto"><button class="btn badge badge-info category mini-margin">{{category}}</button></div>
 			{%- endfor -%}
-			</span>
+			<div class="col"></div>
 		</div>
+		<div class="mb-2"></div>
 	</div>
 </div>
 

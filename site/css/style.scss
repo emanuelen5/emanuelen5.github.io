@@ -4,3 +4,8 @@
 a.disabled {
     pointer-events: none;
 }
+
+.tag.mini-margin,.category.mini-margin {
+	margin-left:  0.05rem;
+	margin-right: 0.05rem;
+}
