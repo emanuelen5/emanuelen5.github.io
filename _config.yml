@@ -4,6 +4,7 @@ destination: .build
 livereload: true
 url: "https://blog.cedernaes.com"
 repo: "https://github.com/emanuelen5/emanuelen5.github.io/"
+email: erasmus.cedernaes@gmail.com
 timezone: Europe/Stockholm
 strict_front_matter: True
 title: "Emaus' blogsite"
