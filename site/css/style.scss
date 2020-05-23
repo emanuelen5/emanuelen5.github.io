@@ -57,3 +57,10 @@ ol ol {
 	margin-left:  0.05rem;
 	margin-right: 0.05rem;
 }
+
+.filter-color-inactive-link {
+	filter: grayscale(50%);
+	&:hover {
+		filter: none;
+	}
+}
