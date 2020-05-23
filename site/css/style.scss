@@ -60,13 +60,30 @@ ol ol {
 
 
 // Color special links on hover
-.filter-color-inactive-link {
-	filter: grayscale(100%) contrast(3) brightness(0.6);
-	&.invert {
-		filter: grayscale(100%) invert(100%);
+a {
+	&:hover {
+		.filter-color-inactive-link	{
+			display: none;
+		}
+	}
+
+	.filter-color-inactive-link {
+		display: inline-block;
+		width: 2em;
+		height: 2em;
 	}
 }
 
-a:hover .filter-color-inactive-link {
-	filter: none;
+a {
+	&:hover {
+		.filter-color-active-link	{
+			display: inline-block;
+			width: 2em;
+			height: 2em;
+		}
+	}
+
+	.filter-color-active-link {
+		display: none;
+	}
 }
