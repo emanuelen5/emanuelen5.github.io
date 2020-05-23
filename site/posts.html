@@ -20,12 +20,14 @@ sortindex: 1
 	</button>
 	<div class="collapsing" id="filters">
 		<div class="row no-gutters justify-content-center">
-			{%- for t in site.tags -%}
-				{% assign tag = t | first %}
+			{%- include tags_n_categories.html -%}
+			{%- assign tags = tags | sort_natural -%}
+			{%- assign categories = categories | sort_natural -%}
+
+			{%- for tag in tags -%}
 				<div class="col-auto"><button class="btn badge badge-dark tag mini-margin">{{tag}}</button></div>
 			{%- endfor -%}
-			{%- for c in site.categories -%}
-				{% assign category = c | first %}
+			{%- for category in categories -%}
 				<div class="col-auto"><button class="btn badge badge-info category mini-margin">{{category}}</button></div>
 			{%- endfor -%}
 		</div>

@@ -1,0 +1,25 @@
+{% comment %}
+	Ugly hack for getting an array of tags and categories
+
+	output:
+		tags: an array of all tags
+		categories: an array of all categories
+
+	usage:
+		{% include tags_n_categories.html %}
+		// Now the variables tags and categories will contain all tags/categories
+{% endcomment %}
+
+{%- capture tmp -%}
+	{%- for name in site.tags -%}
+		{{ name | first }},
+	{%- endfor -%}
+{%- endcapture -%}
+{%- assign tags = tmp | split:',' -%}
+
+{%- capture tmp -%}
+	{%- for name in site.categories -%}
+		{{ name | first }},
+	{%- endfor -%}
+{%- endcapture -%}
+{%- assign categories = tmp | split:',' -%}
