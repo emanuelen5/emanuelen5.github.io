@@ -20,6 +20,15 @@ layout: shell
 
 <p class="lead">Published:    {{ page.date | date: "%F" }} <br/>
 Last updated: {{ page.last-modified-date | date: "%F %R" }}</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start">
+	{%- for tag in page.tags -%}
+		<div class="col-auto"><div class="badge badge-dark tag mini-margin">{{tag}}</div></div>
+	{%- endfor -%}
+	{%- for category in page.categories -%}
+		<div class="col-auto"><div class="badge badge-info category mini-margin">{{category}}</div></div>
+	{%- endfor -%}
+</div>
 <hr class="my-4">
 
 <section>
