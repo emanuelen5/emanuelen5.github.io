@@ -58,9 +58,15 @@ ol ol {
 	margin-right: 0.05rem;
 }
 
+
+// Color special links on hover
 .filter-color-inactive-link {
-	filter: grayscale(50%);
-	&:hover {
-		filter: none;
+	filter: grayscale(100%) contrast(3) brightness(0.6);
+	&.invert {
+		filter: grayscale(100%) invert(100%);
 	}
+}
+
+a:hover .filter-color-inactive-link {
+	filter: none;
 }
