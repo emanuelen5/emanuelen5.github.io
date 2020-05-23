@@ -12,3 +12,5 @@ group :jekyll_plugins do
 end
 gem "html-proofer", "~> 3.15"
 
+
+gem "git", "~> 1.7"

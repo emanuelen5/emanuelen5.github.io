@@ -19,7 +19,7 @@ layout: shell
 {% endif %}
 
 <p class="lead">Published:    {{ page.date | date: "%F" }} <br/>
-Last updated: {{ page.last-modified-date | date: "%F %R" }}</p>
+Last updated: {{ page.git-last-modified-date | date: "%F %R" }}</p>
 
 <div class="row no-gutters justify-content-center justify-content-md-start">
 	{%- for tag in page.tags -%}
