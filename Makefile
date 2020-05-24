@@ -9,6 +9,8 @@ init: .install
 
 build:
 	bundle exec jekyll build -d ${BUILD_DIR} ${FLAGS}
+develop:
+	FLAGS='--watch --drafts ${FLAGS}' ${MAKE} build
 gh-pages: build
 	touch "${BUILD_DIR}/.nojekyll"
 	if [ -f README.md ]; then cp README.md "${BUILD_DIR}"; fi
