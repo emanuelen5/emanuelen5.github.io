@@ -42,7 +42,6 @@ sudo install sunwait /usr/local/bin/
 Testing the program at night with the coordinates for Stockholm yields:
 
 ```bash
-712 22:49:25 ~
 $ sunwait poll 59.3260668N 17.8419725E
 NIGHT
 ```
