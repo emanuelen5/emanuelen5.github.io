@@ -7,7 +7,7 @@ Jekyll::Hooks.register :posts, :pre_render do |post|
   modification_times = g.log.path(post.path)
 
   if modification_times.size == 0 then
-    modification_time = "BAH"
+    modification_time = File.mtime( post.path )
   else
     modification_time = modification_times[0].date
   end
