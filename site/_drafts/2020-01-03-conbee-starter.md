@@ -1,5 +1,4 @@
 ---
-finished: false
 title: Getting started with Conbee II
 date: 2020-01-03
 tags: [deCONZ, conbee, ha]

@@ -1,5 +1,4 @@
 ---
-finished: false
 title: Comments on blogs
 date: 2019-07-29
 tags: [disqus, isso]

@@ -1,5 +1,4 @@
 ---
-finished: false
 image: /assets/images/nginx_logo.svg
 title: Setting up Nginx for Jekyll
 date: 2020-05-16 10:33

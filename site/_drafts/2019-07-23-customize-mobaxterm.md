@@ -1,5 +1,4 @@
 ---
-finished: false
 title: Customizing MobaXterm
 date: 2019-07-23
 tags: [terminal]

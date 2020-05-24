@@ -1,5 +1,4 @@
 ---
-finished: false
 title: Flashing Arduino bootloader
 date: 2020-01-04
 tags: [arduino]

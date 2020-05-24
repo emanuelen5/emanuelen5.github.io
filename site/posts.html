@@ -45,6 +45,11 @@ sortindex: 1
 				{%- endif -%}
 			{{p.title}}</a>
 			<div>
+				{%- if p.draft == true -%}
+				<span>
+					<div class="badge badge-warning">DRAFT</div>
+				</span>
+				{%- endif -%}
 				<span class="tags">
 				{%- for t in p.tags -%}
 					<button class="btn badge badge-dark tag">{{t}}</button>
