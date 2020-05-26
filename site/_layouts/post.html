@@ -22,6 +22,9 @@ layout: shell
 Last updated: {{ page.git-last-modified-date | date: "%F %R" }}</p>
 
 <div class="row no-gutters justify-content-center justify-content-md-start">
+	{%- if page.draft -%}
+		<div class="col-auto mr-2"><div class="badge badge-warning">DRAFT</div></div>
+	{%- endif -%}
 	{%- for tag in page.tags -%}
 		<div class="col-auto"><div class="badge badge-dark tag mini-margin">{{tag}}</div></div>
 	{%- endfor -%}
