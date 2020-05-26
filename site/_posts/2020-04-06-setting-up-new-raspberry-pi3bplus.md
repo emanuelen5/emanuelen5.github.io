@@ -13,6 +13,17 @@ I will set it up to have a user called `emaus` and hostname as `emaus-pi3`, but 
 1. Write an image to the SD card with [Balena etcher](https://www.balena.io/etcher/) on Windows or [`dd`](https://www.raspberrypi.org/documentation/installation/installing-images/linux.md) on Linux.
 2. Add a file called *ssh* to the root of the **boot partition** to enable SSH directly after boot
 
+If you're setting up the SD card on a Linux computer, you can also set up hostname and Wifi before booting the Pi by editing files in the **root file system**:
+
+* Set the hostname of the pi by editing */etc/hostname*.
+* Set up a WiFi connection by adding to */etc/wpa_supplicant/wpa_supplicant.conf*:
+  ```
+  network={
+     ssid="SSID of the access point"
+     psk="Password of the access point"
+  }
+  ```
+
 ## Raspberry Pi config
 3. SSH into pi with default user and password:
     ```bash
