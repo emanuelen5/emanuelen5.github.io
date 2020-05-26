@@ -15,7 +15,11 @@ I will set it up to have a user called `emaus` and hostname as `emaus-pi3`, but 
 
 If you're setting up the SD card on a Linux computer, you can also set up hostname and Wifi before booting the Pi by editing files in the **root file system**:
 
-* Set the hostname of the pi by editing */etc/hostname*.
+* Set the hostname of the pi by editing replacing "raspberrypi" in */etc/hostname* and */etc/hosts*:
+  ```bash
+  cd /mountpoint/of/rpi/rfs
+  sed 's/raspberrypi/emaus-pi3/' -i etc/hostname etc/hosts
+  ```
 * Set up a WiFi connection by adding to */etc/wpa_supplicant/wpa_supplicant.conf*:
   ```
   network={
