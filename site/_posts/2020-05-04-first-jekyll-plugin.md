@@ -1,9 +1,10 @@
 ---
 finished: true
-title: Jekyll plugin for escaping Atom feed content
+title: Jekyll plugin for escaping Atom feed content and altering links
+summary: I look into how one could escape an Atom feed using Ruby and making links absolute. The intention was to use it for fixing links in my Atom feed, but I didn't need to turn it into a plugin since the actual problem was with the main url in the Atom feed (it was missing https:// in the start).
 date: 2020-05-04 20:01
-tags: [jekyll, ruby]
-categories: [meta]
+tags: [jekyll, ruby, nokogiri, xpath]
+categories: [meta, plugin]
 ---
 
 So I had some trouble getting correct links in my Atom feed. The links are written as relative in my posts, while feed apps expect them to be absolute.
@@ -32,6 +33,20 @@ contents.xpath('//a').foreach { |a|
 
 # Escape the content of each each entry
 contents.children = CGI.escapeHTML(contents.children.to_s)
+```
+
+## Unexpected solution
+
+The actual problem with the feed seemed to be with the atom feed URL not being absolute, which was fixed by adding the `absolute_url` filter to the url:
+
+```xml
+<link href="{% raw %}{{ page.url | absolute_url }}{% endraw %}" rel="self" type="application/atom+xml" />
+```
+
+which then turns into
+
+```xml
+<link href="https://blog.cedernaes.com/atom.xml" rel="self" type="application/atom+xml"/>
 ```
 
 [Modifying XML nodes]: https://nokogiri.org/tutorials/modifying_an_html_xml_document.html#modifying-nodes-and-attributes
