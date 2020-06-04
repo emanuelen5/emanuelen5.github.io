@@ -12,6 +12,10 @@ title: "Emaus' blogsite"
 feed:
     max_posts: 10
 
+collections:
+    tips:
+        output: true
+
 defaults:
   - scope:
       path: ""
@@ -25,3 +29,7 @@ defaults:
       path: "_posts"
     values:
       layout: "post"
+  - scope:
+      path: "tips"
+    values:
+      layout: "tip"

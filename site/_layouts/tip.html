@@ -1,0 +1,25 @@
+---
+layout: shell
+---
+
+{%- if page.summary -%}
+<p class="lead">{{ page.summary }}</p>
+{%- endif %}
+
+{% comment %}
+<p>Published:    {{ page.date | date: "%F" }} <br/>
+Last updated: {{ page.git-last-modified-date | date: "%F %R" }}</p>
+{% endcomment %}
+
+<div class="row no-gutters justify-content-center justify-content-md-start">
+	{%- for tag in page.tags -%}
+		<div class="col-auto"><div class="badge badge-dark tag mini-margin">{{tag}}</div></div>
+	{%- endfor -%}
+	{%- for category in page.categories -%}
+		<div class="col-auto"><div class="badge badge-info category mini-margin">{{category}}</div></div>
+	{%- endfor -%}
+</div>
+
+<section>
+	{{ content }}
+</section>

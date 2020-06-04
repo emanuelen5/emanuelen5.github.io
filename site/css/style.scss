@@ -33,13 +33,14 @@ img.img-post {
 }
 
 // Text lists
-ol {
+ol, ul {
 	@media screen and (max-width: $small)  {
-		padding: 1em;
+		padding-left: 1em;
 	}
+}
 
+ol {
 	ol {
-
 		list-style-type: lower-roman;
 		ol {
 			list-style-type: lower-greek;
@@ -50,7 +51,7 @@ ol {
 	}
 }
 
-ol ol {
+ol ol,ul ul {
 	@media screen and (max-width: $small) {
 		padding-left: 1em;
 		margin-left: -1em;
@@ -62,6 +63,41 @@ ol ol {
 	margin-right: 0.05rem;
 }
 
+blockquote {
+	font-size: 1em;
+	font-style: italic;
+	line-height: 1.8em;
+	padding: 0 0.5em;
+	min-height: 3em;
+	max-width: 50em;
+	background: #F2E7E0;
+	border-left: 0.5em solid #ccc5c0;
+	margin-left: 2em !important;
+
+	@media screen and (max-width: $small) {
+		margin-left: 0 !important;
+	}
+
+	// Blockquote is italic, so emphasis is "normal"
+	em {
+		font-style: normal;
+	}
+
+	// Create quote mark before first paragraph
+	&:before {
+		color: #555;
+		content: open-quote;
+		font-size: 4em;
+		line-height: 0.1em;
+		margin-right: 0.25em;
+		vertical-align: -0.4em;
+		font-family: monospace;
+	}
+
+	p:first-child {
+		display: inline;
+	}
+}
 
 // Color special links on hover
 a {
@@ -75,7 +111,7 @@ a {
 		}
 	}
 
-	> div {
+	> div.fade-image {
 		position: relative;
 		width: 2em;
 		height: 2em;
