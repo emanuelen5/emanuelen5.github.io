@@ -8,14 +8,16 @@ sortindex: 2
 
 {%- for p in site.tips -%}
 <div class="card" id="{{p.id}}">
-	<div class="card-body px-sm-3 px-1">
+	<div class="card-body px-sm-3 px-1 py-1">
 		<h5 class="card-title">
 			<a href="{{p.url}}">
 				{%- if p.thumbnail -%}
 				<span style="width:1.5em; text-align:center; display: inline-block; overflow: hidden;"><img style="height:1em;" alt="Post thumbnail" src="{{p.thumbnail}}"/></span>
 				{%- endif -%}
 			{{p.what | markdownify}}</a>
-			<div>
+		</h5>
+		<div class="card-text">{{p.why}}
+			<div class="d-inline-block">
 				{%- if p.draft == true -%}
 				<span>
 					<div class="badge badge-warning">DRAFT</div>
@@ -32,9 +34,7 @@ sortindex: 2
 				{%- endfor -%}
 				</span>
 			</div>
-		</h5>
-		<div class="card-subtitle">{{p.date | date: "%Y-%m-%d"}}</div>
-		<div class="card-text">{{p.why}}</div>
+		</div>
 	</div>
 </div>
 {%- endfor -%}
