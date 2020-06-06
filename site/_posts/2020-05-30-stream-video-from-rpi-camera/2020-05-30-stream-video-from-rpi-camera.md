@@ -2,7 +2,7 @@
 title: Streaming video from a Raspberry Pi camera
 date: 2020-05-30 21:25
 summary: > 
-   In this miniguide, I will go through two ways to stream video from a Raspberry Pi. <br>
+   In this guide, I will go through two ways to stream video from a Raspberry Pi. <br>
    First using the picamera library in Python, and then using the raspivid tool and VLC directly in the shell.
 tags: [rpi, vlc, picamera]
 categories: guide

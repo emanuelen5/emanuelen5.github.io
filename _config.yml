@@ -16,6 +16,9 @@ collections:
     tips:
         output: true
 
+exclude:
+  - '*.png'
+
 defaults:
   - scope:
       path: ""
