@@ -100,8 +100,10 @@ blockquote {
 }
 
 .anchor {
-	letter-spacing: -0.3em;
-	margin-right: 0.3em;
+	>span {
+		letter-spacing: -0.3em;
+		margin-right: 0.3em;
+	}
 }
 
 // Color special links on hover
