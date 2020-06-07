@@ -17,7 +17,7 @@ collections:
         output: true
 
 exclude:
-  - '*.png'
+  - '_drafts/*.png'
 
 defaults:
   - scope:
