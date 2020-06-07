@@ -2,6 +2,12 @@
 layout: shell
 ---
 
+<div class="container-fluid">
+	<div class="d-flex">
+		{% include previous_next_post_buttons.html %}
+	</div>
+</div>
+
 {% if page.image %}
 <div class="jumbotron post">
 	<img alt="Post image" class="img-post" src="{{page.image}}">
@@ -32,14 +38,10 @@ Last updated: {{ page.git-last-modified-date | date: "%F %R" }}</p>
 		<div class="col-auto"><div class="badge badge-info category mini-margin">{{category}}</div></div>
 	{%- endfor -%}
 </div>
+
 <hr class="my-4">
 
 <section>
 	{{ content }}
 </section>
-<div class="container">
-	<div class="d-flex justify-content-center btn-group">
-		{% include previous_next_post_buttons.html %}
-	</div>
-</div>
 <script src="/assets/js/post.js"></script>
