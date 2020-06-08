@@ -14,6 +14,7 @@ categories: miniguide
 {:.table .table-bordered .table-responsive-sm .w-auto .thead-dark}
 | Setting                               | Value     |Description |
 |---------------------------------------|-----------|------------|
+| `keyword.enabled`	                    | **`false`**   | Perform a search instead if the text does not match an URL |
 | `browser.urlbar.autoFill`             | **`false`**   |            |
 | `browser.urlbar.suggest.searches`     | **`false`**   |  |
 | `browser.fixup.alternate.enabled`     | **`false`**   | **`false`**: The URL:s entered will be interpreted exactly as they are written. <br> **`true`**: If the lookup of the URL fails, Firefox will try with variants with a prefix and suffix (from the companion settings `browser.fixup.alternate.prefix` and `browser.fixup.alternate.suffix`) |
