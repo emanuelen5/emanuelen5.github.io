@@ -48,6 +48,12 @@ div.jumbotron-post {
 	}
 }
 
+.table th, .table td {
+	@media screen and (max-width: $medium) {
+		padding: 0.2em !important;
+	}
+}
+
 .jumbotron-post-text {
 	text-shadow: 0 0 2px white;
 	text-stroke-width: 3px;

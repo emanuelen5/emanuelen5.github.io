@@ -17,3 +17,7 @@ for (img of document.querySelectorAll("img.img-post, img.img-post-helper")) {
 for (tbl of document.querySelectorAll("table.thead-dark > thead")) {
 	tbl.classList.add("thead-dark");
 }
+
+for (tbl of document.querySelectorAll("table code.highlighter-rouge")) {
+	tbl.innerHTML = tbl.innerHTML.replace(/(\.)/g, "$1<wbr>");
+}
