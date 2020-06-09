@@ -1,10 +1,16 @@
-<a href="{{page.next.url}}" class="{{extra_class}} w-100" rel="next" style="text-align: left;">
+<div class="w-50 previous-post post-navigation">
 	{%- unless page.next == nil -%}
-	<img src="/assets/images/arrow-left.svg" style="height: 1em;" alt="Left arrow">Newer post<br>{{ page.next.title }}
+	<a href="{{page.next.url}}" rel="next" title="{{ page.next.title }}">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a>
 	{%- endunless -%}
-</a>
-<a href="{{page.previous.url}}" class="{{extra_class}} w-100" rel="previous" style="text-align: right;">
+</div>
+<div class="w-50 next-post post-navigation">
 	{%- unless page.previous == nil -%}
-	Older post<img src="/assets/images/arrow-right.svg" style="height: 1em;" alt="Right arrow"><br>{{ page.previous.title }}
+	<a href="{{page.previous.url}}" rel="previous" title="{{ page.previous.title }}">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a>
 	{%- endunless -%}
-</a>
+</div>

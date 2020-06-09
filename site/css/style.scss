@@ -23,13 +23,54 @@ pre.highlight {
 }
 
 // Post jumbotron
-div.jumbotron.post {
+div.jumbotron-post {
 	padding: 0;
-	margin-bottom: 0.5em;
+	margin-bottom: 2em;
+	margin-top: 2em;
+	position: relative;
+	overflow: hidden;
+
+	@media screen and (min-width: $small) {
+		box-shadow: 0 0 10px 0px gray;
+	}
+
+	>.img-post {
+		left: 50%;
+		top: 50%;
+		width: 100%;
+		transform: translate(-50%, -50%);
+		position: absolute;
+	}
+	>.img-post-helper {
+		width: 100%;
+		max-height: 10em;
+		visibility: hidden;
+	}
 }
 
-img.img-post {
-	max-height: 6em;
+.jumbotron-post-text {
+	text-shadow: 0 0 2px white;
+	text-stroke-width: 3px;
+
+	a > img {
+		height: 1em;
+	}
+}
+
+.post-navigation {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	&.previous-post {
+		text-align: left;
+		padding-right: 1em;
+	}
+
+	&.next-post {
+		text-align: right;
+		padding-left: 1em;
+	}
 }
 
 // Text lists

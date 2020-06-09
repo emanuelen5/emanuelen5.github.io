@@ -2,9 +2,12 @@
 title: Advanced search config in Firefox
 date: 2020-06-06 13:08
 #summary:
+image: about_config_proceed_with_caution.png
 tags: [firefox]
 categories: miniguide
 ---
+
+Firefox has a bunch of settings that are not accessible through the regular.
 
 ![Firefox about:config - Proceed with caution](about_config_proceed_with_caution.png)
 ![Firefox about:config](about_config.png)
