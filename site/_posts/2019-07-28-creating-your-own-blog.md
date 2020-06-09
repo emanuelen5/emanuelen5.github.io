@@ -48,7 +48,7 @@ Pandoc is really just a document conversion tool that can be used for creating s
 # <img style="height: 1em;" class="img-inline" alt="Sphinx logo" title="Sphinx logo" src="/assets/images/sphinx_logo.png"/> Sphinx
 I ran into this on the documentation of the [VUnit project](https://github.com/vunit/Vunit) (a great tool by the way for anyone writing VHDL - and SystemVerilog I guess).
 
-# <img style="height: 1em;" class="img-inline" alt="Jekyll logo" title="Jekyll logo" src="/assets/images/jekyll_logo.png"/> Jekyll
+# <img style="height: 1em;" class="img-inline" alt="Jekyll logo" title="Jekyll logo" src="/assets/images/jekyll-test-tube.svg"/> Jekyll
 Jekyll is used for creating static websites from Markdown.
 
 Also see [Octopress](http://octopress.org/docs/) for coding related setups with Jekyll. It's basically an extension of it with several nice extra features.
