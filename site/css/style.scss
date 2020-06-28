@@ -113,13 +113,12 @@ ol ol,ul ul {
 blockquote {
 	font-size: 1em;
 	font-style: italic;
-	line-height: 1.8em;
-	padding: 0 0.5em;
+    font-family: georgia, serif;
+	line-height: 1.5em;
+	padding: 0.5em 0.5em 0.5em 2em;
 	min-height: 3em;
-	max-width: 50em;
 	background: #F2E7E0;
-	border-left: 0.5em solid #ccc5c0;
-	margin-left: 2em !important;
+	border-left: 0.25em solid #ccc5c0;
 
 	@media screen and (max-width: $small) {
 		margin-left: 0 !important;
@@ -128,17 +127,6 @@ blockquote {
 	// Blockquote is italic, so emphasis is "normal"
 	em {
 		font-style: normal;
-	}
-
-	// Create quote mark before first paragraph
-	&:before {
-		color: #555;
-		content: open-quote;
-		font-size: 4em;
-		line-height: 0.1em;
-		margin-right: 0.25em;
-		vertical-align: -0.4em;
-		font-family: monospace;
 	}
 
 	p:first-child {
