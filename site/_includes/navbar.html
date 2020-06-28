@@ -1,0 +1,16 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            {% assign navlink_pages = site.pages | where: "navlink", true | sort: "sortindex" %}
+            {%- for p in navlink_pages %}
+            {%- if p.url == page.url %}
+                {%- assign extracls = "active" %}
+            {%- else %}
+                {%- assign extracls = nil %}
+            {%- endif %}
+            <a class="nav-link {{ extracls }}" href="{{ p.url }}">{{ p.shortname }}</a>
+            {%- endfor %}
+        </ul>
+    </div>
+</nav>

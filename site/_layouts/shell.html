@@ -10,75 +10,22 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	</head>
 	<body class="d-flex flex-column min-vh-100">
-		<nav class="navbar navbar-expand navbar-dark bg-dark">
-			<div class="navbar-brand">Emaus</div>
-			<div class="" id="navbarNav">
-				<ul class="navbar-nav">
-					{% assign navlink_pages = site.pages | where: "navlink", true | sort: "sortindex" %}
-					{%- for p in navlink_pages %}
-					{%- if p.url == page.url %}
-						{%- assign extracls = "active" %}
-					{%- else %}
-						{%- assign extracls = nil %}
-					{%- endif %}
-					<a class="nav-link {{ extracls }}" href="{{ p.url }}">{{ p.shortname }}</a>
-					{%- endfor %}
-				</ul>
-			</div>
-		</nav>
+        {%- include navbar.html -%}
 		<div class="container px-sm-3 px-1">
 			{% include anchor_headings.html anchorBody=">" anchorClass="anchor" beforeHeading=true html=content %}
 		</div>
     </body>
 	<!-- Make sure that footer is at bottom of page -->
 	<div class="wrapper flex-grow-1"></div>
-    <footer>
-		<div class="container-fluid navbar-light bg-light py-2">
-			<div class="row">
-				<div class="col-lg-auto col-12 navbar-brand text-center">&copy; {{site.time | date: "%Y" }} Erasmus Cedernaes</div>
-				<div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
-					<a href="{{site.repo}}/tree/blog/{{site.source}}/{{page.path}}">
-						<div class="align-middle fade-image">
-							<img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0)" src="/assets/images/code.svg"/>
-							<img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
-						</div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
-					</a>
-				</div>
-				<div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
-					<a href="https://github.com/emanuelen5">
-						<div class="align-middle fade-image">
-							<img alt="Github icon" class="filter-color-inactive-link invert" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
-							<img alt="Github icon" class="filter-color-active-link invert" src="/assets/images/github_icon.svg"/>
-						</div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
-					</a>
-				</div>
-				<div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
-					<a href="mailto:{{site.email}}">
-						<div class="align-middle fade-image">
-							<img alt="Email icon" class="filter-color-inactive-link invert" src="/assets/images/email.svg"/>
-							<img alt="Email icon" style="filter: grayscale(100%) invert(100%)" class="filter-color-active-link invert" src="/assets/images/email.svg"/>
-						</div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
-					</a>
-				</div>
-				<div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
-					<a href="https://www.linkedin.com/in/erasmus-cedernaes/">
-						<div class="align-middle fade-image">
-							<img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
-							<img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
 
-						</div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
-					</a>
-				</div>
-				<div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
-					<a href="/atom.xml">
-						<div class="align-middle fade-image">
-							<img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
-							<img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
-						</div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
-					</a>
-				</div>
-			</div>
-		</nav>
+    {%- unless page.previous == nil and page.next == nil-%}
+        <div class="container d-flex jumbotron-post-text w-100">
+            {% include previous_next_post_buttons.html %}
+        </div>
+    {%- endunless -%}
+
+    <footer>
+        {% include footer_links.html %}
 		<script src="/assets/js/shell.js"></script>
     </footer>
 </html>
