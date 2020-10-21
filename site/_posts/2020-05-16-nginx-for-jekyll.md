@@ -7,12 +7,14 @@ categories: [miniguide, meta]
 ---
 
 # Installing
+Is easy on Ubuntu:
+
 ```bash
 apt install nginx
 ```
 
 # Configuring
-Add a configuration file for the site under `/etc/nginx/conf.d/`. I use the following configuration for my blog:
+Then add a configuration file for the site under `/etc/nginx/conf.d/`. I've use the following configuration for my blog:
 
 ```nginx
 # /etc/nginx/conf.d/blog.conf
@@ -21,7 +23,7 @@ server {
   # Port to serve on
   listen 4000;
  
-  # Where the build output is located
+  # Where the build output is located (that should be served)
   root /home/emaus/blog/.build;
 
   # Custom 404 page
@@ -33,8 +35,10 @@ server {
   if ($request_uri ~ ^/(.*)\.html$) {
       return 302 /$1;
   }
+  # Try to find file with different endings, otherwise send to 404 page
   try_files $uri $uri.html $uri/ =404;
 }
 ```
 
-Run `nginx -s reload` after updating the configuration files.
+## Update the configuration
+Remember to run `nginx -s reload` after updating the configuration files!
