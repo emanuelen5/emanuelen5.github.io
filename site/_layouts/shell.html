@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>{{ page.title }}</title>
+		<title>{{ "Emaus: " | append: page.title | markdownify | strip_html | truncatewords: 3 }}</title>
 		<link rel="stylesheet" href="/css/style.css">
 		<link rel="stylesheet" href="/css/default.css">
 		<!-- Bootstrap CSS -->
@@ -18,7 +18,7 @@
 	<!-- Make sure that footer is at bottom of page -->
 	<div class="wrapper flex-grow-1"></div>
 
-    {%- unless page.previous == nil and page.next == nil-%}
+    {%- unless page.previous == nil and page.next == nil -%}
         <div class="container d-flex jumbotron-post-text w-100">
             {% include previous_next_post_buttons.html %}
         </div>

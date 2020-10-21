@@ -6,7 +6,7 @@ shortname: Tips
 sortindex: 2
 ---
 
-{% assign tips = site.tips | sort: 'date' | reverse %}
+{%- assign tips = site.tips | sort: 'date' | reverse -%}
 {%- for p in tips -%}
 <div class="card" id="{{p.id}}">
 	<div class="card-body px-sm-3 px-1 py-1">

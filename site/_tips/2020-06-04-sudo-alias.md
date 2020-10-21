@@ -34,4 +34,4 @@ The Bash manual's section on aliases: <https://www.gnu.org/savannah-checkouts/gn
 {:.stack}
 1. When looking at Z-shell plugins and [comparing zsh versus fish](https://zellwk.com/blog/bash-zsh-fish/).<br>
 1. Linked to his dotfiles where I found [the strange alias](https://github.com/zellwk/dotfiles/blob/06e0411183/env/aliases-shared.sh#L42-L43).<br>
-1. That I duckduckgo:ed up [to have a nice explanation](https://linuxhandbook.com/run-alias-as-sudo/) that refered to the Bash manual.
+1. That I duckduckgo:ed up [to have a nice explanation](https://linuxhandbook.com/run-alias-as-sudo/) that referred to the Bash manual.

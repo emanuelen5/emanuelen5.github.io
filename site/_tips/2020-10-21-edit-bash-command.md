@@ -1,7 +1,7 @@
 ---
 title: edit-and-execute-command
 what: |
-   *C-x, C-e* in bash
+   *C-x, C-e* in Bash
 why: Open up the current line in an editor and execute it when finished editing
 tags: [bash]
 ---
@@ -13,7 +13,7 @@ Press <kbd>Ctrl</kbd>-<kbd>x</kbd>, <kbd>Ctrl</kbd>-<kbd>e</kbd> in the terminal
 So you can edit it (in multi-line mode) with your favorite editor.
 
 # Reference
-The Bash manual's section on miscellaneaous commands: <https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#index-edit_002dand_002dexecute_002dcommand-_0028C_002dx-C_002de_0029>
+The Bash manual's section on miscellaneaous commands: [reference](https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#index-edit_002dand_002dexecute_002dcommand-_0028C_002dx-C_002de_0029)
 
 > edit-and-execute-command (C-x C-e)
 > 
