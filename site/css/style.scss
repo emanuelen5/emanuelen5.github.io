@@ -132,6 +132,11 @@ blockquote {
 	p:first-child {
 		display: inline;
 	}
+
+	p {
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
 }
 
 .anchor {

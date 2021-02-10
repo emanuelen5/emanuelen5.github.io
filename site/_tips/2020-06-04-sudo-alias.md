@@ -4,7 +4,7 @@ what: |
    ```bash
    alias sudo='sudo '
    ```
-why: Run alias with sudo
+why: Run aliases with sudo
 tags: [bash]
 ---
 
