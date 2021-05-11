@@ -6,7 +6,7 @@ what: |
    ssh-keyscan -H <hostname> >> ~/.ssh/known_hosts
    ```
 why: Be able to SSH into machine without warning about fingerprint
-date: 2020-09-27
+date: 2021-02-10
 tags: [ssh]
 ---
 
