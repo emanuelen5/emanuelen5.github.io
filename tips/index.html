@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Emaus: Tips
+</title>
+		<link rel="stylesheet" href="/css/style.css">
+		<link rel="stylesheet" href="/css/default.css">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	</head>
+	<body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link active" href="/tips/">Tips</a>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+			<div class="row no-gutters justify-content-center justify-content-md-start"></div>
+
+<section>
+	<div class="card" id="/tips/emacs-remote-edit-file">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/tips/2021-05-11-emacs-remote-edit-file/"><p>In Emacs: <kbd>Ctrl</kbd> + <kbd>x</kbd>, <kbd>Ctrl</kbd> + <kbd>f</kbd> <br />
+<code>/ssh:<em>user</em>@<em>host</em>:<em>filename</em></code></p>
+</a>
+		
+      </h5>
+		<div class="card-text">Edit a file on a remote server that doesn't have an editor installed
+			<div class="d-inline-block"><span class="tags"><button class="btn badge badge-dark tag">ssh</button><button class="btn badge badge-dark tag">emacs</button></span>
+				<span class="categories"></span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card" id="/tips/update-remote-host-key">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/tips/2021-02-10-update-remote-host-key/"><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-keygen <span class="nt">-R</span> &lt;<span class="nb">hostname</span><span class="o">&gt;</span>
+ssh-keyscan <span class="nt">-H</span> &lt;<span class="nb">hostname</span><span class="o">&gt;</span> <span class="o">&gt;&gt;</span> ~/.ssh/known_hosts
+</code></pre></div></div>
+</a>
+		
+      </h5>
+		<div class="card-text">Be able to SSH into machine without warning about fingerprint
+			<div class="d-inline-block"><span class="tags"><button class="btn badge badge-dark tag">ssh</button></span>
+				<span class="categories"></span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card" id="/tips/edit-bash-command">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/tips/2020-10-21-edit-bash-command/"><p><em>C-x, C-e</em> in Bash</p>
+</a>
+		
+      </h5>
+		<div class="card-text">Open up the current line in an editor and execute it when finished editing
+			<div class="d-inline-block"><span class="tags"><button class="btn badge badge-dark tag">bash</button></span>
+				<span class="categories"></span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card" id="/tips/x11-as-other-user">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/tips/2020-10-21-x11-as-other-user/"><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xauth add <span class="si">$(</span>xauth <span class="nt">-f</span> ~<span class="k">${</span><span class="nv">user</span><span class="k">}</span>/.Xauthority list | <span class="nb">tail</span> <span class="nt">-1</span><span class="si">)</span>
+</code></pre></div></div>
+</a>
+		
+      </h5>
+		<div class="card-text">Run X11 programs as another user
+			<div class="d-inline-block"><span class="tags"><button class="btn badge badge-dark tag">bash</button><button class="btn badge badge-dark tag">x11</button></span>
+				<span class="categories"></span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card" id="/tips/sudo-alias">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/tips/2020-06-04-sudo-alias/"><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">alias sudo</span><span class="o">=</span><span class="s1">'sudo '</span>
+</code></pre></div></div>
+</a>
+		
+      </h5>
+		<div class="card-text">Run aliases with sudo
+			<div class="d-inline-block"><span class="tags"><button class="btn badge badge-dark tag">bash</button></span>
+				<span class="categories"></span>
+			</div>
+		</div>
+	</div>
+</div>
+
+</section>
+
+		</div>
+    </body>
+	<!-- Make sure that footer is at bottom of page -->
+	<div class="wrapper flex-grow-1"></div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2021 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/tips.md">
+                <div class="align-middle fade-image">
+                    <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0)" src="/assets/images/code.svg"/>
+                    <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <img alt="Github icon" class="filter-color-inactive-link invert" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                    <img alt="Github icon" class="filter-color-active-link invert" src="/assets/images/github_icon.svg"/>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <img alt="Email icon" class="filter-color-inactive-link invert" src="/assets/images/email.svg"/>
+                    <img alt="Email icon" style="filter: grayscale(100%) invert(100%)" class="filter-color-active-link invert" src="/assets/images/email.svg"/>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                    <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                    <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+		<script src="/assets/js/shell.js"></script>
+    </footer>
+</html>

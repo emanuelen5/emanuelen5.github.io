@@ -1,0 +1,63 @@
+a.disabled { pointer-events: none; }
+
+img.img-centered { margin-left: auto; margin-right: auto; display: block; }
+
+pre.highlight { max-height: 30rem; }
+
+div.jumbotron-post { padding: 0; margin-bottom: 2em; margin-top: 2em; position: relative; overflow: hidden; }
+
+@media screen and (min-width: 575px) { div.jumbotron-post { box-shadow: 0 0 10px 0px gray; } }
+
+div.jumbotron-post > .img-post { left: 50%; top: 50%; width: 100%; transform: translate(-50%, -50%); position: absolute; }
+
+div.jumbotron-post > .img-post-helper { width: 100%; max-height: 10em; visibility: hidden; }
+
+@media screen and (max-width: 767px) { .table th, .table td { padding: 0.2em !important; } }
+
+.jumbotron-post-text { text-shadow: 0 0 2px white; text-stroke-width: 3px; }
+
+.jumbotron-post-text a > img { height: 1em; }
+
+.post-navigation { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.post-navigation.previous-post { text-align: left; padding-right: 1em; }
+
+.post-navigation.next-post { text-align: right; padding-left: 1em; }
+
+@media screen and (max-width: 575px) { ol, ul { padding-left: 1em; } }
+
+ol ol { list-style-type: lower-roman; }
+
+ol ol ol { list-style-type: lower-greek; }
+
+ol ol ol ol { list-style-type: lower-latin; }
+
+@media screen and (max-width: 575px) { ol ol, ul ul { padding-left: 1em; margin-left: -1em; } }
+
+.tag.mini-margin, .category.mini-margin { margin-left: 0.05rem; margin-right: 0.05rem; }
+
+blockquote { font-size: 1em; font-style: italic; font-family: georgia, serif; line-height: 1.5em; padding: 0.5em 0.5em 0.5em 2em; min-height: 3em; background: #F2E7E0; border-left: 0.25em solid #ccc5c0; }
+
+@media screen and (max-width: 575px) { blockquote { margin-left: 0 !important; } }
+
+blockquote em { font-style: normal; }
+
+blockquote p:first-child { display: inline; }
+
+blockquote p { margin-top: 0px; margin-bottom: 0px; }
+
+.anchor > span { letter-spacing: -0.3em; margin-right: 0.3em; }
+
+a:hover .filter-color-inactive-link { opacity: 0; }
+
+a:hover .filter-color-active-link { opacity: 1; }
+
+a > div.fade-image { position: relative; width: 2em; height: 2em; display: inline-block; }
+
+a .filter-color-inactive-link, a .filter-color-active-link { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: opacity 0.3s ease; }
+
+a .filter-color-inactive-link { opacity: 1; }
+
+a .filter-color-active-link { opacity: 0; }
+
+/*# sourceMappingURL=style.css.map */
