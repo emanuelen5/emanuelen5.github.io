@@ -11,21 +11,26 @@ I will set it up to have a user called `emaus` and hostname as `emaus-pi3`, but 
 
 ## SD card
 1. Write an image to the SD card with [Balena etcher](https://www.balena.io/etcher/) on Windows or [`dd`](https://www.raspberrypi.org/documentation/installation/installing-images/linux.md) on Linux.
-2. Add a file called *ssh* to the root of the **boot partition** to enable SSH directly after boot
+2. Add a file called *ssh* to the root of the **boot partition** to enable SSH directly after boot.
 
-If you're setting up the SD card on a Linux computer, you can also set up hostname and Wifi before booting the Pi by editing files in the **root file system**:
+You can also set up a WiFi by adding a file called *wpa_supplicant.conf* to the root of the **boot partition** to make it connect to a WiFi after boot (this file will then be moved to the root file system under */etc/wpa_supplicant/wpa_supplicant.conf*). The file should contain the following (see the [Raspberry Pi page on headless setup] for more info]):
+  ```
+  ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+  country=<Two letter ISO 3166-1 country code, like: SE, GB, US>
+  update_config=1
 
-* Set the hostname of the pi by editing replacing "raspberrypi" in */etc/hostname* and */etc/hosts*:
+  network={
+     ssid="<SSID of the access point>"
+     psk="<Password of the access point>"
+  }
+  ```
+
+If you're setting up the SD card on a Linux computer, you can also set the hostname before booting the Pi by editing files in the **root file system**:
+
+* Set the hostname of the pi by replacing "raspberrypi" in */etc/hostname* and */etc/hosts*:
   ```bash
   cd /mountpoint/of/rpi/rfs
   sed 's/raspberrypi/emaus-pi3/' -i etc/hostname etc/hosts
-  ```
-* Set up a WiFi connection by adding to */etc/wpa_supplicant/wpa_supplicant.conf*:
-  ```
-  network={
-     ssid="SSID of the access point"
-     psk="Password of the access point"
-  }
   ```
 
 ## Raspberry Pi config
@@ -100,6 +105,10 @@ If you're setting up the SD card on a Linux computer, you can also set up hostna
     # To disable tunneled clear text passwords, change to no here!
     PasswordAuthentication no
     ```
+15. Restart the SSH daemon:
+    ```bash
+    emaus@emaus-pi3:~ $ sudo systemctl restart sshd
+    ```
 
 ## Setting up additional security (fail2ban)
 15. Install fail2ban:
@@ -152,3 +161,5 @@ By attaching the old SD card to another Pi, through an USB to SD card reader, I 
     emaus@emaus-pi4:~/mounttest/home/emaus $ scp -r .ssh emaus@emaus-pi3.local:/home/emaus/.ssh
     ```
     Note that you might have to change priveliges on the .ssh folder to be able to copy it (or run command as sudo).
+
+[Raspberry Pi page on headless setup]: https://www.raspberrypi.org/documentation/configuration/wireless/headless.md
