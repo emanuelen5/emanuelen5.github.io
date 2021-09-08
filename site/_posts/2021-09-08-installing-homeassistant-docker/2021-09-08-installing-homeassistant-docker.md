@@ -1,9 +1,9 @@
 ---
-title: Installing Homeassistant in a Docker container
-date: 2021-07-18 21:00
+title: Installing Homeassistant in a Docker container (e.g. on Raspberry Pi)
+date: 2021-09-08 23:15
 summary: > 
    How to install Homeassistant in a Docker container.
-tags: [ha, docker]
+tags: [ha, docker, rpi]
 categories: guide
 ---
 
