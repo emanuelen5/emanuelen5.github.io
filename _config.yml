@@ -15,6 +15,8 @@ feed:
 collections:
     tips:
         output: true
+    recipes:
+        output: true
 
 exclude:
   - '_drafts/*.png'
@@ -33,6 +35,10 @@ defaults:
     values:
       layout: "post"
   - scope:
-      path: "tips"
+      path: "_tips"
     values:
       layout: "tip"
+  - scope:
+      path: "_recipes"
+    values:
+      layout: "recipe"

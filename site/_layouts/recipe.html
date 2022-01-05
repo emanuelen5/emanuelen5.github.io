@@ -2,8 +2,13 @@
 layout: default
 ---
 
-{%- if page.summary -%}
-<p class="lead">{{ page.summary }}</p>
+{%- if page.ingredients -%}
+<p class="lead">Ingredienser</p>
+<ul>
+{% for ingredient in page.ingredients %}
+<li>{{ingredient}}</li>
+{% endfor %}
+</ul>
 {%- endif %}
 
 {% comment %}
@@ -20,7 +25,4 @@ Last updated: {{ page.git-last-modified-date | date: "%F %R" }}</p>
 	{%- endfor -%}
 </div>
 
-<section>
-	{{ content }}
-</section>
-
+{{ content }}
