@@ -1,0 +1,32 @@
+---
+layout: default
+---
+
+<div class="row no-gutters justify-content-center justify-content-md-start">
+	{%- for tag in page.tags -%}
+		<div class="col-auto"><div class="badge badge-dark tag mini-margin">{{tag}}</div></div>
+	{%- endfor -%}
+	{%- for category in page.categories -%}
+		<div class="col-auto"><div class="badge badge-info category mini-margin">{{category}}</div></div>
+	{%- endfor -%}
+</div>
+
+<p>Published:    {{ page.date | date: "%F" }} <br/>
+{% comment %}
+Last updated: {{ page.git-last-modified-date | date: "%F %R" }}</p>
+{% endcomment %}
+
+{%- if page.ingredients -%}
+<div class="card">
+	<div class="card-body">
+		<h5 class="card-title">Ingredienser</h5>
+		<ul>
+			{% for ingredient in page.ingredients %}
+			<li>{{ingredient}}</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+{%- endif %}
+
+{{ content }}
