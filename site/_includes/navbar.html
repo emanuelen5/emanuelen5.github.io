@@ -11,6 +11,14 @@
             {%- endif %}
             <a class="nav-link {{ extracls }}" href="{{ p.url }}">{{ p.shortname }}</a>
             {%- endfor %}
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
         </ul>
     </div>
 </nav>

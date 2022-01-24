@@ -1,22 +1,24 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>{{ "Emaus: " | append: page.title | markdownify | strip_html | truncatewords: 3 }}</title>
-		<link rel="stylesheet" href="/css/style.css">
-		<link rel="stylesheet" href="/css/default.css">
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-	</head>
-	<body class="d-flex flex-column min-vh-100">
-        {%- include navbar.html -%}
-		<div class="container px-sm-3 px-1">
-			{% include anchor_headings.html anchorBody=">" anchorClass="anchor" beforeHeading=true html=content %}
-		</div>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{{ "Emaus: " | append: page.title | markdownify | strip_html | truncatewords: 3 }}</title>
+        <link rel="stylesheet" href="/assets/dark-mode/dark-mode.css">
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/default.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+            {%- include navbar.html -%}
+            <div class="container px-sm-3 px-1">
+                {% include anchor_headings.html anchorBody=">" anchorClass="anchor" beforeHeading=true html=content %}
+            </div>
     </body>
-	<!-- Make sure that footer is at bottom of page -->
-	<div class="wrapper flex-grow-1"></div>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div>
 
     {%- unless page.previous == nil and page.next == nil -%}
         <div class="container d-flex jumbotron-post-text w-100">
@@ -26,6 +28,6 @@
 
     <footer>
         {% include footer_links.html %}
-		<script src="/assets/js/shell.js"></script>
+        <script src="/assets/js/shell.js" async></script>
     </footer>
 </html>
