@@ -13,4 +13,4 @@ end
 gem "html-proofer", "~> 3.15"
 
 
-gem "git", "~> 1.7"
+gem "git", "~> 1.11"
