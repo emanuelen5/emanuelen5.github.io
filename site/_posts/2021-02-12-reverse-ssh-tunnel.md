@@ -99,14 +99,17 @@ Host my-tunnel
 One can then connect to the target with all of the preconfigured settings, by just specifying the name:
 
 ```bash
-(remote) $ ssh my-tunnel
+(remote) $ ssh -N my-tunnel
 # Equivalent to
-(remote) $ ssh -p 22 -i ~/.ssh/reverse_ssh_example.id_rsa -o IdentitiesOnly=yes -R 4567:localhost:22 -T -o ServerAliveInterval=60 -o ServerAliveCountMax 30 -o ExitOnForwardFailure=yes tunnel-user@example.com
+(remote) $ ssh -N -p 22 -i ~/.ssh/reverse_ssh_example.id_rsa -o IdentitiesOnly=yes -R 4567:localhost:22 -T -o ServerAliveInterval=60 -o ServerAliveCountMax 30 -o ExitOnForwardFailure=yes tunnel-user@example.com
 ```
+
+Note that we still needed the `-N` option since it is [not settable in the SSH config file](https://superuser.com/questions/518888/setup-n-parameter-in-ssh-config-file). It makes sure that we do try not execute a remote command (like starting a terminal) since we have disallowed it in the SSH server configuration.
+
 # On the remote server
 
 ## Service that starts the reverse SSH tunnel
-Create a service on the remote server that continously tries to connects to your local server, using the helper program *autossh*.
+Create a service on the remote server that continously tries to connects to your local server, using the helper program *autossh* (installable on many systems with the command `apt install autossh`).
 
 ```ini
 ## /etc/systemd/system/autossh.service
