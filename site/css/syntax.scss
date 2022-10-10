@@ -1,0 +1,11 @@
+---
+---
+
+:not([data-theme="dark"]) {
+    @import "syntax-light.scss";
+}
+
+
+[data-theme="dark"] {
+    @import "syntax-dark.scss";
+}

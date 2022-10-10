@@ -9,7 +9,7 @@ $extra-large: 1199px;
 
 
 a.disabled {
-    pointer-events: none;
+	pointer-events: none;
 }
 
 img.img-centered {
@@ -113,7 +113,7 @@ ol ol,ul ul {
 blockquote {
 	font-size: 1em;
 	font-style: italic;
-    font-family: georgia, serif;
+	font-family: georgia, serif;
 	line-height: 1.5em;
 	padding: 0.5em 0.5em 0.5em 2em;
 	min-height: 3em;
@@ -180,5 +180,60 @@ a {
 
 	.filter-color-active-link {
 		opacity: 0;
+	}
+}
+
+
+// Dark mode specific styling
+[data-theme="dark"] {
+	background-color: #111 !important;
+	color: #eee;
+
+	.bg-light {
+	background-color: #333 !important;
+	}
+
+	.bg-white {
+	background-color: #000 !important;
+	}
+
+	.bg-black {
+	background-color: #eee !important;
+	}
+
+	.highlight {
+	color: #bbc1c7 !important;
+	background-color: #2a2a2a !important;
+	}
+
+	.nv {
+	color: #423efb !important;
+	}
+
+	.card {
+	background-color: #1a1a1a !important;
+	}
+
+	[data-theme="dark"] blockquote {
+	color: rgba(200, 193, 160, 0.923);
+		background: #3a3735;
+		border-left: 0.25em solid #504d4b;
+	}
+
+	/* Previous/next buttons */
+	.post-navigation > a {
+	color: rgb(198, 183, 159);
+	}
+
+	.jumbotron-post-text {
+		text-shadow: 0 0 2px black;
+	}
+
+	code|table {
+	color: rgb(198, 183, 159);
+	}
+
+	.table-bordered td {
+	color: rgb(198, 183, 159);
 	}
 }
