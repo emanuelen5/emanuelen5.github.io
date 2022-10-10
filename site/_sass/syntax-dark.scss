@@ -7,7 +7,10 @@
     border-radius: 4px;
     font-size: 1rem;
 }
-    
+
+pre > code {
+    color: #969896;
+}
 .highlight .hll { background-color: #373b41 }
 .highlight .c { color: #969896 } /* Comment */
 .highlight .err { color: #cc6666 } /* Error */
