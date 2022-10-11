@@ -10,7 +10,7 @@ Recipes are in 🇸🇪 Swedish!
 
 {% assign recipes = site.recipes | sort: 'date' | reverse -%}
 {%- for p in recipes -%}
-<div class="card my-1" id="{{p.id}}">
+<div class="card my-3" id="{{p.id}}">
 	<div class="card-body px-sm-3 px-1 py-1">
 		<h5 class="card-title">
 			<a href="{{p.url}}">

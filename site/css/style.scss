@@ -193,6 +193,10 @@ a {
 
 // Dark mode specific styling
 [data-theme="dark"] {
+	$footer-color:#201f1c;
+	$text-color: rgb(198, 188, 183);
+	$light-text-color: rgb(96, 90, 88);
+
 	.show-when-light {
 		display: none;
 	}
@@ -200,47 +204,63 @@ a {
 		display: inherit;
 	}
 
-	// Filter links styling
+	// Header and footer
 	a {
 		.filter-color-inactive-link.dark {
 			opacity: 1;
 		}
-
 		.filter-color-active-link.dark {
 			opacity: 0;
 		}
 	}
+	nav.navbar-dark {
+		background-color: $footer-color !important;
+	}
+	.bg-light {
+		background-color: $footer-color !important;
+	}
+	.navbar-light {
+		.navbar-brand {
+			color: $light-text-color;
+			&:hover {
+				color: $light-text-color;
+			}
+		}
+
+		.navbar-text a {
+			color: $light-text-color;
+			&:hover {
+				color: $text-color;
+			}
+		}
+	}
 
 	background-color: #111 !important;
-	color: #eee;
+	color: $text-color;
 
 	a {
 		color: #2786ec;
 	}
 
-	.bg-light {
-	background-color: #333 !important;
-	}
-
 	.bg-white {
-	background-color: #000 !important;
+		background-color: #000 !important;
 	}
 
 	.bg-black {
-	background-color: #eee !important;
+		background-color: #eee !important;
 	}
 
 	.highlight {
-	color: #bbc1c7 !important;
-	background-color: #2a2a2a !important;
+		color: #bbc1c7 !important;
+		background-color: #2a2a2a !important;
 	}
 
 	.nv {
-	color: #423efb !important;
+		color: #423efb !important;
 	}
 
 	.card {
-	background-color: #1a1a1a !important;
+		background-color: #1a1a1a !important;
 	}
 
 	blockquote {
@@ -259,10 +279,10 @@ a {
 	}
 
 	code|table {
-	color: rgb(198, 183, 159);
+		color: rgb(198, 183, 159);
 	}
 
 	.table-bordered td {
-	color: rgb(198, 183, 159);
+		color: rgb(198, 183, 159);
 	}
 }
