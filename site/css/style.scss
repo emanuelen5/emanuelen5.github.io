@@ -147,13 +147,14 @@ blockquote {
 }
 
 // Color special links on hover
+// (Several layers of links that are revealed/hidden on hover, see footer_links.html)
 a {
 	&:hover {
-		.filter-color-inactive-link	{
+		.filter-color-inactive-link {
 			opacity: 0;
 		}
 
-		.filter-color-active-link	{
+		.filter-color-active-link {
 			opacity: 1;
 		}
 	}
@@ -182,12 +183,40 @@ a {
 		opacity: 0;
 	}
 }
+.show-when-light {
+	display: inherit;
+}
+.show-when-dark {
+	display: none;
+}
 
 
 // Dark mode specific styling
 [data-theme="dark"] {
+	.show-when-light {
+		display: none;
+	}
+	.show-when-dark {
+		display: inherit;
+	}
+
+	// Filter links styling
+	a {
+		.filter-color-inactive-link.dark {
+			opacity: 1;
+		}
+
+		.filter-color-active-link.dark {
+			opacity: 0;
+		}
+	}
+
 	background-color: #111 !important;
 	color: #eee;
+
+	a {
+		color: #2786ec;
+	}
 
 	.bg-light {
 	background-color: #333 !important;

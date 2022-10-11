@@ -1,9 +1,9 @@
 ---
 title: 'Find + xargs'
 what: |
-   <code>
-       find . -type f <em>-print0</em> | xargs <em>-0</em> &lt;command&gt;
-   </code>
+    ```bash
+    find . -type f -print0 | xargs -0 <command>
+    ```
 why: Use a listing of files from <code>find</code> together with <code>xargs</code>
 date: 2022-10-10
 tags: [bash]

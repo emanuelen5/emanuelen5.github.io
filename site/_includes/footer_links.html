@@ -4,41 +4,70 @@
         <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
             <a href="{{site.repo}}/tree/blog/{{site.source}}/{{page.path}}">
                 <div class="align-middle fade-image">
-                    <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0)" src="/assets/images/code.svg"/>
-                    <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
                 </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
             </a>
         </div>
         <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
             <a href="https://github.com/emanuelen5">
                 <div class="align-middle fade-image">
-                    <img alt="Github icon" class="filter-color-inactive-link invert" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
-                    <img alt="Github icon" class="filter-color-active-link invert" src="/assets/images/github_icon.svg"/>
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
                 </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
             </a>
         </div>
         <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
             <a href="mailto:{{site.email}}">
                 <div class="align-middle fade-image">
-                    <img alt="Email icon" class="filter-color-inactive-link invert" src="/assets/images/email.svg"/>
-                    <img alt="Email icon" style="filter: grayscale(100%) invert(100%)" class="filter-color-active-link invert" src="/assets/images/email.svg"/>
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: contrast(80%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(80%)" src="/assets/images/email.svg"/>
+                    </div>
                 </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
             </a>
         </div>
         <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
             <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
                 <div class="align-middle fade-image">
-                    <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
-                    <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
-
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
                 </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
             </a>
         </div>
         <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
             <a href="/atom.xml">
                 <div class="align-middle fade-image">
-                    <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
-                    <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: contrast(1.8) brightness(0.5)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
                 </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
             </a>
         </div>
