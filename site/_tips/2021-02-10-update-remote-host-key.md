@@ -24,13 +24,13 @@ From the man pages:
 
 ## [ssh-keygen](https://linux.die.net/man/1/ssh-keygen)
 
-> *ssh-keygen -R hostname*
+> `ssh-keygen -R hostname`
 > 
 > Removes all keys belonging to hostname from a known\_hosts file. This option is useful to delete hashed hosts (see the -H option above).
 
 ## [ssh-keyscan](https://linux.die.net/man/1/ssh-keyscan)
 
-> *ssh-keyscan -H'*
+> `ssh-keyscan -H`
 >
 > Hash all hostnames and addresses in the output. Hashed names may be used normally by ssh and sshd, but they do not reveal identifying information should the file's contents be disclosed. 
 
