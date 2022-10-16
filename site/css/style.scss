@@ -242,6 +242,13 @@ a {
 		color: #2786ec;
 	}
 
+	.card-title a {
+		color: $text-color;
+		&:hover {
+			color: #5b6d81;
+		}
+	}
+
 	.bg-white {
 		background-color: #000 !important;
 	}

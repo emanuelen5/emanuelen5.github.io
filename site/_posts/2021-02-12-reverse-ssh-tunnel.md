@@ -35,7 +35,7 @@ Begin by setting up the local server. It will need a dedicated user that only is
 1. First create a separate user called e.g. *tunnel-user*
 2. Configure the SSH daemon to only allow *that* user to create reverse SSH tunnels on specific ports (4567 in the example below):
 
-```ssh-config
+```ssh
 ## /etc/ssh/sshd_config
 
 Match User tunnel-user
@@ -65,7 +65,7 @@ Add a public key that shall be allowed to connect to the local server. This assu
 ## SSH configuration
 This is just a nice feature that I like to use. Instead of setting all of the parameters in the SSH command, they can be specified as targets, called *Hosts*. Each target has a combination of parameters, like what `ip:port` to connect to, what SSH key to use, etc. 
 
-```ssh-config
+```ssh
 ## ~/.ssh/config
 
 # The name of the target becomes my-tunnel

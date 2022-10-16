@@ -96,11 +96,12 @@ If you're setting up the SD card on a Linux computer, you can also set the hostn
     emaus@emaus-pi4:~ $ ssh-copy-id -i .ssh/id_rsa emaus@emaus-pi3.local
     ```
 14. Make sure that SSH password authentication is disabled by editing the configuration file */etc/ssh/sshd_config*:
-    ```sshd
+    ```ssh
     PermitRootLogin no
     MaxAuthTries 1
     PubkeyAuthentication yes
-    [...]
+
+    # [...]
 
     # To disable tunneled clear text passwords, change to no here!
     PasswordAuthentication no
