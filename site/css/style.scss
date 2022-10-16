@@ -263,10 +263,24 @@ a {
 		background-color: #1a1a1a !important;
 	}
 
+	.codecaption {
+		margin-bottom: 0;
+	}
+
 	blockquote {
 		color: rgba(200, 193, 160, 0.923);
 		background: #3a3735;
 		border-left: 0.25em solid #504d4b;
+	}
+
+	figure {
+		text-align: center;
+		margin: auto;
+		margin-bottom: 1em;
+
+		figurecaption {
+			font-style: italic;
+		}
 	}
 
 	/* Previous/next buttons */
