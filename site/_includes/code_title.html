@@ -1,0 +1,26 @@
+{% comment %}
+Parameters: 
+    - title (text)
+    - anchor (#link)
+    - syntax (extra)
+{% endcomment %}
+
+{% assign listing_id = listing_id | plus: 1 -%}
+<p class="mb-0">
+    {% comment %} Get parameter from anchor {% endcomment %}
+    {% if include.anchor -%}
+        {% assign listing_id_ = include.anchor  -%}
+    {% else -%}
+        {% assign listing_id_ =  "listing" | append: listing_id  -%}
+    {% endif -%}
+    <a id="{{ listing_id_ }}" href="#{{ listing_id_ }}">#</a>
+    <span>listing {{ listing_id }}:</span>
+    <strong>
+        <code>
+            {{ include.title | default: "!! ERROR: include.title not set !!" }}
+        </code>
+    </strong>
+{% if include.syntax -%}
+    <span>(syntax={{ include.syntax }})</span>
+{% endif -%}
+</p>
