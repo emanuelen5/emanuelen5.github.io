@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Cronjobs -...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Cronjobs - timely done
+
+      </h1>
+
+
+<p class="lead">Published:    2019-07-22 <br/>
+Last updated: 2020-05-24 22:21</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">cron</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">bash</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">linux</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">debugging</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">miniguide</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2019-07-creating-your-own-blog/" rel="next" title="Frameworks for blogs">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-07-rpi3bplus-compiling-opencv4-1-0/" rel="previous" title="Compiling OpenCV 4.1 on Raspberry Pi Jessie for Python 3.7.3">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>If you want something done at a specific time (down to a minute’s resolution) with a repetition, then cron is the best.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Run as root</span>
+<span class="nb">sudo </span>crontab <span class="nt">-e</span>
+<span class="c"># Can also run as any other user</span>
+<span class="nb">sudo </span>crontab <span class="nt">-u</span> emaus <span class="nt">-e</span>
+</code></pre></div></div>
+
+<p>This will then open up the crontab in an editor. Add the following to run a script called <code class="language-plaintext highlighter-rouge">/home/emaus/service_pi_led_function.sh</code> every minute of the day.</p>
+
+<pre><code class="language-crontab"># crontab
+# m h  dom mon dow   command
+
+* * * * * /home/emaus/service_pi_led_function.sh
+</code></pre>
+
+<p><strong>N.B. 1:</strong> Make sure the script to be run is executable 🤓 (<code class="language-plaintext highlighter-rouge">chmod +x &lt;script&gt;</code>). <a href="#logging-program-output">Debugged by using text logging</a>. <br />
+<strong>N.B. 2:</strong> The cronjob is not updated until you <em>exit</em> the crontab editor. <a href="#enabling-crontab-service-logging">Debugged by using crontab service logger</a>. <br />
+<strong>N.B. 3:</strong> Make sure that the crontab has the correct PATH set up (<a href="https://stackoverflow.com/a/2409369/4713758">see this SO answer</a>, or <a href="#crontab">my final crontab</a>)</p><h2 id="sunrisesunset">
+        <a href="#sunrisesunset" class="anchor"><span>>></span></a>Sunrise/sunset
+      </h2>
+
+<p>If you want something done relative to sunrise/sunset, then <a href="https://github.com/risacher/sunwait">sunwait by risacher on Github</a> is perfect.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone git@github.com:risacher/sunwait.git
+<span class="nb">cd </span>sunwait
+make
+<span class="nb">sudo install </span>sunwait /usr/local/bin/
+</code></pre></div></div>
+
+<p>Testing the program at night with the coordinates for Stockholm yields:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>sunwait poll 59.3260668N 17.8419725E
+NIGHT
+</code></pre></div></div>
+
+<p>This could be combined with getting approximate location of your own IP address and then inputting that.
+E.g. <a href="https://www.ipfy.org">ipfy.org</a> has an API for getting your public IP address, e.g.:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">echo</span> <span class="si">$(</span>curl <span class="s1">'https://api.ipify.org?format=text'</span> <span class="nt">-s</span><span class="si">)</span>
+80.216.68.127
+</code></pre></div></div>
+
+<p>A service like <a href="https://ipinfo.io/">ipinfo.io</a> can then be used for getting the approximate coordinates of the public IP. E.g.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl ipinfo.io/8.8.8.8
+<span class="o">{</span>
+  <span class="s2">"ip"</span>: <span class="s2">"8.8.8.8"</span>,
+  <span class="s2">"hostname"</span>: <span class="s2">"dns.google"</span>,
+  <span class="s2">"city"</span>: <span class="s2">"Mountain View"</span>,
+  <span class="s2">"region"</span>: <span class="s2">"California"</span>,
+  <span class="s2">"country"</span>: <span class="s2">"US"</span>,
+  <span class="s2">"loc"</span>: <span class="s2">"37.3860,-122.0838"</span>,
+  <span class="s2">"org"</span>: <span class="s2">"AS15169 Google LLC"</span>,
+  <span class="s2">"postal"</span>: <span class="s2">"94035"</span>,
+  <span class="s2">"timezone"</span>: <span class="s2">"America/Los_Angeles"</span>,
+  <span class="s2">"readme"</span>: <span class="s2">"https://ipinfo.io/missingauth"</span>
+<span class="o">}</span>
+</code></pre></div></div><h2 id="debugging">
+        <a href="#debugging" class="anchor"><span>>></span></a>Debugging
+      </h2><h3 id="logging-program-output">
+        <a href="#logging-program-output" class="anchor"><span>>>></span></a>Logging program output
+      </h3>
+
+<p>Get the output of the command:</p>
+
+<pre><code class="language-crontab">* * * * * /home/emaus/service_pi_led_function.sh &gt; /home/emaus/crontab.log 2&gt;&amp;1
+</code></pre>
+
+<p>This might reveal the following:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/home/emaus/service_pi_led_function.sh: 1: /home/emaus/service_pi_led_function.sh: sunwait: not found
+/home/emaus/service_pi_led_function.sh: 1: <span class="o">[</span>: <span class="o">=</span>: unexpected operator
+</code></pre></div></div><h3 id="enabling-crontab-service-logging">
+        <a href="#enabling-crontab-service-logging" class="anchor"><span>>>></span></a>Enabling crontab service logging
+      </h3>
+<p>Enable logging so you can see each time the command is invoked (<a href="https://stackoverflow.com/a/34872041/4713758">credits to this SO-answer</a>).</p>
+
+<p>Ensuring the following line is in <code class="language-plaintext highlighter-rouge">/etc/rsyslog.conf</code>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cron.*                         /var/log/cron.log
+</code></pre></div></div>
+
+<p>Then restart <code class="language-plaintext highlighter-rouge">rsyslog</code> and <code class="language-plaintext highlighter-rouge">cron</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>service rsyslog restart
+<span class="nb">sudo </span>service cron restart
+</code></pre></div></div>
+
+<p>You can then find the logs in <code class="language-plaintext highlighter-rouge">/var/log/cron.log</code>.</p>
+
+<p>This file will look something like the following:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Jul 22 22:11:45 Emaus-pi3 cron[13235]: (CRON) INFO (pidfile fd = 3)
+Jul 22 22:11:45 Emaus-pi3 cron[13235]: (CRON) INFO (Skipping @reboot jobs -- not system startup)
+Jul 22 23:41:01 Emaus-pi3 CRON[17431]: (root) CMD (/home/emaus/service_pi_led_function.sh)
+Jul 22 23:41:01 Emaus-pi3 CRON[17427]: (CRON) info (No MTA installed, discarding output)
+Jul 22 23:41:47 Emaus-pi3 crontab[16002]: (root) REPLACE (root)
+Jul 22 23:41:47 Emaus-pi3 crontab[16002]: (root) END EDIT (root)
+Jul 22 23:42:01 Emaus-pi3 cron[13235]: (root) RELOAD (crontabs/root)
+Jul 22 23:42:01 Emaus-pi3 CRON[17896]: (root) CMD (/home/emaus/service_pi_led_function.sh &gt; /home/emaus/crontab.log 2&gt;&amp;1)
+</code></pre></div></div><h1 id="final-result">
+        <a href="#final-result" class="anchor"><span>></span></a>Final result
+      </h1><h2 id="crontab">
+        <a href="#crontab" class="anchor"><span>>></span></a>Crontab:
+      </h2>
+<pre><code class="language-crontab"># sudo crontab -e
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+* * * * * /home/emaus/service_pi_led_function.sh
+</code></pre><h2 id="script-for-setting-raspberry-pi-led-function-at-daynight">
+        <a href="#script-for-setting-raspberry-pi-led-function-at-daynight" class="anchor"><span>>></span></a>Script for setting Raspberry Pi LED function at day/night
+      </h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># service_pi_led_function.sh</span>
+
+<span class="c"># At day, user regular LED functionality</span>
+<span class="k">if</span> <span class="o">[</span> <span class="si">$(</span>sunwait poll 59.3520323N 50.9725342E<span class="si">)</span> <span class="o">=</span> <span class="s2">"DAY"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">sudo </span>sh <span class="nt">-c</span> <span class="s2">"echo mmc0 &gt; /sys/class/leds/led0/trigger"</span>
+    <span class="nb">sudo </span>sh <span class="nt">-c</span> <span class="s2">"echo input &gt; /sys/class/leds/led1/trigger"</span>
+<span class="c"># Turn of LEDs at night so they do not disturb my girlfriend</span>
+<span class="k">else
+    </span><span class="nb">sudo </span>sh <span class="nt">-c</span> <span class="s2">"echo gpio &gt; /sys/class/leds/led0/trigger"</span>
+    <span class="nb">sudo </span>sh <span class="nt">-c</span> <span class="s2">"echo 0 &gt; /sys/class/leds/led0/brightness"</span>
+    <span class="nb">sudo </span>sh <span class="nt">-c</span> <span class="s2">"echo gpio &gt; /sys/class/leds/led1/trigger"</span>
+    <span class="nb">sudo </span>sh <span class="nt">-c</span> <span class="s2">"echo 0 &gt; /sys/class/leds/led1/brightness"</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2019-07-creating-your-own-blog/" rel="next" title="Frameworks for blogs">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-07-rpi3bplus-compiling-opencv4-1-0/" rel="previous" title="Compiling OpenCV 4.1 on Raspberry Pi Jessie for Python 3.7.3">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2019-07-22-cronjob-debugging.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

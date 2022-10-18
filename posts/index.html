@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Posts
+</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link active" href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1>
+        Posts
+      </h1>
+<section>
+    <div class="mb-2 small">
+	<button class="btn btn-block py-0" collapsing-target="#filters">
+		<div class="row">
+			<div class="col-auto pl-1">
+				Filters
+			</div>
+			<div class="col"></div>
+			<div class="col-auto pr-1">
+				⥍ <!-- Up/down arrow symbol -->
+			</div>
+		</div>
+	</button>
+	<div class="collapsing" id="filters">
+		<div class="row no-gutters justify-content-center"><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">backup</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">bash</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">blog</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">cast</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">cron</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">debugging</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">docker</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">expect</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">fail2ban</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">google</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">ha</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">ir</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">jekyll</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">linux</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">locale</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">matplotlib</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">nginx</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">nokogiri</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">opencv</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">parted</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">picamera</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">pip</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">proxy</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">PuTTY</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">python</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">rpi</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">ruby</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">setuptools</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">sphinx</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">ssh</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">tcl</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">temperature</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">timezone</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">tips</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">ubuntu</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">virtualbox</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">vlc</button></div><div class="col-auto"><button class="btn badge badge-dark tag mini-margin">xpath</button></div><div class="col-auto"><button class="btn badge badge-info category mini-margin">build</button></div><div class="col-auto"><button class="btn badge badge-info category mini-margin">experiment</button></div><div class="col-auto"><button class="btn badge badge-info category mini-margin">guide</button></div><div class="col-auto"><button class="btn badge badge-info category mini-margin">meta</button></div><div class="col-auto"><button class="btn badge badge-info category mini-margin">miniguide</button></div><div class="col-auto"><button class="btn badge badge-info category mini-margin">plugin</button></div><div class="col-auto"><button class="btn badge badge-info category mini-margin">security</button></div><div class="col-auto"><button class="btn badge badge-info category mini-margin">tools</button></div></div>
+		<div class="mb-2"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/installing-homeassistant-docker">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2021-09-installing-homeassistant-docker/">Installing Homeassistant in a Docker container (e.g. on Raspberry Pi)</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">ha</button><button class="btn badge badge-dark tag">docker</button><button class="btn badge badge-dark tag">rpi</button></span>
+				<span class="categories"><button class="btn badge badge-info category">guide</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2021-09-08</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/reverse-ssh-tunnel">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2021-08-reverse-ssh-tunnel/">Reverse SSH tunnel for monitoring servers</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">linux</button><button class="btn badge badge-dark tag">ssh</button></span>
+				<span class="categories"><button class="btn badge badge-info category">guide</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2021-08-16</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/custom-python-setup-commands">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2021-06-custom-python-setup-commands/">Custom Python setuptools commands</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">python</button><button class="btn badge badge-dark tag">setuptools</button><button class="btn badge badge-dark tag">pip</button></span>
+				<span class="categories"><button class="btn badge badge-info category">guide</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2021-06-22</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/using-expect">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2021-06-using-expect/">Expect scripting language</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">tcl</button><button class="btn badge badge-dark tag">expect</button><button class="btn badge badge-dark tag">tips</button></span>
+				<span class="categories"><button class="btn badge badge-info category">guide</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2021-06-10</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/stream-video-from-rpi-camera">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2020-05-stream-video-from-rpi-camera/">Streaming video from a Raspberry Pi camera</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">rpi</button><button class="btn badge badge-dark tag">vlc</button><button class="btn badge badge-dark tag">picamera</button></span>
+				<span class="categories"><button class="btn badge badge-info category">guide</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2020-05-30</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/setting-locale-and-date">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2020-05-setting-locale-and-date/">Setting locale and date on Raspberry Pi</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">rpi</button><button class="btn badge badge-dark tag">locale</button><button class="btn badge badge-dark tag">timezone</button></span>
+				<span class="categories"><button class="btn badge badge-info category">miniguide</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2020-05-26</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/ir-thermometer">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2020-05-ir-thermometer/">Testing IR thermometer for body temperature measurement</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">ir</button><button class="btn badge badge-dark tag">temperature</button><button class="btn badge badge-dark tag">matplotlib</button><button class="btn badge badge-dark tag">python</button></span>
+				<span class="categories"><button class="btn badge badge-info category">experiment</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2020-05-17</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/nginx-for-jekyll">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2020-05-nginx-for-jekyll/">Setting up Nginx for Jekyll</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">nginx</button></span>
+				<span class="categories"><button class="btn badge badge-info category">miniguide</button><button class="btn badge badge-info category">meta</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2020-05-16</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/first-jekyll-plugin">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2020-05-first-jekyll-plugin/">Jekyll plugin for escaping Atom feed content and altering links</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">jekyll</button><button class="btn badge badge-dark tag">ruby</button><button class="btn badge badge-dark tag">nokogiri</button><button class="btn badge badge-dark tag">xpath</button></span>
+				<span class="categories"><button class="btn badge badge-info category">meta</button><button class="btn badge badge-info category">plugin</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2020-05-04</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/proxy-from-windows-to-linux">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2020-05-proxy-from-windows-to-linux/">Setting up a proxy to a Linux server</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">ssh</button><button class="btn badge badge-dark tag">proxy</button><button class="btn badge badge-dark tag">PuTTY</button></span>
+				<span class="categories"><button class="btn badge badge-info category">tools</button><button class="btn badge badge-info category">security</button><button class="btn badge badge-info category">guide</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2020-05-04</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/setting-up-new-raspberry-pi3bplus">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2020-04-setting-up-new-raspberry-pi3bplus/">Setting up a Raspberry Pi 3B plus from scratch</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">rpi</button><button class="btn badge badge-dark tag">ssh</button><button class="btn badge badge-dark tag">fail2ban</button></span>
+				<span class="categories"><button class="btn badge badge-info category">guide</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2020-04-06</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/backing-up-sd-card-from-crashed-pi">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2020-04-backing-up-sd-card-from-crashed-pi/">Backing up an SD card from a crashed Raspberry Pi</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">backup</button><button class="btn badge badge-dark tag">virtualbox</button><button class="btn badge badge-dark tag">rpi</button></span>
+				<span class="categories"><button class="btn badge badge-info category">miniguide</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2020-04-05</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/resize-virtualbox-image">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2019-10-resize-virtualbox-image/">Resizing a Virtual Box image</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">virtualbox</button><button class="btn badge badge-dark tag">parted</button><button class="btn badge badge-dark tag">ubuntu</button></span>
+				<span class="categories"><button class="btn badge badge-info category">miniguide</button><button class="btn badge badge-info category">tools</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2019-10-27</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/programatically-controlling-cast-device">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2019-10-programatically-controlling-cast-device/">Controlling Google cast devices programmatically (Chromecast and Home)</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">google</button><button class="btn badge badge-dark tag">cast</button><button class="btn badge badge-dark tag">ha</button></span>
+				<span class="categories"><button class="btn badge badge-info category">miniguide</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2019-10-02</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/sphinx">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2019-08-sphinx/"><span style="width:1.5em; text-align:center; display: inline-block; overflow: hidden;"><img style="height:1em;" alt="Post thumbnail" src="/assets/images/sphinx_logo.png" /></span>Sphinx</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">sphinx</button><button class="btn badge badge-dark tag">python</button><button class="btn badge badge-dark tag">blog</button></span>
+				<span class="categories"><button class="btn badge badge-info category">guide</button><button class="btn badge badge-info category">meta</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2019-08-02</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/jekyll">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2019-07-jekyll/"><span style="width:1.5em; text-align:center; display: inline-block; overflow: hidden;"><img style="height:1em;" alt="Post thumbnail" src="/assets/images/jekyll-test-tube.svg" /></span>Jekyll</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">jekyll</button><button class="btn badge badge-dark tag">ruby</button><button class="btn badge badge-dark tag">blog</button></span>
+				<span class="categories"><button class="btn badge badge-info category">guide</button><button class="btn badge badge-info category">meta</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2019-07-30</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/creating-your-own-blog">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2019-07-creating-your-own-blog/">Frameworks for blogs</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">blog</button></span>
+				<span class="categories"><button class="btn badge badge-info category">meta</button><button class="btn badge badge-info category">tools</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2019-07-28</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/cronjob-debugging">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2019-07-cronjob-debugging/">Cronjobs - timely done</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">cron</button><button class="btn badge badge-dark tag">bash</button><button class="btn badge badge-dark tag">linux</button><button class="btn badge badge-dark tag">debugging</button></span>
+				<span class="categories"><button class="btn badge badge-info category">miniguide</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2019-07-22</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/rpi3bplus-compiling-opencv4-1-0">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2019-07-rpi3bplus-compiling-opencv4-1-0/">Compiling OpenCV 4.1 on Raspberry Pi Jessie for Python 3.7.3</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">rpi</button><button class="btn badge badge-dark tag">python</button><button class="btn badge badge-dark tag">opencv</button></span>
+				<span class="categories"><button class="btn badge badge-info category">miniguide</button><button class="btn badge badge-info category">build</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2019-07-21</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/rpi3bplus-controlling-leds">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2019-07-rpi3bplus-controlling-leds/">Controlling Raspberry Pi LEDs</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">rpi</button><button class="btn badge badge-dark tag">linux</button></span>
+				<span class="categories"><button class="btn badge badge-info category">miniguide</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2019-07-18</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<div class="card my-3" id="/posts/rpi3bplus-compiling-python-373">
+	<div class="card-body px-sm-3 px-1 py-1"><h5 class="card-title">
+        
+			<a href="/posts/2019-07-rpi3bplus-compiling-python-373/">Compiling Python 3.7.3 on Raspberry Pi Jessie</a>
+			<div><span class="tags"><button class="btn badge badge-dark tag">rpi</button><button class="btn badge badge-dark tag">python</button></span>
+				<span class="categories"><button class="btn badge badge-info category">miniguide</button><button class="btn badge badge-info category">build</button></span>
+			</div>
+		
+      </h5>
+		<div class="card-subtitle">2019-07-18</div>
+		<div class="card-text"></div>
+	</div>
+</div>
+<script src="/assets/js/posts.js"></script>
+
+
+</section>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/posts.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

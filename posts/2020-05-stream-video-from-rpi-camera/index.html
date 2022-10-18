@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Streaming video...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Streaming video from a Raspberry Pi camera
+
+      </h1>
+
+<p class="lead">In this guide, I will go through two ways to stream video from a Raspberry Pi. <br> First using the picamera library in Python, and then using the raspivid tool and VLC directly in the shell.
+</p>
+
+
+<p class="lead">Published:    2020-05-30 <br/>
+Last updated: 2020-06-07 12:58</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">rpi</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">vlc</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">picamera</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">guide</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2021-06-using-expect/" rel="next" title="Expect scripting language">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2020-05-setting-locale-and-date/" rel="previous" title="Setting locale and date on Raspberry Pi">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4"><h1 id="python-web-server">
+        <a href="#python-web-server" class="anchor"><span>></span></a>Python web server
+      </h1>
+<p>The bulk of the code is taken from <a href="https://randomnerdtutorials.com/video-streaming-with-raspberry-pi-camera/">random nerd tutorials: Video Streaming with Raspberry Pi Camera</a>.</p><h2 id="installation">
+        <a href="#installation" class="anchor"><span>>></span></a>Installation
+      </h2>
+<p>You need to install the Python package for accessing the Pi camera.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>picamera
+</code></pre></div></div><h2 id="the-script">
+        <a href="#the-script" class="anchor"><span>>></span></a><a href="surv.py">The script</a>
+      </h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># surv.py 
+</span>
+<span class="c1"># Web streaming example
+# Source code from the official PiCamera package
+# http://picamera.readthedocs.io/en/latest/recipes2.html#web-streaming
+</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">picamera</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">socketserver</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Condition</span>
+<span class="kn">from</span> <span class="nn">http</span> <span class="kn">import</span> <span class="n">server</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="p">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">"--size"</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">),</span> <span class="n">help</span><span class="o">=</span><span class="s">"Size of captured images"</span><span class="p">)</span>
+<span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">"--frame-rate"</span><span class="p">,</span> <span class="s">"-r"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">"Frame rate of camera capture"</span><span class="p">)</span>
+<span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">"--port"</span><span class="p">,</span> <span class="s">"-p"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">"Port to serve website on"</span><span class="p">)</span>
+<span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">"--rotation"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">"Rotation of camera"</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+<span class="n">width</span>  <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">height</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">PAGE</span><span class="o">=</span><span class="sa">f</span><span class="s">"""
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Raspberry Pi - Surveillance Camera&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;center&gt;&lt;h1&gt;Raspberry Pi - Surveillance Camera&lt;/h1&gt;&lt;/center&gt;
+&lt;center&gt;&lt;img src="stream.mjpg" style="max-width: 1024px; width: 100%;"&gt;&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"""</span>
+
+<span class="k">class</span> <span class="nc">StreamingOutput</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">BytesIO</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">condition</span> <span class="o">=</span> <span class="n">Condition</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buf</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">buf</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\xff\xd8</span><span class="s">'</span><span class="p">):</span>
+            <span class="c1"># New frame, copy the existing buffer's content and notify all
+</span>            <span class="c1"># clients it's available
+</span>            <span class="bp">self</span><span class="p">.</span><span class="nb">buffer</span><span class="p">.</span><span class="n">truncate</span><span class="p">()</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="p">.</span><span class="n">condition</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="nb">buffer</span><span class="p">.</span><span class="n">getvalue</span><span class="p">()</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">condition</span><span class="p">.</span><span class="n">notify_all</span><span class="p">()</span>
+            <span class="bp">self</span><span class="p">.</span><span class="nb">buffer</span><span class="p">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="nb">buffer</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">StreamingHandler</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">do_GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">path</span> <span class="o">==</span> <span class="s">'/'</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">send_response</span><span class="p">(</span><span class="mi">301</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">send_header</span><span class="p">(</span><span class="s">'Location'</span><span class="p">,</span> <span class="s">'/index.html'</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">end_headers</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="p">.</span><span class="n">path</span> <span class="o">==</span> <span class="s">'/index.html'</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">PAGE</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">send_response</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">send_header</span><span class="p">(</span><span class="s">'Content-Type'</span><span class="p">,</span> <span class="s">'text/html'</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">send_header</span><span class="p">(</span><span class="s">'Content-Length'</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">))</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">end_headers</span><span class="p">()</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">wfile</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="p">.</span><span class="n">path</span> <span class="o">==</span> <span class="s">'/stream.mjpg'</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">send_response</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">send_header</span><span class="p">(</span><span class="s">'Age'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">send_header</span><span class="p">(</span><span class="s">'Cache-Control'</span><span class="p">,</span> <span class="s">'no-cache, private'</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">send_header</span><span class="p">(</span><span class="s">'Pragma'</span><span class="p">,</span> <span class="s">'no-cache'</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">send_header</span><span class="p">(</span><span class="s">'Content-Type'</span><span class="p">,</span> <span class="s">'multipart/x-mixed-replace; boundary=FRAME'</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">end_headers</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="n">output</span><span class="p">.</span><span class="n">condition</span><span class="p">:</span>
+                        <span class="n">output</span><span class="p">.</span><span class="n">condition</span><span class="p">.</span><span class="n">wait</span><span class="p">()</span>
+                        <span class="n">frame</span> <span class="o">=</span> <span class="n">output</span><span class="p">.</span><span class="n">frame</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">wfile</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s">'--FRAME</span><span class="se">\r\n</span><span class="s">'</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">send_header</span><span class="p">(</span><span class="s">'Content-Type'</span><span class="p">,</span> <span class="s">'image/jpeg'</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">send_header</span><span class="p">(</span><span class="s">'Content-Length'</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">frame</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">end_headers</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">wfile</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">wfile</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\r\n</span><span class="s">'</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logging</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s">'Removed streaming client %s: %s'</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">client_address</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">send_error</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">end_headers</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">StreamingServer</span><span class="p">(</span><span class="n">socketserver</span><span class="p">.</span><span class="n">ThreadingMixIn</span><span class="p">,</span> <span class="n">server</span><span class="p">.</span><span class="n">HTTPServer</span><span class="p">):</span>
+    <span class="n">allow_reuse_address</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">daemon_threads</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="k">with</span> <span class="n">picamera</span><span class="p">.</span><span class="n">PiCamera</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s">x</span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">framerate</span><span class="o">=</span><span class="n">args</span><span class="p">.</span><span class="n">frame_rate</span><span class="p">)</span> <span class="k">as</span> <span class="n">camera</span><span class="p">:</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">StreamingOutput</span><span class="p">()</span>
+    <span class="n">camera</span><span class="p">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="n">rotation</span>
+    <span class="n">camera</span><span class="p">.</span><span class="n">start_recording</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s">'mjpeg'</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">args</span><span class="p">.</span><span class="n">port</span><span class="p">)</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">StreamingServer</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">StreamingHandler</span><span class="p">)</span>
+        <span class="n">server</span><span class="p">.</span><span class="n">serve_forever</span><span class="p">()</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">camera</span><span class="p">.</span><span class="n">stop_recording</span><span class="p">()</span>
+</code></pre></div></div><h2 id="running">
+        <a href="#running" class="anchor"><span>>></span></a>Running
+      </h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python surv.py <span class="nt">--help</span>
+usage: surv.py <span class="o">[</span><span class="nt">-h</span><span class="o">]</span> <span class="o">[</span><span class="nt">--size</span> SIZE SIZE] <span class="o">[</span><span class="nt">--frame-rate</span> FRAME_RATE] <span class="o">[</span><span class="nt">--port</span> PORT]
+               <span class="o">[</span><span class="nt">--rotation</span> ROTATION]
+
+optional arguments:
+  <span class="nt">-h</span>, <span class="nt">--help</span>            show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  <span class="nt">--size</span> SIZE SIZE      Size of captured images
+  <span class="nt">--frame-rate</span> FRAME_RATE, <span class="nt">-r</span> FRAME_RATE
+                        Frame rate of camera capture
+  <span class="nt">--port</span> PORT, <span class="nt">-p</span> PORT  Port to serve website on
+  <span class="nt">--rotation</span> ROTATION   Rotation of camera
+
+<span class="nv">$ </span>python surv.py
+</code></pre></div></div>
+
+<p>Before changing video settings, make sure to <a href="https://picamera.readthedocs.io/en/latest/fov.html#sensor-modes">Picamera’s page on sensor modes</a>. There are some connections between frame rate and resolution which would take time to figure out empirically. This was important for me, because I wanted the native aspect ratio and as high frame rate as possible.</p>
+
+<p>Here is an excerpt for the V2 camera module with the settings I preferred:</p>
+
+<table class="table table-responsive">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Resolution</th>
+      <th>Aspect Ratio</th>
+      <th>Framerates</th>
+      <th>Video</th>
+      <th>Image</th>
+      <th>FoV</th>
+      <th>Binning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4</td>
+      <td>1640x1232</td>
+      <td>4:3</td>
+      <td>1/10 &lt;= fps &lt;= 40</td>
+      <td>x</td>
+      <td> </td>
+      <td>Full</td>
+      <td>2x2</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>And the corresponding invocation:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python surv.py <span class="nt">--size</span> 1640 1232 <span class="nt">--frame-rate</span> 40 <span class="nt">--rotation</span> 180 <span class="nt">-p</span> 8000
+</code></pre></div></div><h2 id="result">
+        <a href="#result" class="anchor"><span>>></span></a>Result
+      </h2>
+<p>Using your favorite web browser, you can then go to the IP address (or hostname if you have the luxury of mDNS) of the server:</p>
+
+<p><img src="surv_img.png" alt="Surveillance web page accessed at http://emaus-pi3:8000 with Firefox" /></p>
+
+<p>I was quite astonished at the low latency of the stream! It is well under a second. Awesome! 🎉</p><h3 id="monitoring-traffic">
+        <a href="#monitoring-traffic" class="anchor"><span>>>></span></a>Monitoring traffic
+      </h3>
+<p>I thought it would be possible to monitor the network traffic using the built-in developer tools in Firefox (accessed by pressing <kbd>F12</kbd>). However, the network logger does not update its stats until after an “image” has been downloaded completely. So we will only be able to get the statistics when the stream has ended. This is what is looks like while it is streaming:</p>
+
+<p><img src="network_traffic.png" alt="Network logger tool in Firefox showing no activity for the stream" /></p><h1 id="vlc-server">
+        <a href="#vlc-server" class="anchor"><span>></span></a>VLC server
+      </h1>
+<p>VLC can be used from the command line to stream video with RTP (Real-Time Protocol) through RTMP (Real-Time Messaging Protocol). It’s quite neat. 😊</p>
+
+<p>There are several example on how to use this. See for example <a href="https://chriscarey.com/blog/2017/04/30/achieving-high-frame-rate-with-a-raspberry-pi-camera-system/">Chis Carey’s blog</a>, and <a href="https://sammit.net/raspberry-pi-camera-streaming-to-vlc-player/">Sammit</a>.</p><h2 id="installation-1">
+        <a href="#installation-1" class="anchor"><span>>></span></a>Installation
+      </h2>
+<p><code class="language-plaintext highlighter-rouge">raspivid</code> should already be installed, so you only need to install VLC.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt <span class="nb">install </span>vlc
+</code></pre></div></div><h2 id="running-1">
+        <a href="#running-1" class="anchor"><span>>></span></a>Running
+      </h2>
+
+<p><a href="https://www.raspberrypi.org/documentation/usage/camera/raspicam/raspivid.md"><code class="language-plaintext highlighter-rouge">raspivid</code></a> has a bunch of flags that can be used for tweaking its output. It can rotate the video, apply video filters, change stream settings etc. Use <code class="language-plaintext highlighter-rouge">raspivid 2&gt;&amp;1 | less</code> for viewing its help with a pager.</p><h3 id="h264">
+        <a href="#h264" class="anchor"><span>>>></span></a>H.264
+      </h3>
+<p>To set up an H264 video stream, use the following command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>raspivid <span class="nt">-rot</span> 180 <span class="nt">-t</span> 0 <span class="nt">-fps</span> 20 <span class="nt">-w</span> 640 <span class="nt">-h</span> 480 <span class="nt">-o</span> - |
+    cvlc <span class="nt">-vvv</span> stream:///dev/stdin <span class="nt">--sout</span> <span class="s1">'#rtp{access=udp,sdp=rtsp://:8554/stream}'</span> :demux<span class="o">=</span>h264
+</code></pre></div></div><h4 id="raspivid-flags">
+        <a href="#raspivid-flags" class="anchor"><span>>>>></span></a><code class="language-plaintext highlighter-rouge">raspivid</code> flags
+      </h4>
+<ul>
+  <li>The most important flag to <code class="language-plaintext highlighter-rouge">raspivid</code> is <code class="language-plaintext highlighter-rouge">-t 0</code>, which makes the stream continue forever. Otherwise it would stop almost immediately.</li>
+  <li>If you want to decrease the video bandwidth (possibly at the cost of latency), you can increase the GOP (Group Of Pictures) number. I.e. by adding the flag <code class="language-plaintext highlighter-rouge">-g 100</code>.</li>
+  <li>You can directly decrease the maximum bandwidth (at the cost of quality) by using the flag <code class="language-plaintext highlighter-rouge">-b</code>. E.g. <code class="language-plaintext highlighter-rouge">-b 200000</code> for setting it to 200 kb/s.</li>
+  <li>The framerate can be set (within limits, of course) using the <code class="language-plaintext highlighter-rouge">-fps</code>-flag. Note however that this increases the bandwidth, and possibly also the latency.</li>
+</ul>
+
+<p>I didn’t notice much change in latency when playing around with the settings. It was quite constant around 2-4 seconds depending on when the stream was started. Except for possibly when increasing the framerate.</p><h3 id="m-jpeg">
+        <a href="#m-jpeg" class="anchor"><span>>>></span></a>M-JPEG
+      </h3>
+<p>VLC can also be used for setting up a Motion-JPEG stream using the following flags:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>raspivid <span class="nt">-cd</span> MJPEG <span class="nt">-rot</span> 180 <span class="nt">-t</span> 0 <span class="nt">-fps</span> 20 <span class="nt">-w</span> 640 <span class="nt">-h</span> 480 <span class="nt">-o</span> - |
+    cvlc <span class="nt">-vvv</span> stream:///dev/stdin <span class="nt">--sout</span> <span class="s1">'#rtp{access=udp,sdp=rtsp://:8554/stream}'</span> :demux<span class="o">=</span>mjpeg
+</code></pre></div></div><h2 id="result-1">
+        <a href="#result-1" class="anchor"><span>>></span></a>Result
+      </h2>
+<p>Open the stream in VLC by going to <em>Media</em> ➥ <em>Open Network Stream…</em> (<kbd>Ctrl</kbd> + <kbd>N</kbd>):</p>
+
+<p><img src="setting_up_stream.png" alt="Opening a stream in VLC" /></p>
+
+<p><img src="vlc_stream.png" alt="Viewing the stream" /></p>
+
+<p>The latency of this stream is way higher than the <a href="#python-web-server">picamera stream</a>. For me it is at least 2 seconds, and can go up to around 6 seconds.</p><h3 id="monitoring-traffic-1">
+        <a href="#monitoring-traffic-1" class="anchor"><span>>>></span></a>Monitoring traffic
+      </h3>
+<p>You can monitor the actual bitrate of the stream in VLC by going to <em>Tools</em> ➥ <em>Media information</em> (<kbd>Ctrl</kbd> + <kbd>I</kbd>), and then switching to the <em>Statistics</em> tab. This can be useful while tweaking the <code class="language-plaintext highlighter-rouge">raspivid</code> settings:</p>
+
+<p><img src="stream_statistics.png" alt="Stream statistics in VLC" /></p>
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2021-06-using-expect/" rel="next" title="Expect scripting language">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2020-05-setting-locale-and-date/" rel="previous" title="Setting locale and date on Raspberry Pi">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2020-05-30-stream-video-from-rpi-camera/2020-05-30-stream-video-from-rpi-camera.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Custom Python...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Custom Python setuptools commands
+
+      </h1>
+
+<p class="lead">How to set up Python setuptools to run custom code on install or build.
+</p>
+
+
+<p class="lead">Published:    2021-06-22 <br/>
+Last updated: 2021-06-22 23:25</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">python</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">setuptools</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">pip</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">guide</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2021-08-reverse-ssh-tunnel/" rel="next" title="Reverse SSH tunnel for monitoring servers">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2021-06-using-expect/" rel="previous" title="Expect scripting language">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>Let say you have a simple install script for a package:</p><h4 id="setuppy">
+        <a href="#setuppy" class="anchor"><span>>>>></span></a><a href="./setup.py"><strong><code class="language-plaintext highlighter-rouge">setup.py</code></strong></a>
+      </h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s">"package_name"</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s">"1.0.0"</span><span class="p">,</span>
+    <span class="n">author</span><span class="o">=</span><span class="s">"emaus"</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>And you want to add a custom command to be run during the install process. This is actually very easy to achieve!</p><h2 id="modified-setuppy">
+        <a href="#modified-setuppy" class="anchor"><span>>></span></a>Modified setup.py
+      </h2>
+
+<p>You simply need to:</p>
+
+<ol>
+  <li>Import the command class</li>
+  <li>Create a class that inherits from that class, but overrides the <code class="language-plaintext highlighter-rouge">run</code> method to do what you like instead.</li>
+  <li>Then, let the setup package know of the custom command override that you want to use.</li>
+</ol><h4 id="setup_overriddenpy">
+        <a href="#setup_overriddenpy" class="anchor"><span>>>>></span></a><a href="./setup_overridden.py"><strong><code class="language-plaintext highlighter-rouge">setup_overridden.py</code></strong></a>
+      </h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+<span class="kn">from</span> <span class="nn">setuptools.command.install</span> <span class="kn">import</span> <span class="n">install</span>
+
+
+<span class="k">def</span> <span class="nf">custom_command</span><span class="p">():</span>
+    <span class="c1"># Here we can run anything that we like
+</span>    <span class="k">print</span><span class="p">(</span><span class="s">"Running custom command!"</span><span class="p">)</span>
+
+
+<span class="c1"># Inherit from the command class
+</span><span class="k">class</span> <span class="nc">InstallWrapper</span><span class="p">(</span><span class="n">install</span><span class="p">):</span>
+    <span class="c1"># Override the run method
+</span>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">custom_command</span><span class="p">()</span>
+        <span class="c1"># Run the original install command as well, if you want to extend original behaviour
+</span>        <span class="nb">super</span><span class="p">().</span><span class="n">run</span><span class="p">()</span>
+
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s">"package_name"</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s">"1.0.0"</span><span class="p">,</span>
+    <span class="n">author</span><span class="o">=</span><span class="s">"emaus"</span><span class="p">,</span>
+    <span class="c1"># Specify that we want to use our override for the install command
+</span>    <span class="n">cmdclass</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">install</span><span class="o">=</span><span class="n">InstallWrapper</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Other commands can be overridden in an anologous way (subsituting <code class="language-plaintext highlighter-rouge">install</code> for another command, like <code class="language-plaintext highlighter-rouge">build</code>, <code class="language-plaintext highlighter-rouge">build_py</code>, etc.). See <a href="https://docs.python.org/3/distutils/apiref.html#module-distutils.command">https://docs.python.org/3/distutils/apiref.html#module-distutils.command</a> for details on the different commands available.</p><h3 id="install">
+        <a href="#install" class="anchor"><span>>>></span></a>Install
+      </h3>
+<p>Installing the modified package however shows no sign of of the modifications (<em>Running custom command!</em> is never printed)!</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>pip <span class="nb">install</span> <span class="nb">.</span>
+<span class="go">Processing /tmp/test
+Building wheels for collected packages: package-name
+  Building wheel for package-name (setup.py) ... done
+  Created wheel for package-name: filename=package_name-1.0.0-py3-none-any.whl size=1045 sha256=1e6ebf07649a28a42fd3ce41077f0abbed4e9e0593175776444d42aff4cf6fb7
+  Stored in directory: /tmp/pip-ephem-wheel-cache-riywfbyt/wheels/88/36/8d/03b070db53bc124488b9daa3226de7abdcc759470790b534d1
+Successfully built package-name
+Installing collected packages: package-name
+  Attempting uninstall: package-name
+    Found existing installation: package-name 1.0.0
+    Uninstalling package-name-1.0.0:
+      Successfully uninstalled package-name-1.0.0
+Successfully installed package-name-1.0.0
+</span><span class="gp">WARNING: You are using pip version 20.3.3;</span><span class="w"> </span>however, version 21.1.2 is available.
+<span class="go">You should consider upgrading via the '/tmp/venv/bin/python -m pip install --upgrade pip' command.
+</span></code></pre></div></div>
+
+<p>This is due to <code class="language-plaintext highlighter-rouge">pip</code> swallowing the standard output. To show them, we need to increase the verbosity.</p><h1 id="debug-with-pip">
+        <a href="#debug-with-pip" class="anchor"><span>></span></a>Debug with pip
+      </h1>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>pip <span class="nb">install</span> <span class="nt">-v</span> <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>This prints all of the steps that are run when installing the Python package, and can help in debugging your own extensions.</p>
+
+<p>Running that will produce the following output:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Using pip 20.3.3 from /tmp/venv/lib/python3.9/site-packages/pip (python 3.9)
+Non-user install because user site-packages disabled
+Created temporary directory: /tmp/pip-ephem-wheel-cache-fmba4u1y
+Created temporary directory: /tmp/pip-req-tracker-yoxvk28o
+Initialized build tracking at /tmp/pip-req-tracker-yoxvk28o
+Created build tracker: /tmp/pip-req-tracker-yoxvk28o
+Entered build tracker: /tmp/pip-req-tracker-yoxvk28o
+Created temporary directory: /tmp/pip-install-841rcwae
+Processing /tmp/test
+  Created temporary directory: /tmp/pip-req-build-9v5go3l3
+  Added file:///tmp/test to build tracker '/tmp/pip-req-tracker-yoxvk28o'
+    Running setup.py (path:/tmp/pip-req-build-9v5go3l3/setup.py) egg_info for package from file:///tmp/test
+    Created temporary directory: /tmp/pip-pip-egg-info-ktedvm95
+    Running command python setup.py egg_info
+    running egg_info
+    creating /tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info
+    writing /tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info/PKG-INFO
+    writing dependency_links to /tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info/dependency_links.txt
+    writing top-level names to /tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info/top_level.txt
+    writing manifest file '/tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info/SOURCES.txt'
+    reading manifest file '/tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info/SOURCES.txt'
+    writing manifest file '/tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info/SOURCES.txt'
+  Source in /tmp/pip-req-build-9v5go3l3 has version 1.0.0, which satisfies requirement package-name==1.0.0 from file:///tmp/test
+  Removed package-name==1.0.0 from file:///tmp/test from build tracker '/tmp/pip-req-tracker-yoxvk28o'
+Created temporary directory: /tmp/pip-unpack-2ciz7m_r
+Building wheels for collected packages: package-name
+  Created temporary directory: /tmp/pip-wheel-je2yu2f3
+  Building wheel for package-name (setup.py) ...   Destination directory: /tmp/pip-wheel-je2yu2f3
+  Running command /tmp/venv/bin/python -u -c 'import sys, setuptools, tokenize; sys.argv[0] = '"'"'/tmp/pip-req-build-9v5go3l3/setup.py'"'"'; __file__='"'"'/tmp/pip-req-build-9v5go3l3/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' bdist_wheel -d /tmp/pip-wheel-je2yu2f3
+  running bdist_wheel
+  running build
+  installing to build/bdist.linux-x86_64/wheel
+  running install
+  Running custom command!
+  running install_egg_info
+  running egg_info
+  creating package_name.egg-info
+  writing package_name.egg-info/PKG-INFO
+  writing dependency_links to package_name.egg-info/dependency_links.txt
+  writing top-level names to package_name.egg-info/top_level.txt
+  writing manifest file 'package_name.egg-info/SOURCES.txt'
+  reading manifest file 'package_name.egg-info/SOURCES.txt'
+  writing manifest file 'package_name.egg-info/SOURCES.txt'
+  Copying package_name.egg-info to build/bdist.linux-x86_64/wheel/package_name-1.0.0-py3.9.egg-info
+  running install_scripts
+  creating build/bdist.linux-x86_64/wheel/package_name-1.0.0.dist-info/WHEEL
+  creating '/tmp/pip-wheel-je2yu2f3/package_name-1.0.0-py3-none-any.whl' and adding 'build/bdist.linux-x86_64/wheel' to it
+  adding 'package_name-1.0.0.dist-info/METADATA'
+  adding 'package_name-1.0.0.dist-info/WHEEL'
+  adding 'package_name-1.0.0.dist-info/top_level.txt'
+  adding 'package_name-1.0.0.dist-info/RECORD'
+  removing build/bdist.linux-x86_64/wheel
+done
+  Created wheel for package-name: filename=package_name-1.0.0-py3-none-any.whl size=1045 sha256=bacf8fa6a6c63156f3c42902cc48f51e87eb03c51b142b111b93a7e3348c13cc
+  Stored in directory: /tmp/pip-ephem-wheel-cache-fmba4u1y/wheels/88/36/8d/03b070db53bc124488b9daa3226de7abdcc759470790b534d1
+Successfully built package-name
+Installing collected packages: package-name
+  Attempting uninstall: package-name
+    Found existing installation: package-name 1.0.0
+    Uninstalling package-name-1.0.0:
+      Created temporary directory: /tmp/venv/lib/python3.9/site-packages/~ackage_name-1.0.0.dist-info
+      Removing file or directory /tmp/venv/lib/python3.9/site-packages/package_name-1.0.0.dist-info/
+      Successfully uninstalled package-name-1.0.0
+
+Successfully installed package-name-1.0.0
+WARNING: You are using pip version 20.3.3; however, version 21.1.2 is available.
+You should consider upgrading via the '/tmp/venv/bin/python -m pip install --upgrade pip' command.
+Removed build tracker: '/tmp/pip-req-tracker-yoxvk28o'
+</code></pre></div></div>
+
+<p>Note two things:</p>
+<ol>
+  <li>Our custom command is run (<strong>Running custom command!</strong> is printed)</li>
+  <li>Also, it prints out all of the setuptools steps that are run during the installation. In this case:
+    <ol>
+      <li><code class="language-plaintext highlighter-rouge">egg_info</code></li>
+      <li><code class="language-plaintext highlighter-rouge">bdist_wheel</code></li>
+      <li><code class="language-plaintext highlighter-rouge">build</code></li>
+      <li><code class="language-plaintext highlighter-rouge">install</code></li>
+      <li><code class="language-plaintext highlighter-rouge">install_egg_info</code></li>
+      <li><code class="language-plaintext highlighter-rouge">egg_info</code></li>
+      <li><code class="language-plaintext highlighter-rouge">install_scripts</code></li>
+    </ol>
+  </li>
+</ol><h1 id="sources-of-information">
+        <a href="#sources-of-information" class="anchor"><span>></span></a>Sources of information
+      </h1>
+<ul>
+  <li><a href="https://setuptools.readthedocs.io/en/latest/userguide/package_discovery.html">https://setuptools.readthedocs.io/en/latest/userguide/package_discovery.html</a></li>
+  <li><a href="https://www.anomaly.net.au/blog/running-pre-and-post-install-jobs-for-your-python-packages/">https://www.anomaly.net.au/blog/running-pre-and-post-install-jobs-for-your-python-packages/</a></li>
+</ul>
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2021-08-reverse-ssh-tunnel/" rel="next" title="Reverse SSH tunnel for monitoring servers">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2021-06-using-expect/" rel="previous" title="Expect scripting language">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2021-06-22-custom-python-setup-commands/2021-06-22-custom-python-setup-commands.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

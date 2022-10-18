@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Testing IR...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Testing IR thermometer for body temperature measurement
+
+      </h1>
+
+
+<p class="lead">Published:    2020-05-17 <br/>
+Last updated: 2020-05-17 17:37</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">ir</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">temperature</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">matplotlib</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">python</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">experiment</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2020-05-setting-locale-and-date/" rel="next" title="Setting locale and date on Raspberry Pi">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2020-05-nginx-for-jekyll/" rel="previous" title="Setting up Nginx for Jekyll">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>My grandpa wanted a thermometer to be able to easily find out if he had got a fever during the suites of Covid-19. However, he could not get a hold of a thermometer made for measuring body temperature, so he settled with a regular IR thermometer from Clas Ohlson (<a href="https://www.clasohlson.com/se/IR-termometer-mini/p/36-6891">IR thermometer mini</a>). It’s a quite neat little package with a button that, when pressed, takes a continuous measurement, and a small LCD display that shows the result.</p>
+
+<p>The product would not start at first when he opened the package, so he sent it to me so that I could take a look at it. I found that the batteries were mounted backwards (!) and had been completely drained (probably of the same reason). But this was not a big problem since there was an extra set of batteries in the package. So I just switched them out. Et voilà!</p>
+
+<p>After having “fixed” the thermometer, I decided to test it out to see how easy/accurate the measurement can be.</p><h2 id="measurements">
+        <a href="#measurements" class="anchor"><span>>></span></a>Measurements
+      </h2>
+<p>I made several measurements of several parts of my body (mouth, forehead, inside of hand, under cheek, throad, inside of head and navel) in quick succession. These measurements were retaken 20 times under a period of about 15 minutes. Then I let the thermometer rest for 5 minutes. Finally I made one last measurement.</p><h3 id="result">
+        <a href="#result" class="anchor"><span>>>></span></a>Result
+      </h3>
+<p>The code snippet below contains the measurement data and creates a plot with it (<a href="#result-figure">the figure below</a>).</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># measurements.py
+</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s">"mouth"</span><span class="p">,</span> <span class="s">"forehead"</span><span class="p">,</span> <span class="s">"hand"</span><span class="p">,</span> <span class="s">"under cheek"</span><span class="p">,</span> <span class="s">"throat"</span><span class="p">,</span> <span class="s">"ear"</span><span class="p">,</span> <span class="s">"navel"</span><span class="p">]</span>
+<span class="n">measurements</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mf">27.8</span><span class="p">,</span> <span class="mf">26.3</span><span class="p">,</span> <span class="mf">28.0</span><span class="p">,</span> <span class="mf">28.5</span><span class="p">,</span> <span class="mf">29.3</span><span class="p">,</span> <span class="mf">29.3</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="mf">30.2</span><span class="p">,</span> <span class="mf">30.9</span><span class="p">,</span> <span class="mf">31.3</span><span class="p">,</span> <span class="mf">27.8</span><span class="p">,</span> <span class="mf">30.3</span><span class="p">,</span> <span class="mf">30.2</span><span class="p">,</span> <span class="mf">30.7</span><span class="p">,</span> <span class="mf">31.0</span><span class="p">,</span> <span class="mf">31.2</span><span class="p">,</span> <span class="mf">30.6</span><span class="p">,</span> <span class="mf">30.4</span><span class="p">,</span> <span class="mf">30.5</span><span class="p">,</span> <span class="mf">29.8</span><span class="p">,</span> <span class="mf">34.3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">26.2</span><span class="p">,</span> <span class="mf">25.9</span><span class="p">,</span> <span class="mf">27.3</span><span class="p">,</span> <span class="mf">26.8</span><span class="p">,</span> <span class="mf">27.9</span><span class="p">,</span> <span class="mf">27.8</span><span class="p">,</span> <span class="mf">28.1</span><span class="p">,</span> <span class="mf">28.5</span><span class="p">,</span> <span class="mf">29.0</span><span class="p">,</span> <span class="mf">29.8</span><span class="p">,</span> <span class="mf">29.3</span><span class="p">,</span> <span class="mf">28.5</span><span class="p">,</span> <span class="mf">28.5</span><span class="p">,</span> <span class="mf">29.0</span><span class="p">,</span> <span class="mf">29.8</span><span class="p">,</span> <span class="mf">29.9</span><span class="p">,</span> <span class="mf">29.1</span><span class="p">,</span> <span class="mf">28.9</span><span class="p">,</span> <span class="mf">28.3</span><span class="p">,</span> <span class="mf">28.2</span><span class="p">,</span> <span class="mf">34.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">25.7</span><span class="p">,</span> <span class="mf">26.3</span><span class="p">,</span> <span class="mf">27.7</span><span class="p">,</span> <span class="mf">27.9</span><span class="p">,</span> <span class="mf">28.8</span><span class="p">,</span> <span class="mf">28.4</span><span class="p">,</span> <span class="mf">28.5</span><span class="p">,</span> <span class="mf">29.4</span><span class="p">,</span> <span class="mf">30.3</span><span class="p">,</span> <span class="mf">30.5</span><span class="p">,</span> <span class="mf">29.4</span><span class="p">,</span> <span class="mf">30.1</span><span class="p">,</span> <span class="mf">29.5</span><span class="p">,</span> <span class="mf">30.5</span><span class="p">,</span> <span class="mf">30.2</span><span class="p">,</span> <span class="mf">30.1</span><span class="p">,</span> <span class="mf">29.3</span><span class="p">,</span> <span class="mf">29.8</span><span class="p">,</span> <span class="mf">29.2</span><span class="p">,</span> <span class="mf">29.4</span><span class="p">,</span> <span class="mf">32.7</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">25.4</span><span class="p">,</span> <span class="mf">25.4</span><span class="p">,</span> <span class="mf">26.6</span><span class="p">,</span> <span class="mf">26.7</span><span class="p">,</span> <span class="mf">27.7</span><span class="p">,</span> <span class="mf">27.9</span><span class="p">,</span> <span class="mf">27.6</span><span class="p">,</span> <span class="mf">28.0</span><span class="p">,</span> <span class="mf">29.0</span><span class="p">,</span> <span class="mf">29.1</span><span class="p">,</span> <span class="mf">28.8</span><span class="p">,</span> <span class="mf">28.3</span><span class="p">,</span> <span class="mf">28.8</span><span class="p">,</span> <span class="mf">29.5</span><span class="p">,</span> <span class="mf">29.4</span><span class="p">,</span> <span class="mf">29.6</span><span class="p">,</span> <span class="mf">29.6</span><span class="p">,</span> <span class="mf">29.2</span><span class="p">,</span> <span class="mf">29.1</span><span class="p">,</span> <span class="mf">28.3</span><span class="p">,</span> <span class="mf">34.3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">25.1</span><span class="p">,</span> <span class="mf">25.4</span><span class="p">,</span> <span class="mf">26.9</span><span class="p">,</span> <span class="mf">26.7</span><span class="p">,</span> <span class="mf">27.8</span><span class="p">,</span> <span class="mf">28.3</span><span class="p">,</span> <span class="mf">28.7</span><span class="p">,</span> <span class="mf">28.5</span><span class="p">,</span> <span class="mf">29.7</span><span class="p">,</span> <span class="mf">29.7</span><span class="p">,</span> <span class="mf">29.3</span><span class="p">,</span> <span class="mf">28.9</span><span class="p">,</span> <span class="mf">28.7</span><span class="p">,</span> <span class="mf">29.3</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="mf">30.3</span><span class="p">,</span> <span class="mf">29.6</span><span class="p">,</span> <span class="mf">28.6</span><span class="p">,</span> <span class="mf">29.1</span><span class="p">,</span> <span class="mf">28.1</span><span class="p">,</span> <span class="mf">34.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">23.7</span><span class="p">,</span> <span class="mf">27.3</span><span class="p">,</span> <span class="mf">28.4</span><span class="p">,</span> <span class="mf">28.0</span><span class="p">,</span> <span class="mf">29.0</span><span class="p">,</span> <span class="mf">29.2</span><span class="p">,</span> <span class="mf">29.6</span><span class="p">,</span> <span class="mf">30.3</span><span class="p">,</span> <span class="mf">29.9</span><span class="p">,</span> <span class="mf">30.8</span><span class="p">,</span> <span class="mf">30.2</span><span class="p">,</span> <span class="mf">30.3</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="mf">30.7</span><span class="p">,</span> <span class="mf">30.4</span><span class="p">,</span> <span class="mf">31.0</span><span class="p">,</span> <span class="mf">30.6</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="mf">30.4</span><span class="p">,</span> <span class="mf">30.6</span><span class="p">,</span> <span class="mf">35.5</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">26.0</span><span class="p">,</span> <span class="mf">27.7</span><span class="p">,</span> <span class="mf">28.1</span><span class="p">,</span> <span class="mf">28.1</span><span class="p">,</span> <span class="mf">29.0</span><span class="p">,</span> <span class="mf">28.9</span><span class="p">,</span> <span class="mf">29.3</span><span class="p">,</span> <span class="mf">29.5</span><span class="p">,</span> <span class="mf">30.2</span><span class="p">,</span> <span class="mf">30.7</span><span class="p">,</span> <span class="mf">30.2</span><span class="p">,</span> <span class="mf">29.4</span><span class="p">,</span> <span class="mf">29.5</span><span class="p">,</span> <span class="mf">30.3</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="mf">30.7</span><span class="p">,</span> <span class="mf">29.9</span><span class="p">,</span> <span class="mf">29.3</span><span class="p">,</span> <span class="mf">29.6</span><span class="p">,</span> <span class="mf">29.8</span><span class="p">,</span> <span class="mf">35.4</span><span class="p">]])</span>
+<span class="n">meas_count</span> <span class="o">=</span> <span class="n">measurements</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">meas</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">measurements</span><span class="p">):</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">meas</span><span class="p">,</span> <span class="s">'.-'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">"Body temperature measurement with IR surface thermometer"</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">"Temperature [C]"</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">"Measurement"</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">meas_count</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">meas_count</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">meas_count</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">"X"</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p><img src="result.png" alt="Graph of measurements taken" id="result-figure" /></p><h3 id="observationslearnings">
+        <a href="#observationslearnings" class="anchor"><span>>>></span></a>Observations/learnings
+      </h3>
+
+<ul>
+  <li>The observed temperature is far lower than my actual body temperature. I made a reference measurement with a stool thermometer that showed 36.9 degrees celsius.</li>
+  <li>The measured temperature increases after a couple of minutes of use. The thermometer itself probably gets warm, which results in the drift of temperature in the readings.</li>
+  <li>There are a couple of outliers (ear[1], mouth[2] and mouth[11]), probably due to faulty measurements. I should have performed several measurements and taken the maximum readout to filter out any bad measurements. Bad measurements were mostly due to me forgetting to let go of the <em>measure</em> button when removing the thermometer.</li>
+  <li>The last jump upwards was a bit surprising. I do not think it was due to the change in working temperature, but rather a drift in the sensor since I got similar readings 15 minutes later as well. Unfortunately, I did not have time to perform any more control measurements before returning the thermometer to my grandfather.</li>
+</ul>
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2020-05-setting-locale-and-date/" rel="next" title="Setting locale and date on Raspberry Pi">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2020-05-nginx-for-jekyll/" rel="previous" title="Setting up Nginx for Jekyll">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2020-05-17-ir-thermometer/2020-05-17-ir-thermometer.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

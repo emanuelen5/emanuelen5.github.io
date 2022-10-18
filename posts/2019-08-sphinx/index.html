@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Sphinx
+</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	<img style="height: 1em;" alt="Post thumbnail" src="/assets/images/sphinx_logo.png">
+	
+	Sphinx
+
+      </h1>
+
+
+<p class="lead">Published:    2019-08-02 <br/>
+Last updated: 2020-05-17 22:58</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">sphinx</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">python</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">blog</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">guide</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">meta</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2019-10-programatically-controlling-cast-device/" rel="next" title="Controlling Google cast devices programmatically (Chromecast and Home)">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-07-jekyll/" rel="previous" title="Jekyll">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>In this post I’m testing Sphinx!</p><h1 id="installing">
+        <a href="#installing" class="anchor"><span>></span></a>Installing
+      </h1>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip <span class="nb">install </span>sphinx
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>sphinx-quickstart
+<span class="o">[</span>...]
+<span class="o">&gt;</span> Separate <span class="nb">source </span>and build directories <span class="o">(</span>y/n<span class="o">)</span> <span class="o">[</span>n]: y
+<span class="o">[</span>...]
+<span class="o">&gt;</span> Project name: sphinx-blog
+<span class="o">&gt;</span> Author name<span class="o">(</span>s<span class="o">)</span>: Erasmus Cedernaes
+<span class="o">&gt;</span> Project release <span class="o">[]</span>:
+<span class="o">[</span>...]
+<span class="o">&gt;</span> Project language <span class="o">[</span>en]:
+<span class="o">[</span>...]
+</code></pre></div></div>
+
+<p>Initially the directory structure looks as follows</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tree
+<span class="nb">.</span>
+├── build/
+├── make.bat
+├── Makefile
+├── requirements.txt
+└── <span class="nb">source</span>/
+    ├── conf.py
+    ├── index.rst
+    ├── _static
+    └── _templates
+
+4 directories, 5 files
+</code></pre></div></div>
+
+<p>There is a combined tool for rebuilding and serving the web page called <code class="language-plaintext highlighter-rouge">sphinx-autobuild</code> which can be installed using pip (<code class="language-plaintext highlighter-rouge">pip install sphinx autobuild</code>) and used as:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>sphinx-autobuild <span class="nt">-b</span> html
+</code></pre></div></div>
+
+<p>I however had some trouble with using it together with Vim since it rebuilt too many files and <em>twice</em> for each file I changed (due to Vim creating .swp-files?). I therefore switched to using the good old faithful <code class="language-plaintext highlighter-rouge">entr</code> (get it with <code class="language-plaintext highlighter-rouge">apt install entr</code> on Debianesque systems):</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Do this in one terminal</span>
+<span class="nv">$ </span><span class="k">while </span><span class="nb">sleep </span>1<span class="p">;</span> <span class="k">do </span>find <span class="nb">.</span> | entr <span class="nt">-d</span> make html<span class="p">;</span> <span class="k">done</span>
+<span class="c"># And this in another terminal session</span>
+<span class="nv">$ </span>python <span class="nt">-m</span> http.server 4001 <span class="nt">--directory</span> <span class="s2">"build/html"</span>
+</code></pre></div></div>
+
+<p>I even added these as targets in the Makefile:</p>
+<div class="language-make highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Minimal makefile for Sphinx documentation
+#
+</span>
+<span class="c"># You can set these variables from the command line, and also
+# from the environment for the first two.
+</span><span class="nv">SPHINXOPTS</span>    <span class="o">?=</span>
+<span class="nv">SPHINXBUILD</span>   <span class="o">?=</span> sphinx-build
+<span class="nv">SOURCEDIR</span>     <span class="o">=</span> <span class="nb">source</span>
+<span class="nv">BUILDDIR</span>      <span class="o">=</span> build
+<span class="nv">PORT</span>          <span class="o">?=</span> 4001
+
+<span class="c"># Put it first so that "make" without argument is like "make help".
+</span><span class="nl">help</span><span class="o">:</span>
+	<span class="p">@</span><span class="nv">$(SPHINXBUILD)</span> <span class="nt">-M</span> <span class="nb">help</span> <span class="s2">"</span><span class="nv">$(SOURCEDIR)</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$(BUILDDIR)</span><span class="s2">"</span> <span class="nv">$(SPHINXOPTS)</span> <span class="nv">$(O)</span>
+
+<span class="nl">livehtml</span><span class="o">:</span>
+	sphinx-autobuild <span class="nt">-p</span> <span class="nv">$(PORT)</span> <span class="nt">-b</span> html <span class="nt">-i</span> <span class="s2">".*.*"</span> <span class="s2">"</span><span class="nv">$(SOURCEDIR)</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$(BUILDDIR)</span><span class="s2">/html"</span> <span class="nv">$(SPHINXOPTS)</span> <span class="nv">$(O)</span>
+
+<span class="nl">watchhtml</span><span class="o">:</span>
+	<span class="k">while </span><span class="nb">sleep </span>1<span class="p">;</span> <span class="k">do </span>find <span class="s2">"</span><span class="nv">$(SOURCEDIR)</span><span class="s2">"</span> | entr <span class="nt">-d</span> <span class="nv">$(MAKE)</span> html<span class="p">;</span> <span class="k">done</span>
+
+<span class="nl">webserver</span><span class="o">:</span>
+	python <span class="nt">-m</span> http.server <span class="nv">$(PORT)</span> <span class="nt">--directory</span> <span class="s2">"</span><span class="nv">$(BUILDDIR)</span><span class="s2">/html"</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">help livehtml watchhtml webserver Makefile</span>
+
+<span class="c"># Catch-all target: route all unknown targets to Sphinx using the new
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+</span><span class="nl">%</span><span class="o">:</span> <span class="nf">Makefile</span>
+	<span class="nv">$(SPHINXBUILD)</span> <span class="nt">-M</span> <span class="nv">$@</span> <span class="s2">"</span><span class="nv">$(SOURCEDIR)</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$(BUILDDIR)</span><span class="s2">"</span> <span class="nv">$(SPHINXOPTS)</span> <span class="nv">$(O)</span>
+
+</code></pre></div></div>
+
+<p>They can then be built using <code class="language-plaintext highlighter-rouge">make watchhtml</code> and <code class="language-plaintext highlighter-rouge">make webserver</code>. Go to the page by visiting <a href="http://localhost:4001" data-proofer-ignore="">localhost:4001</a>.</p><h1 id="page-format">
+        <a href="#page-format" class="anchor"><span>></span></a>Page format
+      </h1>
+<p>Sphinx pages are written in reStructuredText (RST) which is a much more potent language than Markdown, but also more difficult. It is quite similar to LaTeX in that it has a lot of predefined commands for common things like linking to manpages and rfc documents, labeling sections so they can be inter- and intralinked, adding footnotes/references and adding code sections.</p>
+
+<p><a href="https://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html">Here is a simple introduction</a> to RST with a lot of good examples (similar to <a href="http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html">RST primer from the Sphinx documentation</a>, but simpler to understand). If you want to get a lot more technical about the tools then check out <a href="https://www.devdungeon.com/content/restructuredtext-rst-tutorial-0">this page</a>. Otherwise check out <a href="http://docutils.sourceforge.net/rst.html">the specifications for RST</a> which contains all of the details.</p><h1 id="changing-the-design">
+        <a href="#changing-the-design" class="anchor"><span>></span></a>Changing the design
+      </h1>
+<p>Let’s say we would like to change something in the design of our website (which everyone will do). Then, first we have to check what theme we are using in the <code class="language-plaintext highlighter-rouge">conf.py</code> file:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># The theme to use for HTML and HTML Help pages.  See the documentation for
+# a list of builtin themes.
+#
+</span><span class="n">html_theme</span> <span class="o">=</span> <span class="s">'alabaster'</span>
+</code></pre></div></div>
+
+<p><em>Alabaster</em> is the default theme according to <a href="http://www.sphinx-doc.org/en/master/usage/theming.html#builtin-themes">the Sphinx theming page</a>. There is some info on that page on where we should look for further documentation for the Alabaster theme. According to it we will need to go to the <a href="https://alabaster.readthedocs.io/en/latest/index.html">alabaster theme page</a>.</p>
+
+<p>If we want to add something to the sidebar, then we need to set <a href="http://www.sphinx-doc.org/en/master/usage/configuration.html#confval-html_sidebars"><code class="language-plaintext highlighter-rouge">html_sidebars</code> in <em>conf.py</em></a>. The default value can be found <a href="https://alabaster.readthedocs.io/en/latest/installation.html">here</a>:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html_sidebars</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'**'</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s">'about.html'</span><span class="p">,</span>
+        <span class="s">'navigation.html'</span><span class="p">,</span>
+        <span class="s">'localtoc.html'</span><span class="p">,</span>
+        <span class="s">'relations.html'</span><span class="p">,</span>
+        <span class="s">'searchbox.html'</span><span class="p">,</span>
+        <span class="s">'donate.html'</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div><h1 id="adding-a-blog">
+        <a href="#adding-a-blog" class="anchor"><span>></span></a>Adding a blog
+      </h1>
+<p>I think one of the best alternatives is to use an extension called <a href="https://ablog.readthedocs.io/">ABlog</a> (<code class="language-plaintext highlighter-rouge">pip install -U ablog</code>).</p><h1 id="thoughts">
+        <a href="#thoughts" class="anchor"><span>></span></a>Thoughts
+      </h1>
+<p>It is very hard to find the correct documentation for all of the settings. I have basically just searched online for the keywords that I think might be relevant in the <em>conf.py</em> file.</p>
+
+<p>There are several extensions available.</p>
+
+<p>The boilerplate that is available makes it quick to set up a project with a nice looking structure.
+Sphinx seems to be most suitable for documenting code and libraries.</p>
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2019-10-programatically-controlling-cast-device/" rel="next" title="Controlling Google cast devices programmatically (Chromecast and Home)">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-07-jekyll/" rel="previous" title="Jekyll">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2019-08-02-sphinx.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

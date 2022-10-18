@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Jekyll
+</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	<img style="height: 1em;" alt="Post thumbnail" src="/assets/images/jekyll-test-tube.svg">
+	
+	Jekyll
+
+      </h1>
+
+
+<p class="lead">Published:    2019-07-30 <br/>
+Last updated: 2020-06-09 20:36</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">jekyll</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">ruby</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">blog</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">guide</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">meta</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2019-08-sphinx/" rel="next" title="Sphinx">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-07-creating-your-own-blog/" rel="previous" title="Frameworks for blogs">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>In this post I am going to test Jekyll! I will go through how to <a href="#installing">install it</a> and some things I have learned on the way, such as how to use the <a href="#liquid">Liquid preprocessor</a> and how Jekyll structures <a href="#directory-structure">its build output</a>.</p><h1 id="installing">
+        <a href="#installing" class="anchor"><span>></span></a>Installing
+      </h1>
+<p>If you are familiar with Ruby on rails, this should go smoothly. See the <a href="https://jekyllrb.com/docs/#instructions">Jekyll page</a> for the basic instructions. Since I was new, I just wanted to add the sidesteps I had to go from the instructions:</p>
+
+<ol>
+  <li>
+    <p>Install a full Ruby development environment <br />
+ Apparently I already had this installed (Ubuntu 16):</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nv">$ </span><span class="nb">sudo </span>apt <span class="nb">install </span>ruby ruby-dev
+ <span class="o">[</span>...]
+ ruby is already the latest version <span class="o">(</span>1:2.3.0+1<span class="o">)</span><span class="nb">.</span>
+ ruby-dev is already the latest version <span class="o">(</span>1:2.3.0+1<span class="o">)</span><span class="nb">.</span>
+ <span class="nv">$ </span>ruby <span class="nt">-v</span>
+ ruby 2.3.1p112 <span class="o">(</span>2016-04-26<span class="o">)</span> <span class="o">[</span>x86_64-linux-gnu]
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Install Jekyll and bundler gems</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c"># I had not set up so gems could be installed globally, so I had to install it under my user</span>
+ <span class="nv">$ </span>gem <span class="nb">install</span> <span class="nt">--user-install</span> jekyll bundler
+ <span class="c"># Then I had to add the Ruby gems to the path so I could execute them</span>
+ <span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PATH</span><span class="s2">:~/.gem/ruby/2.3.0/bin"</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create a new site at <code class="language-plaintext highlighter-rouge">./myblog</code> and go into the new directory</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c"># Here bundler would complain that it could not install all dependencies and failed (due to</span>
+ <span class="c"># lack of permissions). I therefore skipped the automatic install and made it install in my</span>
+ <span class="c"># user gems directory</span>
+ <span class="nv">$ </span>jekyll new myblog <span class="nt">--skip-bundle</span>
+ <span class="nv">$ </span><span class="nb">cd </span>myblog
+ <span class="nv">$ </span>bundler <span class="nb">install</span> <span class="nt">--path</span> ~/.gem/ruby/2.3.0/gems
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Build the site and make it available on a local server at port 4000</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nv">$ </span>bundler <span class="nb">exec </span>jekyll serve <span class="nt">--port</span> 4000
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Now you can start adding posts in by adding the to the <code class="language-plaintext highlighter-rouge">_posts/</code> folder. As long as you run the <code class="language-plaintext highlighter-rouge">serve</code> option, Jekyll will keep updating the .html files everytime you change in the posts or assets (one exception, however, seems to be the <code class="language-plaintext highlighter-rouge">_config.yml</code> file). This is great when developing. It also has support for <em>livereload</em> so the web browser automatically refreshes when the site is changed.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>bundle <span class="nb">exec </span>jekyll serve <span class="nt">--port</span> 4000
+Configuration file: /home/emaus/blog/_config.yml
+            Source: /home/emaus/blog
+       Destination: /home/emaus/blog/_site
+ Incremental build: disabled. Enable with <span class="nt">--incremental</span>
+      Generating...
+       Jekyll Feed: Generating feed <span class="k">for </span>posts
+                    <span class="k">done in </span>0.689 seconds.
+ Auto-regeneration: enabled <span class="k">for</span> <span class="s1">'/home/emaus/blog'</span>
+    Server address: http://127.0.0.1:4000/
+  Server running... press ctrl-c to stop.
+      Regenerating: 1 file<span class="o">(</span>s<span class="o">)</span> changed at 2019-07-31 13:56:55
+                    _posts/2019-07-30-first-post.md
+       Jekyll Feed: Generating feed <span class="k">for </span>posts
+                    ...done <span class="k">in </span>0.313123519 seconds.
+</code></pre></div></div><h1 id="directory-structure">
+        <a href="#directory-structure" class="anchor"><span>></span></a>Directory structure
+      </h1>
+<p>Here is a snapshot of the directory structure after basically just setting up the page and adding a post as well as an asset.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tree
+<span class="nb">.</span>
+├── 404.html
+├── about.md
+├── assets
+│   └── lorem.md
+├── _config.yml
+├── Gemfile
+├── Gemfile.lock
+├── index.md
+├── _posts
+│   ├── 2019-07-29-welcome-to-jekyll.markdown
+│   └── 2019-07-30-first-post.md
+└── _site
+    ├── 404.html
+    ├── about
+    │   └── index.html
+    ├── assets
+    │   ├── lorem.md
+    │   ├── main.css
+    │   └── minima-social-icons.svg
+    ├── feed.xml
+    ├── index.html
+    └── jekyll
+        └── update
+            └── 2019
+                └── 07
+                    ├── 29
+                    │   └── welcome-to-jekyll.html
+                    └── 30
+                        └── first-post.html
+
+11 directories, 18 files
+</code></pre></div></div>
+
+<p>So, some important things:</p>
+
+<p><strong>Output directory</strong><br />
+The whole site is built into the <code class="language-plaintext highlighter-rouge">_site</code> folder. All of the files needed to serve incoming HTTP connections are placed here, i.e. CSS, HTML etc. This directory can be specified to another path by supplying an argument to the <code class="language-plaintext highlighter-rouge">jekyll</code> command.</p>
+
+<p><strong>Posts</strong><br />
+Posts written in Markdown should be placed in the <code class="language-plaintext highlighter-rouge">_posts</code> directory and named as <code class="language-plaintext highlighter-rouge">&lt;year&gt;-&lt;month&gt;-&lt;day&gt;-&lt;name&gt;.md</code>. When built, they are placed in <code class="language-plaintext highlighter-rouge">_site/jekyll/update/&lt;year&gt;/&lt;month&gt;/&lt;date&gt;/&lt;name&gt;.html</code>.</p>
+
+<p><strong>Other Markdown pages</strong><br />
+Other markdown pages are processed and placed in the root of the output directory, such as <code class="language-plaintext highlighter-rouge">404.html</code> and <code class="language-plaintext highlighter-rouge">index.html</code>. However, the <code class="language-plaintext highlighter-rouge">about.md</code> page was treated diffrently since it had the attribute <code class="language-plaintext highlighter-rouge">permalink: /about/</code> in its <em>front matter</em> (more about that below).</p>
+
+<p><strong>Assets</strong><br />
+Assets are placed in a folder called <code class="language-plaintext highlighter-rouge">assets</code>. When the site is build these are copied into the <code class="language-plaintext highlighter-rouge">_site/assets</code> folder together with e.g. the .css-output from .sass-files. Here you can also place other types of files that you want to include in your posts, such as images.</p><h1 id="post-format">
+        <a href="#post-format" class="anchor"><span>></span></a>Post format
+      </h1>
+<p>The posts are written in Markdown with a few additions:</p>
+
+<ol>
+  <li>Front matter</li>
+  <li>Liquid</li>
+</ol><h1 id="front-matter">
+        <a href="#front-matter" class="anchor"><span>></span></a><a href="https://jekyllrb.com/docs/front-matter/">Front matter</a>
+      </h1>
+<p>The front matter is simply a header to the Markdown file with YAML format! It is both an indication that the file should be converted to an HTML file using the Liquid preprocessor, and a place where metadata can be defined for a post, such as the post’s title and definitions of Liquid page variables (accessed as memebers of the variable <code class="language-plaintext highlighter-rouge">page</code>).</p>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="c1"># front matter tells Jekyll to process Liquid, defines page variables and other properties of the page</span>
+<span class="na">foo</span><span class="pi">:</span> <span class="s">a page variable</span>
+<span class="nn">---</span>
+
+<span class="gh"># My page</span>
+
+The variable foo has the value of 
+<span class="c">&lt;!--- i.e. a page variable --&gt;</span>
+</code></pre></div></div>
+
+<p><strong>NB:</strong> You have to include this in your Markdown files, otherwise they won’t be converted to HTML.</p><h1 id="liquid">
+        <a href="#liquid" class="anchor"><span>></span></a>Liquid
+      </h1>
+<p>Liquid is a form of scripting/templating engine similar to Jinja. It is statically built, but still versatile. It allows you to reduce repetitions (using objects, tags and filters), split source files (using includes), and apply formatting (templates). The version of Liquid that is build into Jekyll has some additions, but most of the time the <a href="https://shopify.github.io/liquid/">official Liquid documentation</a> can be used as reference.</p><h2 id="liquid-objects">
+        <a href="#liquid-objects" class="anchor"><span>>></span></a>Liquid objects
+      </h2>
+<p>An object is really just a single unit that is processed by Liquid. It can contain for example strings, variables and filters. It is contained in double curly brackets:</p>
+<div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{{</span><span class="w"> </span><span class="nv">object</span><span class="w"> </span><span class="p">}}</span>
+</code></pre></div></div>
+
+<p>A string is just contained in quotation marks:</p>
+<div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{{</span><span class="w"> </span><span class="s2">"string"</span><span class="w"> </span><span class="p">}}</span>
+</code></pre></div></div>
+
+<p>Variables can be defined in either the front matter, by the Jekyll page builer, by plugins or in templates:</p>
+<div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{{</span><span class="w"> </span><span class="nv">page</span><span class="p">.</span><span class="nv">date</span><span class="w"> </span><span class="p">}}</span>
+</code></pre></div></div><h2 id="liquid-tags">
+        <a href="#liquid-tags" class="anchor"><span>>></span></a>Liquid tags
+      </h2>
+<p>A tag can perform more advanced tasks, such as loops or inclusion of other files.</p>
+<div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{%</span><span class="w"> </span><span class="nt">tag</span><span class="w"> </span><span class="p">%}</span>
+</code></pre></div></div>
+
+<p>A conditional:</p>
+<div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">page</span><span class="p">.</span><span class="nv">show_sidebar</span><span class="w"> </span><span class="p">%}</span>
+  &lt;div class="sidebar"&gt;
+    sidebar content
+  &lt;/div&gt;
+<span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+</code></pre></div></div>
+
+<p>We need to use the <a href="https://jekyllrb.com/docs/liquid/tags/#links">specific tags for inclusion and linking</a> of resources, except for assets (and thus generated CSS):</p>
+<div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;!--- Including CSS generated from SASS --&gt;
+&lt;link rel="stylesheet" href="/assets/css/styles.css"&gt;
+
+&lt;!--- Links --&gt;
+[Link to an asset](/assets/&lt;asset_name&gt;)
+[Link to a post  ](<span class="p">{%</span><span class="w"> </span><span class="nt">link</span><span class="w"> </span>_posts/&lt;a_post_name&gt;<span class="w"> </span><span class="p">%}</span>)
+</code></pre></div></div>
+
+<p>Special <em>include</em> files can be used to reduce repetitions, and allowing to split files for better legibility and structure. The file to be included has to be placed in <code class="language-plaintext highlighter-rouge">_includes/&lt;filename&gt;</code>.</p>
+<div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{%</span><span class="w"> </span><span class="nt">include</span><span class="w"> </span>&lt;filename&gt;<span class="w"> </span><span class="p">%}</span>
+</code></pre></div></div><h2 id="example-post-conversion-to-markdown">
+        <a href="#example-post-conversion-to-markdown" class="anchor"><span>>></span></a>Example post conversion to Markdown
+      </h2>
+<p>Let me just show an example of the Liquid preprocessing that is done:</p>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">layout</span><span class="pi">:</span>      <span class="s">post</span>
+<span class="na">title</span><span class="pi">:</span>       <span class="s2">"</span><span class="s">Ay</span><span class="nv"> </span><span class="s">caramba"</span>
+<span class="na">date</span><span class="pi">:</span>        <span class="s">2019-07-30 11:14:00 +0200</span>
+<span class="na">categories</span><span class="pi">:</span>  <span class="s">jekyll update</span>
+<span class="na">tags</span><span class="pi">:</span>        <span class="pi">[</span><span class="s2">"</span><span class="s">test"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">tutorial"</span><span class="pi">]</span>
+<span class="na">foo</span><span class="pi">:</span>         <span class="s">bar</span>
+<span class="nn">---</span>
+
+Published {{ page.date | date: '%B %d, %Y' }}.
+
+{% for tag in page.tags %}
+<span class="gh"># Tag: {{ tag }}</span>
+{% if tag=="test" %}
+TEST!
+{% endif %}
+{% endfor %}
+
+<span class="p">```</span><span class="nl">bash
+</span><span class="nv">$ </span><span class="nb">exec </span>dash
+<span class="p">```</span>
+
+Other property: {{ page.foo }}
+</code></pre></div></div>
+
+<p>which is equivalient to the following Markdown document before conversion to HTML:</p>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+Published July 30, 2019.
+
+<span class="gh"># Tag: test</span>
+TEST!
+<span class="gh"># Tag: tutorial</span>
+
+<span class="p">```</span><span class="nl">bash
+</span><span class="nv">$ </span><span class="nb">exec </span>dash
+<span class="p">```</span>
+
+Other property: bar
+</code></pre></div></div><h1 id="concluding-thoughts">
+        <a href="#concluding-thoughts" class="anchor"><span>></span></a>Concluding thoughts
+      </h1>
+<p>I am quite amazed at how easy it was to set it up and install.</p>
+
+<p>Jekyll is obviously very blog-centric. It is very easy to create posts with different layouts. It is very streamlined for setting up a single blog/article series, but can be modified to have several blogs on a single website.</p>
+
+<p>Since the pages become static all you need is a simple web server that can serve HTTP connections with HTML pages. E.g. Apache, Nginx, NodeJS etc.</p>
+
+<p>It is a bit annoying that you have to use the Liquid preprocessor to create intralinks (links between posts). They point to files that you created yourself with known exact locations before preprocessing, I think it would have been nice if this was handled automatically instead. Sure, they are preprocessed and converted from Markdown to HTML, but why can’t they instead keep the same directory structure? Perhaps this can be avoided somehow.</p>
+
+<p>The amount of plugins seems to be fairly limited. Here is <a href="https://github.com/planetjekyll/awesome-jekyll-plugins">a list I found that seems to point out some good ones</a>. Pages can still be dynamic just by adding the appropriate Javascript to it. For example using dynamic pages with AJAX would make it  possible to remove the pagination from the main page and instead load the posts dynamically. The list of posts could perhaps be passed to Javascript by using some Liquid preprocessing that creates a Javascript variable. Here is an example of <a href="https://github.com/christian-fei/Simple-Jekyll-Search">how to add search functionality to your Jekyll blog</a>.</p>
+
+<p>The framework in itself is really not limiting compared to writing raw HTML pages, it just makes it a lot simpler to write and manage. With templating you get similar features as when creating pages dynamically with PHP, Python and NodeJS. You however miss the possibility of dynamically creating pages (such as reading from databases) without using client side AJAX. This will make it a bit more cumbersome to create shops and other pages where you need to do server-side verification.</p>
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2019-08-sphinx/" rel="next" title="Sphinx">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-07-creating-your-own-blog/" rel="previous" title="Frameworks for blogs">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2019-07-30-jekyll.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

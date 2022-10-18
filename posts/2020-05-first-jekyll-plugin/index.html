@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Jekyll plugin...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Jekyll plugin for escaping Atom feed content and altering links
+
+      </h1>
+
+<p class="lead">I look into how one could escape an Atom feed using Ruby and making links absolute. The intention was to use it for fixing links in my Atom feed, but I didn't need to turn it into a plugin since the actual problem was with the main url in the Atom feed (it was missing https:// in the start).</p>
+
+
+<p class="lead">Published:    2020-05-04 <br/>
+Last updated: 2020-05-31 12:27</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">jekyll</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">ruby</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">nokogiri</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">xpath</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">meta</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">plugin</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2020-05-nginx-for-jekyll/" rel="next" title="Setting up Nginx for Jekyll">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2020-05-proxy-from-windows-to-linux/" rel="previous" title="Setting up a proxy to a Linux server">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>So I had some trouble getting correct links in my Atom feed. The links are written as relative in my posts, while feed apps expect them to be absolute.</p>
+
+<p>I was looking for any plugins that would transform them easily to absolute links, but fell short. I therefore started looking at how hard it would be to develop my own Ruby plugin to Jekyll. Having no previous experience with Ruby, than typing <code class="language-plaintext highlighter-rouge">bundle install</code> and <code class="language-plaintext highlighter-rouge">bundle exec jekyll serve</code>, I felt that I had some reading to do.</p><h2 id="ruby-example">
+        <a href="#ruby-example" class="anchor"><span>>></span></a>Ruby example
+      </h2>
+<p>The following script opens up the final Atom feed XML file, prepends each url with the values <code class="language-plaintext highlighter-rouge">base_url</code> and <code class="language-plaintext highlighter-rouge">page_url</code>, and then HTML escapes the contents of the entries.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">require</span> <span class="s1">'nokogiri'</span>
+<span class="nb">require</span> <span class="s1">'cgi'</span>
+
+<span class="c1"># Parse document</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="no">Nokogiri</span><span class="o">::</span><span class="no">HTML</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'atom.xml'</span><span class="p">))</span>
+<span class="n">contents</span> <span class="o">=</span> <span class="n">doc</span><span class="p">.</span><span class="nf">xpath</span><span class="p">(</span><span class="s1">'//feed//entry//content'</span><span class="p">)</span>
+
+<span class="c1"># Fix URLs for images and links</span>
+<span class="n">contents</span><span class="p">.</span><span class="nf">xpath</span><span class="p">(</span><span class="s1">'//img'</span><span class="p">).</span><span class="nf">foreach</span> <span class="p">{</span> <span class="o">|</span><span class="n">img</span><span class="o">|</span>
+	<span class="n">img</span><span class="p">[</span><span class="s1">'src'</span><span class="p">]</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">page_url</span> <span class="o">+</span> <span class="n">img</span><span class="p">[</span><span class="s1">'src'</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="n">contents</span><span class="p">.</span><span class="nf">xpath</span><span class="p">(</span><span class="s1">'//a'</span><span class="p">).</span><span class="nf">foreach</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="o">|</span>
+	<span class="n">a</span><span class="p">[</span><span class="s1">'href'</span><span class="p">]</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">page_url</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="s1">'href'</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># Escape the content of each each entry</span>
+<span class="n">contents</span><span class="p">.</span><span class="nf">children</span> <span class="o">=</span> <span class="no">CGI</span><span class="p">.</span><span class="nf">escapeHTML</span><span class="p">(</span><span class="n">contents</span><span class="p">.</span><span class="nf">children</span><span class="p">.</span><span class="nf">to_s</span><span class="p">)</span>
+</code></pre></div></div><h2 id="unexpected-solution">
+        <a href="#unexpected-solution" class="anchor"><span>>></span></a>Unexpected solution
+      </h2>
+
+<p>The actual problem with the feed seemed to be with the atom feed URL not being absolute, which was fixed by adding the <code class="language-plaintext highlighter-rouge">absolute_url</code> filter to the url:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ page.url | absolute_url }}"</span> <span class="na">rel=</span><span class="s">"self"</span> <span class="na">type=</span><span class="s">"application/atom+xml"</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>which then turns into</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"https://blog.cedernaes.com/atom.xml"</span> <span class="na">rel=</span><span class="s">"self"</span> <span class="na">type=</span><span class="s">"application/atom+xml"</span><span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2020-05-nginx-for-jekyll/" rel="next" title="Setting up Nginx for Jekyll">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2020-05-proxy-from-windows-to-linux/" rel="previous" title="Setting up a proxy to a Linux server">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2020-05-04-first-jekyll-plugin.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

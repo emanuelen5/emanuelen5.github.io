@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Setting up...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Setting up a Raspberry Pi 3B plus from scratch
+
+      </h1>
+
+
+<p class="lead">Published:    2020-04-06 <br/>
+Last updated: 2022-10-17 00:36</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">rpi</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">ssh</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">fail2ban</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">guide</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2020-05-proxy-from-windows-to-linux/" rel="next" title="Setting up a proxy to a Linux server">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2020-04-backing-up-sd-card-from-crashed-pi/" rel="previous" title="Backing up an SD card from a crashed Raspberry Pi">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>Here I will show you basically all of the steps that are needed for installing a Raspberry Pi and setting up a new user on it.
+I will set it up to have a user called <code class="language-plaintext highlighter-rouge">emaus</code> and hostname as <code class="language-plaintext highlighter-rouge">emaus-pi3</code>, but you can modify that to whatever you want and follow along.</p><h2 id="sd-card">
+        <a href="#sd-card" class="anchor"><span>>></span></a>SD card
+      </h2>
+<ol>
+  <li>Write an image to the SD card with <a href="https://www.balena.io/etcher/">Balena etcher</a> on Windows or <a href="https://www.raspberrypi.org/documentation/installation/installing-images/linux.md"><code class="language-plaintext highlighter-rouge">dd</code></a> on Linux.</li>
+  <li>Add a file called <em>ssh</em> to the root of the <strong>boot partition</strong> to enable SSH directly after boot.</li>
+</ol>
+
+<p>You can also set up a WiFi by adding a file called <em>wpa_supplicant.conf</em> to the root of the <strong>boot partition</strong> to make it connect to a WiFi after boot (this file will then be moved to the root file system under <em>/etc/wpa_supplicant/wpa_supplicant.conf</em>). The file should contain the following (see the <a href="https://www.raspberrypi.org/documentation/configuration/wireless/headless.md">Raspberry Pi page on headless setup</a> for more info]):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+  country=&lt;Two letter ISO 3166-1 country code, like: SE, GB, US&gt;
+  update_config=1
+
+  network={
+     ssid="&lt;SSID of the access point&gt;"
+     psk="&lt;Password of the access point&gt;"
+  }
+</code></pre></div></div>
+
+<p>If you’re setting up the SD card on a Linux computer, you can also set the hostname before booting the Pi by editing files in the <strong>root file system</strong>:</p>
+
+<ul>
+  <li>Set the hostname of the pi by replacing “raspberrypi” in <em>/etc/hostname</em> and <em>/etc/hosts</em>:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> /mountpoint/of/rpi/rfs
+<span class="nb">sed</span> <span class="s1">'s/raspberrypi/emaus-pi3/'</span> <span class="nt">-i</span> etc/hostname etc/hosts
+</code></pre></div>    </div>
+  </li>
+</ul><h2 id="raspberry-pi-config">
+        <a href="#raspberry-pi-config" class="anchor"><span>>></span></a>Raspberry Pi config
+      </h2>
+<ol>
+  <li>SSH into pi with default user and password:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> emaus@pc:~ <span class="nv">$ </span>ssh <span class="nt">-X</span> pi@raspberrypi.local
+</code></pre></div>    </div>
+  </li>
+  <li>Start to set up the pi through the config:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> pi@raspberrypi:~ <span class="nv">$ </span>raspi-config
+</code></pre></div>    </div>
+    <ul>
+      <li>Set hostname to something better</li>
+      <li>Expand filesystem</li>
+      <li>Set locale</li>
+    </ul>
+  </li>
+  <li>Check that the date is set appropriately with <code class="language-plaintext highlighter-rouge">date</code> and set it if it is not.</li>
+  <li>Reboot so that our changes become effective (hostname, filestystem, etc.):
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> pi@raspberrypi:~ <span class="nv">$ </span><span class="nb">sudo </span>reboot now
+</code></pre></div>    </div>
+  </li>
+  <li>SSH into pi with new hostname:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> emaus@pc:~ <span class="nv">$ </span>ssh <span class="nt">-X</span> pi@emaus-pi3.local
+</code></pre></div>    </div>
+  </li>
+  <li>Update it:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> pi@emaus-pi3:~ <span class="nv">$ </span><span class="nb">sudo </span>apt update
+ pi@emaus-pi3:~ <span class="nv">$ </span><span class="nb">sudo </span>apt upgrade <span class="nt">-y</span>
+</code></pre></div>    </div>
+  </li>
+</ol><h2 id="new-user">
+        <a href="#new-user" class="anchor"><span>>></span></a>New user
+      </h2>
+<ol>
+  <li>Add a new user with all groups that pi has (but not the <code class="language-plaintext highlighter-rouge">pi</code> group since we will remove that user):
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> pi@emaus-pi3:~ <span class="nv">$ </span><span class="nb">groups
+ </span>pi adm dialout cdrom <span class="nb">sudo </span>audio video plugdev games <span class="nb">users </span>input netdev gpio i2c spi
+ pi@emaus-pi3:~ <span class="nv">$ </span><span class="nb">sudo </span>useradd <span class="nt">-m</span> <span class="nt">-s</span> /bin/bash <span class="nt">-G</span> adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,input,netdev,gpio,i2c,spi &lt;username&gt;
+</code></pre></div>    </div>
+  </li>
+  <li>Set password of the new user:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pi@emaus-pi3:~ <span class="nv">$ </span><span class="nb">sudo </span>passwd emaus
+New password:
+Retype new password:
+passwd: password updated successfully
+</code></pre></div>    </div>
+  </li>
+  <li>Log out of the session as pi and enter as the new user:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pi@emaus-pi3:~ <span class="nv">$ </span><span class="nb">logout
+</span>Connection to emaus-pi3.local closed.
+                                                                                              ✔
+───────────────────────────────────────────────────────────────────────────────────────────────
+<span class="o">[</span>2020-04-06 20:31.58]  ~
+<span class="o">[</span>Emanu.Emaus-XPS] ➤ ssh <span class="nt">-X</span> emaus@emaus-pi3.local
+</code></pre></div>    </div>
+  </li>
+  <li>Remove the <code class="language-plaintext highlighter-rouge">pi</code> user (all sessions with that user must first be logged out, including GUI if using regular Raspbian):
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>emaus@emaus-pi3:~ <span class="nv">$ </span><span class="nb">sudo </span>userdel <span class="nt">-r</span> pi
+<span class="o">[</span><span class="nb">sudo</span><span class="o">]</span> password <span class="k">for </span>emaus:
+userdel: pi mail spool <span class="o">(</span>/var/mail/pi<span class="o">)</span> not found
+</code></pre></div>    </div>
+  </li>
+</ol><h2 id="ssh-security">
+        <a href="#ssh-security" class="anchor"><span>>></span></a>SSH security
+      </h2>
+<ol>
+  <li>Copy your public SSH keys to the file <em>.ssh/authorized_keys</em>:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>emaus@emaus-pi4:~ <span class="nv">$ </span>ssh-copy-id <span class="nt">-i</span> .ssh/id_rsa emaus@emaus-pi3.local
+</code></pre></div>    </div>
+  </li>
+  <li>Make sure that SSH password authentication is disabled by editing the configuration file <em>/etc/ssh/sshd_config</em>:
+    <div class="language-ssh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">PermitRootLogin</span> <span class="no">no</span>
+<span class="k">MaxAuthTries</span> <span class="m">1</span>
+<span class="k">PubkeyAuthentication</span> <span class="no">yes</span>
+
+<span class="c1"># [...]</span>
+
+<span class="c1"># To disable tunneled clear text passwords, change to no here!</span>
+<span class="k">PasswordAuthentication</span> <span class="no">no</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Restart the SSH daemon:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>emaus@emaus-pi3:~ <span class="nv">$ </span><span class="nb">sudo </span>systemctl restart sshd
+</code></pre></div>    </div>
+  </li>
+</ol><h2 id="setting-up-additional-security-fail2ban">
+        <a href="#setting-up-additional-security-fail2ban" class="anchor"><span>>></span></a>Setting up additional security (fail2ban)
+      </h2>
+<ol>
+  <li>Install fail2ban:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>emaus@emaus-pi3:~ <span class="nv">$ </span><span class="nb">sudo </span>apt <span class="nb">install </span>fail2ban
+emaus@emaus-pi3:~ <span class="nv">$ </span><span class="nb">sudo </span>fail2ban-client status
+Status
+|- Number of jail:      1
+<span class="sb">`</span>- Jail list:   sshd
+emaus@emaus-pi3:~ <span class="nv">$ </span><span class="nb">sudo </span>fail2ban-client status sshd
+Status <span class="k">for </span>the jail: sshd
+|- Filter
+|  |- Currently failed: 0
+|  |- Total failed:     0
+|  <span class="sb">`</span>- File list:        /var/log/auth.log
+<span class="sb">`</span>- Actions
+   |- Currently banned: 0
+   |- Total banned:     0
+   <span class="sb">`</span>- Banned IP list:
+</code></pre></div>    </div>
+  </li>
+  <li>Configure ssh filter by editing the file <em>/etc/fail2ban/jail.d/defaults-debian.conf</em>:
+    <div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[sshd]</span>
+<span class="py">enabled</span> <span class="p">=</span> <span class="s">true</span>
+<span class="py">bantime</span> <span class="p">=</span> <span class="s">-1</span>
+<span class="py">findtime</span> <span class="p">=</span> <span class="s">600</span>
+<span class="py">maxretry</span> <span class="p">=</span> <span class="s">3</span>
+<span class="py">ignoreip</span> <span class="p">=</span> <span class="s">192.168.0.0/24</span>
+</code></pre></div>    </div>
+  </li>
+</ol><h2 id="restoring-files-from-an-old-pis-sd-card">
+        <a href="#restoring-files-from-an-old-pis-sd-card" class="anchor"><span>>></span></a>Restoring files from an old Pi’s SD card
+      </h2>
+<p>By attaching the old SD card to another Pi, through an USB to SD card reader, I can copy old files to my new Pi.</p>
+
+<ol>
+  <li>Mount the partition that corresponds to the old root filesystem on the SD card as read-only (<a href="/posts/2020-04-backing-up-sd-card-from-crashed-pi/">see also previous post</a>):
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>emaus@emaus-pi4:~ <span class="nv">$ </span>lsblk
+NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda           8:0    1 14.5G  0 disk
+├─sda1        8:1    1   63M  0 part
+└─sda2        8:2    1 14.4G  0 part
+mmcblk0     179:0    0 29.4G  0 disk
+├─mmcblk0p1 179:1    0  256M  0 part /boot
+└─mmcblk0p2 179:2    0 29.2G  0 part /
+emaus@emaus-pi4:~ <span class="nv">$ </span><span class="nb">mkdir </span>mounttest
+emaus@emaus-pi4:~ <span class="nv">$ </span><span class="nb">sudo </span>mount <span class="nt">-o</span> ro /dev/sda2 mounttest/
+</code></pre></div>    </div>
+  </li>
+  <li>SCP files from the computer with the card reader (emaus-pi4) to the new pi (emaus-pi3):
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>emaus@emaus-pi4:~/mounttest/home/emaus <span class="nv">$ </span><span class="nb">cd </span>mounttest/home/emaus
+emaus@emaus-pi4:~/mounttest/home/emaus <span class="nv">$ </span>scp <span class="nt">-r</span> .ssh emaus@emaus-pi3.local:/home/emaus/.ssh
+</code></pre></div>    </div>
+    <p>Note that you might have to change priveliges on the .ssh folder to be able to copy it (or run command as sudo).</p>
+  </li>
+</ol>
+
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2020-05-proxy-from-windows-to-linux/" rel="next" title="Setting up a proxy to a Linux server">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2020-04-backing-up-sd-card-from-crashed-pi/" rel="previous" title="Backing up an SD card from a crashed Raspberry Pi">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2020-04-06-setting-up-new-raspberry-pi3bplus.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Resizing a...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Resizing a Virtual Box image
+
+      </h1>
+
+
+<p class="lead">Published:    2019-10-27 <br/>
+Last updated: 2020-05-22 17:55</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">virtualbox</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">parted</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">ubuntu</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">miniguide</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">tools</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2020-04-backing-up-sd-card-from-crashed-pi/" rel="next" title="Backing up an SD card from a crashed Raspberry Pi">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-10-programatically-controlling-cast-device/" rel="previous" title="Controlling Google cast devices programmatically (Chromecast and Home)">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>I decided to upgrade my Ubuntu installation from 16 to 18 but realized I had quite limited memory left on the disk. So I had to inevitably increase the size of the disk :)</p>
+
+<p>This is not hard, but takes a couple of steps:</p>
+
+<ol>
+  <li>Make a backup of the original image</li>
+  <li>Resize the image</li>
+  <li>Resize the partition</li>
+  <li>Update the fstab table with new partition UUID:s</li>
+</ol><h2 id="creating-a-copy">
+        <a href="#creating-a-copy" class="anchor"><span>>></span></a>Creating a copy
+      </h2>
+<p>Make sure to first copy the disk in case we do something wrong:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>VBoxManage clonemedium <span class="s2">"Ubuntu 16.04 LTS.vdi"</span> <span class="s2">"Ubuntu 18.04 LTS.vdi"</span>
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+Clone medium created <span class="k">in </span>format <span class="s1">'VDI'</span><span class="nb">.</span> UUID: 010688e2-34a3-462c-9aa2-4d477fc7f35b
+</code></pre></div></div><h2 id="resizing">
+        <a href="#resizing" class="anchor"><span>>></span></a>Resizing
+      </h2>
+<p>Now we need to resize the disk size available for the image. This step goes really quickly if is is set up as dynamically allocated.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>VBoxManage modifymedium <span class="s2">"Ubuntu 18.04 LTS.vdi"</span> <span class="nt">--resize</span> 30000
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+</code></pre></div></div><h2 id="resize-the-partition">
+        <a href="#resize-the-partition" class="anchor"><span>>></span></a>Resize the partition
+      </h2>
+<p>This is the most complex step and where things can go wrong. We will use the GParted live CD to modify the newly created image.</p><h3 id="gparted-live-cd">
+        <a href="#gparted-live-cd" class="anchor"><span>>>></span></a>GParted live CD
+      </h3>
+<p>This is done using a GParted live CD. Download it from e.g. <a href="https://gparted.sourceforge.io/livecd.php">https://gparted.sourceforge.io/livecd.php</a> and set up a new virtual machine that starts with it and the newly created image mounted.</p><h3 id="remove-swap-partition">
+        <a href="#remove-swap-partition" class="anchor"><span>>>></span></a>Remove SWAP partition
+      </h3>
+<p>First we will have to move the SWAP partition that is located after the main partition. We will completely remove it and then recreate it as it is otherwise blocking us from expanding the main paritition.</p><h3 id="expand-filesystem">
+        <a href="#expand-filesystem" class="anchor"><span>>>></span></a>Expand filesystem
+      </h3>
+<p>When the SWAP partition has been removed we can expand the main paritition by resizing it to the new size (minus the space that the new SWAP partition will take up).</p><h3 id="recreate-swap-partition">
+        <a href="#recreate-swap-partition" class="anchor"><span>>>></span></a>Recreate SWAP partition
+      </h3>
+<p>Then create the SWAP partition and press <em>apply</em>.</p>
+
+<p>Shut down GParted and then boot up the modified .vdi image.</p><h2 id="update-the-fstab-table">
+        <a href="#update-the-fstab-table" class="anchor"><span>>></span></a>Update the fstab table
+      </h2>
+<p>You might notice that it takes unusually long time to boot the modified image. This is because it no longer is able to mount the swap partition since it has changed UUID. We therefore have to modify the fstab table with the new UUID.</p>
+
+<p>Run the <code class="language-plaintext highlighter-rouge">lsblk</code> or <code class="language-plaintext highlighter-rouge">blkid</code> to get the UUID of the newly created swap partition (sda5).</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>lsblk <span class="nt">-o</span> +UUID
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT UUID
+sda      8:0    0 29,3G  0 disk
+├─sda1   8:1    0 27,4G  0 part /          9ed27326-80bf-433e-8b59-e409aa7d15ab
+├─sda2   8:2    0    1K  0 part
+└─sda5   8:5    0    2G  0 part     2c662c96-ab37-4d26-85bc-2b0472c7cff9
+sr0     11:0    1 1024M  0 rom
+</code></pre></div></div>
+
+<p>As you can see, it has not been mounted. To fix this we have to grab its UUID and place it in the fstab file as a SWAP partition:</p>
+
+<pre><code class="language-fstab"># /etc/fstab: static file system information.
+# &lt;file system&gt; &lt;mount point&gt;   &lt;type&gt;  &lt;options&gt;       &lt;dump&gt;  &lt;pass&gt;
+# / was on /dev/sda1 during installation
+UUID=9ed27326-80bf-433e-8b59-e409aa7d15ab /               ext4    errors=remount-ro 0       1
+# swap was on /dev/sda5 during installation
+UUID=2c662c96-ab37-4d26-85bc-2b0472c7cff9 none            swap    sw              0       0
+</code></pre>
+
+<p>Now just mount the SWAP partition and everything is good to go:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>mount <span class="nt">-a</span>
+</code></pre></div></div>
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2020-04-backing-up-sd-card-from-crashed-pi/" rel="next" title="Backing up an SD card from a crashed Raspberry Pi">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-10-programatically-controlling-cast-device/" rel="previous" title="Controlling Google cast devices programmatically (Chromecast and Home)">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2019-10-27-resize-virtualbox-image.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

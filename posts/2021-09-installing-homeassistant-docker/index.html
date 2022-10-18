@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Installing Homeassistant...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Installing Homeassistant in a Docker container (e.g. on Raspberry Pi)
+
+      </h1>
+
+<p class="lead">How to install Homeassistant in a Docker container.
+</p>
+
+
+<p class="lead">Published:    2021-09-08 <br/>
+Last updated: 2021-09-08 23:16</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">ha</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">docker</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">rpi</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">guide</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2021-08-reverse-ssh-tunnel/" rel="previous" title="Reverse SSH tunnel for monitoring servers">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4"><h2 id="installation">
+        <a href="#installation" class="anchor"><span>>></span></a>Installation
+      </h2>
+
+<p>This is the guide that I have followed for installing Home Assistant on Docker: <a href="https://github.com/home-assistant/supervised-installer">https://github.com/home-assistant/supervised-installer</a></p>
+
+<p>It is split in X steps:</p>
+
+<ol>
+  <li>Install prerequisites. This means the libraries and programs that are needed for the installation, such as Docker, NetworkManager, etc. (<a href="https://github.com/home-assistant/architecture/blob/master/adr/0014-home-assistant-supervised.md">see here</a>).</li>
+  <li>Download the installer script:
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span><span class="w"> </span>curl <span class="nt">-Lo</span> installer.sh https://raw.githubusercontent.com/home-assistant/supervised-installer/master/installer.sh
+</code></pre></div>    </div>
+  </li>
+  <li>Run the installer script for your specific machine configuration:
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span><span class="w"> </span>bash installer.sh <span class="nt">--machine</span> raspberrypi4  <span class="c"># Not rpi64(!)</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>You should now see a truckload of containers running when you run the command <code class="language-plaintext highlighter-rouge">docker ps</code> (except for the addons):</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>docker ps <span class="nt">-a</span>
+<span class="go">CONTAINER ID   IMAGE                                                        COMMAND                  CREATED        STATUS                  PORTS                                                                                                                          NAMES
+</span><span class="gp">e4e74391821e   homeassistant/armv7-addon-nginx_proxy:3.0.2                  "/init /run.sh"          26 hours ago   Up 26 hours             0.0.0.0:80-&gt;</span>80/tcp, :::80-&gt;80/tcp, 0.0.0.0:443-&gt;443/tcp, :::443-&gt;443/tcp                                                       addon_core_nginx_proxy
+<span class="go">e368bb8a7c82   homeassistant/armv7-addon-configurator:5.3.3                 "/init"                  26 hours ago   Up 26 hours                                                                                                                                            addon_core_configurator
+667f0bd06813   ghcr.io/hassio-addons/node-red/armv7:10.0.0                  "/init"                  26 hours ago   Up 26 hours                                                                                                                                            addon_a0d7b954_nodered
+5de96fd9b603   homeassistant/armhf-addon-deconz:6.10.0                      "/init"                  26 hours ago   Up 26 hours                                                                                                                                            addon_core_deconz
+7cec24a697d0   homeassistant/armv7-addon-duckdns:1.13.0                     "/init /run.sh"          26 hours ago   Up 26 hours                                                                                                                                            addon_core_duckdns
+</span><span class="gp">639745b0716b   homeassistant/armv7-addon-mosquitto:6.0.1                    "/init"                  26 hours ago   Up 26 hours             0.0.0.0:1883-1884-&gt;</span>1883-1884/tcp, :::1883-1884-&gt;1883-1884/tcp, 0.0.0.0:8883-8884-&gt;8883-8884/tcp, :::8883-8884-&gt;8883-8884/tcp   addon_core_mosquitto
+<span class="go">7cb55f454264   homeassistant/armv7-hassio-multicast:2021.04.0               "/init"                  26 hours ago   Up 26 hours                                                                                                                                            hassio_multicast
+2b0d613fa555   ghcr.io/home-assistant/armv7-hassio-cli:2021.08.1            "/init /bin/bash -c …"   26 hours ago   Up 26 hours                                                                                                                                            hassio_cli
+4bdfdbf18f22   ghcr.io/home-assistant/armv7-hassio-audio:2021.07.0          "/init"                  26 hours ago   Up 26 hours                                                                                                                                            hassio_audio
+1037d933ec74   ghcr.io/home-assistant/armv7-hassio-dns:2021.06.0            "/init"                  26 hours ago   Up 26 hours                                                                                                                                            hassio_dns
+7bf259658e41   homeassistant/armv7-hassio-supervisor                        "/init"                  4 days ago     Up 26 hours                                                                                                                                            hassio_supervisor
+8ea5f06d0c1f   ghcr.io/home-assistant/raspberrypi4-homeassistant:2021.8.8   "/init"                  7 days ago     Up 26 hours                                                                                                                                            homeassistant
+1dddcf5c35d0   homeassistant/armv7-addon-check_config:3.8.0                 "/init"                  7 days ago     Exited (0) 7 days ago                                                                                                                                  addon_core_check_config
+</span><span class="gp">76315327b5ee   ghcr.io/home-assistant/armv7-hassio-observer:2021.06.0       "/init"                  2 months ago   Up 26 hours             0.0.0.0:4357-&gt;</span>80/tcp, :::4357-&gt;80/tcp                                                                                          hassio_observer
+</code></pre></div></div>
+
+<p>This might seem daunting at first. But, basically, each program runs in its own container: like Home Assistant; a supervisor that keeps track of updates and the home assistant state; other helper containers; and addons.
+Each container has its own version, state and log. All of which can be accessed either through Home Assistant (version and logs), or by using the docker commands.</p><h2 id="migration">
+        <a href="#migration" class="anchor"><span>>></span></a>Migration
+      </h2>
+<blockquote>
+  <p>Before migrating the files, make sure to stop Home Assistant. This can be done with the command <code class="language-plaintext highlighter-rouge">ha core stop</code> or <code class="language-plaintext highlighter-rouge">docker stop homeassistant</code>. When done, start it again by replacing <em>stop</em> with <em>start</em>.</p>
+</blockquote>
+
+<p>The configuration files for the Dockerized Home Assistant are located under <em>/usr/share/hassio/homeassistant</em>. Make sure to move your existing files there, if you have any (e.g. <em>configuration.yaml</em>, and possibly even login tokens).</p><h2 id="install-some-addons">
+        <a href="#install-some-addons" class="anchor"><span>>></span></a>Install some addons
+      </h2>
+<p>The next step would be to actually start using the supervised HA features, by for example, installing some addons:
+<img src="./homeassistant-addons.png" alt="Homeassistant addons" /></p>
+
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2021-08-reverse-ssh-tunnel/" rel="previous" title="Reverse SSH tunnel for monitoring servers">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2021-09-08-installing-homeassistant-docker/2021-09-08-installing-homeassistant-docker.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

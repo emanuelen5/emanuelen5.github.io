@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: SSH jump...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1>
+        SSH jump hosts
+      </h1>
+<section>
+    
+
+
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">ssh</div></div></div>
+
+<section><h1 id="what">
+        <a href="#what" class="anchor"><span>></span></a>What
+      </h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-J</span> jump target
+</code></pre></div></div>
+
+<p>or, if configured in the ssh_config file, we can set up so it works with this nice syntax:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh jump.target
+</code></pre></div></div><h1 id="why">
+        <a href="#why" class="anchor"><span>></span></a>Why
+      </h1>
+<p>SSH to a <em>target</em> host via a <em>jump</em> host</p>
+
+<figure class="image">
+  <pre><code class="language-asciiart">┌──────────────┐       ┌───────────────┐      ┌────────────┐
+│              │       │               │      │            │
+│              │       │               │      │            │
+│    Source    ├──────►│   Jump host   ├─────►│   Target   │
+│              │       │               │      │            │
+│              │       │               │      │            │
+└──────────────┘       └───────────────┘      └────────────┘
+   localhost               10.0.0.50            90.0.0.10
+</code></pre>
+  <figurecaption>(generated using <a href="https://asciiflow.com">AsciiFlow</a>)</figurecaption>
+</figure>
+
+<p>This is useful if we want to reach a server <em>target</em> that is not reachable directly from WAN, while the <em>jump</em> is.</p><h1 id="how">
+        <a href="#how" class="anchor"><span>></span></a>How
+      </h1>
+<p>We just need to configure up the hosts as usual:</p>
+
+<p class="mb-0">
+    
+    <a id="ssh_config1" href="#ssh_config1">#</a>
+    <span>listing 1:</span>
+    <strong>
+        <code>
+            ~/.ssh/config
+        </code>
+    </strong>
+<span>(syntax=ssh)</span>
+</p>
+<div class="language-ssh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">Host</span> jump
+    <span class="k">HostName</span> <span class="m">10</span>.0.0.50
+    <span class="c1"># Other settings needed to connect to the jump server (like specifying IdentityFile for an SSH key)</span>
+
+<span class="k">Host</span> target
+    <span class="k">HostName</span> <span class="m">90</span>.0.0.10
+    <span class="c1"># Any other settings that you need to connect to the target (like specifying IdentityFile for an SSH key)</span>
+</code></pre></div></div>
+
+<p>Then we can use the <code class="language-plaintext highlighter-rouge">ssh -J jump target</code> command to go to <em>target</em> via <em>jump</em>.</p><h2 id="adding-it-to-the-ssh-config-instead">
+        <a href="#adding-it-to-the-ssh-config-instead" class="anchor"><span>>></span></a>Adding it to the SSH config instead
+      </h2>
+<p>We can create a special Host so we don’t have to type the <code class="language-plaintext highlighter-rouge">-J</code> option:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh jump.target
+</code></pre></div></div>
+
+<p>all we need to do is to modify the SSH config in the following way:</p>
+
+<p class="mb-0">
+    
+    <a id="listing2" href="#listing2">#</a>
+    <span>listing 2:</span>
+    <strong>
+        <code>
+            ~/.ssh/config
+        </code>
+    </strong>
+<span>(syntax=ssh)</span>
+</p>
+<div class="language-ssh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">Host</span> jump
+    <span class="k">HostName</span> <span class="m">10</span>.0.0.50  <span class="c1"># Same settings as before</span>
+
+<span class="c1"># Add a jump configuration</span>
+<span class="k">Host</span> jump.*
+    <span class="k">ProxyJump</span> jump
+
+<span class="k">Host</span> target jump.target  <span class="c1"># Note the added Host (jump.target)</span>
+    <span class="k">HostName</span> <span class="m">90</span>.0.0.10  <span class="c1"># Other settings are identical</span>
+</code></pre></div></div>
+
+<p>An arbitrary number of additional jumps can be configured by chaining the <em>jump</em> host to go via another exactly like for <em>target</em> host.</p><h1 id="references">
+        <a href="#references" class="anchor"><span>></span></a>References
+      </h1>
+<p>From the man pages:</p><h2 id="ssh1--j">
+        <a href="#ssh1--j" class="anchor"><span>>></span></a><a href="https://man7.org/linux/man-pages/man1/ssh.1.html">ssh(1): <code class="language-plaintext highlighter-rouge">-J</code></a>
+      </h2>
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">-J</code> <em>destination</em></p>
+
+  <p>Connect to the target host by first making a <code class="language-plaintext highlighter-rouge">ssh</code> connection to the jump host described by <em>destination</em> and then establishing a TCP forwarding to the ultimate destination from there. […] This is a shortcut to specify a <code class="language-plaintext highlighter-rouge">ProxyJump</code> configuration directive.</p>
+</blockquote><h2 id="ssh_config5-proxyjump">
+        <a href="#ssh_config5-proxyjump" class="anchor"><span>>></span></a><a href="https://man7.org/linux/man-pages/man5/ssh_config.5.html">ssh_config(5): <code class="language-plaintext highlighter-rouge">ProxyJump</code></a>
+      </h2>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">ProxyJump</code></p>
+
+  <p>Specifies one or more jump proxies as either <code class="language-plaintext highlighter-rouge">[user@]host[:port]</code> or an ssh URI.
+Multiple proxies may be separated by comma characters and will be visited sequentially.</p>
+</blockquote><h2 id="other-references">
+        <a href="#other-references" class="anchor"><span>>></span></a>Other references
+      </h2>
+<ul>
+  <li><a href="https://www.tecmint.com/access-linux-server-using-a-jump-host/">[1]: Tecmint: How to Access a Remote Server Using a Jump Host</a></li>
+  <li><a href="https://citizix.com/how-to-ssh-through-hostjumpserver-to-reach-another-server/">[2]: Citizix: How to ssh through host(jumpserver) to reach another server</a></li>
+  <li><a href="https://wiki.gentoo.org/wiki/SSH_jump_host">[3]: Gentoo: SSH jump hosts</a></li>
+</ul>
+
+<!-- References !-->
+
+</section>
+
+
+</section>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"></div>
+<div class="w-50 next-post post-navigation"><a href="/tips/2022-10-10-find-and-xargs/" rel="previous" title="Find + xargs">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_tips/2022-10-16-ssh-jump-host.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

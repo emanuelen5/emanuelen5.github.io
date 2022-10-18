@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Controlling Google...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Controlling Google cast devices programmatically (Chromecast and Home)
+
+      </h1>
+
+
+<p class="lead">Published:    2019-10-02 <br/>
+Last updated: 2020-05-13 21:19</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">google</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">cast</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">ha</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">miniguide</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2019-10-resize-virtualbox-image/" rel="next" title="Resizing a Virtual Box image">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-08-sphinx/" rel="previous" title="Sphinx">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p><a href="https://github.com/balloob/pychromecast">pychromecast</a> has the code for controlling the cast device. It becomes very simple with it, just install it from pip <code class="language-plaintext highlighter-rouge">pip install pychromecast</code> and then follow along:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python
+Python 3.7.3 <span class="o">(</span>v3.7.3:ef4ec6e, Jul 18 2019, 21:03:00<span class="o">)</span>
+<span class="o">[</span>GCC 4.9.2] on linux
+Type <span class="s2">"help"</span>, <span class="s2">"copyright"</span>, <span class="s2">"credits"</span> or <span class="s2">"license"</span> <span class="k">for </span>more information.
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">time</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pychromecast</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">chromecasts</span> <span class="o">=</span> <span class="n">pychromecast</span><span class="p">.</span><span class="n">get_chromecasts</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">chromecasts</span>
+<span class="p">[</span><span class="n">Chromecast</span><span class="p">(</span><span class="s">'192.168.0.13'</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8009</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DeviceStatus</span><span class="p">(</span><span class="n">friendly_name</span><span class="o">=</span><span class="s">'Living Room Speaker'</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s">'Google Nest Mini'</span><span class="p">,</span> <span class="n">manufacturer</span><span class="o">=</span><span class="s">'Unknown manufacturer'</span><span class="p">,</span> <span class="n">uuid</span><span class="o">=</span><span class="n">UUID</span><span class="p">(</span><span class="s">'f7033a0a-9fc6-1846-9ed8-ee2d88521f65'</span><span class="p">),</span> <span class="n">cast_type</span><span class="o">=</span><span class="s">'cast'</span><span class="p">)),</span> <span class="n">Chromecast</span><span class="p">(</span><span class="s">'192.168.0.13'</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">42834</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DeviceStatus</span><span class="p">(</span><span class="n">friendly_name</span><span class="o">=</span><span class="s">'Test'</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s">'Google Cast Group'</span><span class="p">,</span> <span class="n">manufacturer</span><span class="o">=</span><span class="s">'Unknown manufacturer'</span><span class="p">,</span> <span class="n">uuid</span><span class="o">=</span><span class="n">UUID</span><span class="p">(</span><span class="s">'0e008ac1-4d6b-4545-80e0-1c703a7c775c'</span><span class="p">),</span> <span class="n">cast_type</span><span class="o">=</span><span class="s">'group'</span><span class="p">))]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="n">cc</span><span class="p">.</span><span class="n">device</span><span class="p">.</span><span class="n">friendly_name</span> <span class="k">for</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">chromecasts</span><span class="p">]</span>
+<span class="p">[</span><span class="s">'Living Room Speaker'</span><span class="p">,</span> <span class="s">'Test'</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cast</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">cc</span> <span class="k">for</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">chromecasts</span> <span class="k">if</span> <span class="n">cc</span><span class="p">.</span><span class="n">device</span><span class="p">.</span><span class="n">friendly_name</span> <span class="o">==</span> <span class="s">"Living Room Speaker"</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cast</span>
+<span class="n">Chromecast</span><span class="p">(</span><span class="s">'192.168.0.13'</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8009</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DeviceStatus</span><span class="p">(</span><span class="n">friendly_name</span><span class="o">=</span><span class="s">'Living Room Speaker'</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s">'Google Nest Mini'</span><span class="p">,</span> <span class="n">manufacturer</span><span class="o">=</span><span class="s">'Unknown manufacturer'</span><span class="p">,</span> <span class="n">uuid</span><span class="o">=</span><span class="n">UUID</span><span class="p">(</span><span class="s">'f7033a0a-9fc6-1846-9ed8-ee2d88521f65'</span><span class="p">),</span> <span class="n">cast_type</span><span class="o">=</span><span class="s">'cast'</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">cast</span><span class="p">.</span><span class="n">device</span><span class="p">)</span>
+<span class="n">DeviceStatus</span><span class="p">(</span><span class="n">friendly_name</span><span class="o">=</span><span class="s">'Living Room Speaker'</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s">'Google Nest Mini'</span><span class="p">,</span> <span class="n">manufacturer</span><span class="o">=</span><span class="s">'Unknown manufacturer'</span><span class="p">,</span> <span class="n">uuid</span><span class="o">=</span><span class="n">UUID</span><span class="p">(</span><span class="s">'f7033a0a-9fc6-1846-9ed8-ee2d88521f65'</span><span class="p">),</span> <span class="n">cast_type</span><span class="o">=</span><span class="s">'cast'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cast</span><span class="p">.</span><span class="n">device</span><span class="p">.</span><span class="n">friendly_name</span>
+<span class="s">'Living Room Speaker'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cast</span><span class="p">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">cast</span><span class="p">.</span><span class="n">device</span><span class="p">)</span>
+<span class="n">DeviceStatus</span><span class="p">(</span><span class="n">friendly_name</span><span class="o">=</span><span class="s">'Living Room Speaker'</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s">'Google Nest Mini'</span><span class="p">,</span> <span class="n">manufacturer</span><span class="o">=</span><span class="s">'Unknown manufacturer'</span><span class="p">,</span> <span class="n">uuid</span><span class="o">=</span><span class="n">UUID</span><span class="p">(</span><span class="s">'f7033a0a-9fc6-1846-9ed8-ee2d88521f65'</span><span class="p">),</span> <span class="n">cast_type</span><span class="o">=</span><span class="s">'cast'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">cast</span><span class="p">.</span><span class="n">status</span><span class="p">)</span>
+<span class="n">CastStatus</span><span class="p">(</span><span class="n">is_active_input</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">is_stand_by</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">volume_level</span><span class="o">=</span><span class="mf">0.30000001192092896</span><span class="p">,</span> <span class="n">volume_muted</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">app_id</span><span class="o">=</span><span class="s">'CC32E753'</span><span class="p">,</span> <span class="n">display_name</span><span class="o">=</span><span class="s">'Spotify'</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="p">[</span><span class="s">'urn:x-cast:com.google.cast.debugoverlay'</span><span class="p">,</span> <span class="s">'urn:x-cast:com.google.cast.cac'</span><span class="p">,</span> <span class="s">'urn:x-cast:com.spotify.chromecast.secure.v1'</span><span class="p">,</span> <span class="s">'urn:x-cast:com.google.cast.test'</span><span class="p">,</span> <span class="s">'urn:x-cast:com.google.cast.broadcast'</span><span class="p">,</span> <span class="s">'urn:x-cast:com.google.cast.media'</span><span class="p">],</span> <span class="n">session_id</span><span class="o">=</span><span class="s">'43d9042c-3d6e-4a05-aec6-06682f9f0e5d'</span><span class="p">,</span> <span class="n">transport_id</span><span class="o">=</span><span class="s">'43d9042c-3d6e-4a05-aec6-06682f9f0e5d'</span><span class="p">,</span> <span class="n">status_text</span><span class="o">=</span><span class="s">'Spotify'</span><span class="p">,</span> <span class="n">icon_url</span><span class="o">=</span><span class="s">'https://lh3.googleusercontent.com/HOX9yqNu6y87Chb1lHYqhKVTQW43oFAFFe2ojx94yCLh0yMzgygTrM0RweAexApRWqq6UahgrWYimVgK'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mc</span> <span class="o">=</span> <span class="n">cast</span><span class="p">.</span><span class="n">media_controller</span>
+<span class="c1"># Get an URL to an mp4 video
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">media_url</span> <span class="o">=</span> <span class="s">"https://r6---sn-jvhixh-5go6.googlevideo.com/videoplayback?expire=1572732827&amp;ei=O6u9Xf-gDsWBhAetzI3IDA&amp;ip=185.27.134.50&amp;id=o-AKt2dwvxIXleT5YfxQ0EYLIRT-aUV6Rtkio0gzk8vrgO&amp;itag=22&amp;source=youtube&amp;requiressl=yes&amp;mime=video%2Fmp4&amp;ratebypass=yes&amp;dur=917.768&amp;lmt=1572418007364260&amp;fvip=6&amp;fexp=23842630&amp;c=WEB&amp;txp=5535432&amp;sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cmime%2Cratebypass%2Cdur%2Clmt&amp;sig=ALgxI2wwRgIhALD9kMpaG8nqIMSpEz5e5PTlLeW48TMTqx7MPlrqg92MAiEAvNAAQrfixl4acN2-m2eVrneCMRsgbLG9IG_bJDPRggA%3D&amp;redirect_counter=1&amp;rm=sn-aigezz7d&amp;req_id=24c4935b3749a3ee&amp;cms_redirect=yes&amp;ipbypass=yes&amp;mip=80.216.68.127&amp;mm=31&amp;mn=sn-jvhixh-5go6&amp;ms=au&amp;mt=1572711125&amp;mv=m&amp;mvi=5&amp;pcm2cms=yes&amp;pl=19&amp;lsparams=ipbypass,mip,mm,mn,ms,mv,mvi,pcm2cms,pl&amp;lsig=AHylml4wRgIhAJfnlLfRghpCGUSOrEQKNmIgFzqdcMKILzv0Fo66EwK5AiEA2iMdvpfojKnQ1WcSaG9Vfk_j79EBdrHiPC_HuKpxBqQ="</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mc</span><span class="p">.</span><span class="n">play_media</span><span class="p">(</span><span class="n">media_url</span><span class="p">,</span> <span class="s">'video/mp4'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mc</span><span class="p">.</span><span class="n">block_until_active</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">mc</span><span class="p">.</span><span class="n">status</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">MediaStatus</span> <span class="p">{</span><span class="s">'metadata_type'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'title'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'series_title'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'season'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'episode'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'artist'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'album_name'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'album_artist'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'track'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'subtitle_tracks'</span><span class="p">:</span> <span class="p">[{</span><span class="s">'trackId'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'type'</span><span class="p">:</span> <span class="s">'VIDEO'</span><span class="p">}],</span> <span class="s">'images'</span><span class="p">:</span> <span class="p">[],</span> <span class="s">'supports_pause'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">'supports_seek'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">'supports_stream_volume'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">'supports_stream_mute'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">'supports_skip_forward'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'supports_skip_backward'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'current_time'</span><span class="p">:</span> <span class="mf">1.055187</span><span class="p">,</span> <span class="s">'content_id'</span><span class="p">:</span> <span class="s">'https://r6---sn-jvhixh-5go6.googlevideo.com/videoplayback?expire=1572732827&amp;ei=O6u9Xf-gDsWBhAetzI3IDA&amp;ip=185.27.134.50&amp;id=o-AKt2dwvxIXleT5YfxQ0EYLIRT-aUV6Rtkio0gzk8vrgO&amp;itag=22&amp;source=youtube&amp;requiressl=yes&amp;mime=video%2Fmp4&amp;ratebypass=yes&amp;dur=917.768&amp;lmt=1572418007364260&amp;fvip=6&amp;fexp=23842630&amp;c=WEB&amp;txp=5535432&amp;sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cmime%2Cratebypass%2Cdur%2Clmt&amp;sig=ALgxI2wwRgIhALD9kMpaG8nqIMSpEz5e5PTlLeW48TMTqx7MPlrqg92MAiEAvNAAQrfixl4acN2-m2eVrneCMRsgbLG9IG_bJDPRggA%3D&amp;redirect_counter=1&amp;rm=sn-aigezz7d&amp;req_id=24c4935b3749a3ee&amp;cms_redirect=yes&amp;ipbypass=yes&amp;mip=80.216.68.127&amp;mm=31&amp;mn=sn-jvhixh-5go6&amp;ms=au&amp;mt=1572711125&amp;mv=m&amp;mvi=5&amp;pcm2cms=yes&amp;pl=19&amp;lsparams=ipbypass,mip,mm,mn,ms,mv,mvi,pcm2cms,pl&amp;lsig=AHylml4wRgIhAJfnlLfRghpCGUSOrEQKNmIgFzqdcMKILzv0Fo66EwK5AiEA2iMdvpfojKnQ1WcSaG9Vfk_j79EBdrHiPC_HuKpxBqQ='</span><span class="p">,</span> <span class="s">'content_type'</span><span class="p">:</span> <span class="s">'video/mp4'</span><span class="p">,</span> <span class="s">'duration'</span><span class="p">:</span> <span class="mf">917.699048</span><span class="p">,</span> <span class="s">'stream_type'</span><span class="p">:</span> <span class="s">'BUFFERED'</span><span class="p">,</span> <span class="s">'idle_reason'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'media_session_id'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'playback_rate'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'player_state'</span><span class="p">:</span> <span class="s">'PLAYING'</span><span class="p">,</span> <span class="s">'supported_media_commands'</span><span class="p">:</span> <span class="mi">274447</span><span class="p">,</span> <span class="s">'volume_level'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'volume_muted'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'media_custom_data'</span><span class="p">:</span> <span class="p">{},</span> <span class="s">'media_metadata'</span><span class="p">:</span> <span class="p">{},</span> <span class="s">'current_subtitle_tracks'</span><span class="p">:</span> <span class="p">[],</span> <span class="s">'last_updated'</span><span class="p">:</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2019</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">902682</span><span class="p">)}</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mc</span><span class="p">.</span><span class="n">pause</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mc</span><span class="p">.</span><span class="n">play</span><span class="p">()</span>
+</code></pre></div></div><h2 id="mp4-link-for-youtube-video">
+        <a href="#mp4-link-for-youtube-video" class="anchor"><span>>></span></a>MP4 link for youtube video
+      </h2>
+<p>If you want to get the mp4 link for a video on youtube, then you can use the following service <a href="http://youlink.epizy.com/?url=https://www.youtube.com/watch?v=%5BID%5D">http://youlink.epizy.com/?url=https://www.youtube.com/watch?v=%5BID%5D</a> (taken from <a href="https://stackoverflow.com/a/49687760/4713758">this SO answer</a>). These can be casted to home devices as well (only sound).</p>
+
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2019-10-resize-virtualbox-image/" rel="next" title="Resizing a Virtual Box image">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-08-sphinx/" rel="previous" title="Sphinx">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2019-10-02-programatically-controlling-cast-device.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

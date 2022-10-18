@@ -1,0 +1,21 @@
+#!/usr/bin/expect -f
+
+# Take the timeout as input argument
+if { $argc > 0 } {
+    set timeout [lindex $argv 0]
+}
+
+# Start the application to automate
+spawn ./greet_slow.sh
+
+# Wait for the application to print the prompt
+expect {^What is your name\?} {
+    # If there is a match, respond to it
+    send -- "Erasmus\r"
+} timeout {
+    puts "Never found the input prompt during the $timeout second timeout!"
+    exit -1
+}
+
+# Make sure that the output from the program is printed
+expect eof

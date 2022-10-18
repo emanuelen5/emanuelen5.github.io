@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Expect scripting...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Expect scripting language
+
+      </h1>
+
+<p class="lead">In this short guide I will show you some tips on how to get started with the *expect* scripting language.
+</p>
+
+
+<p class="lead">Published:    2021-06-10 <br/>
+Last updated: 2021-06-10 23:40</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">tcl</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">expect</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">tips</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">guide</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2021-06-custom-python-setup-commands/" rel="next" title="Custom Python setuptools commands">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2020-05-stream-video-from-rpi-camera/" rel="previous" title="Streaming video from a Raspberry Pi camera">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>The expect scripting language is an extension to <em>tcl</em> that can automate applications that have user input prompts. If you haven’t already, then read <a href="https://likegeeks.com/expect-command/">likegeeks</a> article about it, which is quite comprehensive for starters.</p><h2 id="example-scenario">
+        <a href="#example-scenario" class="anchor"><span>>></span></a>Example scenario
+      </h2>
+<p>Let’s say we have an application that we know requires specific keyboard input, like filling in forms or pressing <em>Continue</em> at prompts.</p>
+
+<p>We can then write an expect script that waits for a printout by the application that matches specific <em>patterns</em> and then react to them.</p><h3 id="example-program-to-automate">
+        <a href="#example-program-to-automate" class="anchor"><span>>>></span></a>Example program to automate
+      </h3>
+
+<p><a href="./greet.sh"><strong><code class="language-plaintext highlighter-rouge">greet.sh</code></strong></a></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+
+<span class="nb">read</span> <span class="nt">-p</span> <span class="s2">"What is your name? "</span> name
+<span class="nb">echo</span> <span class="nt">-en</span> <span class="s2">"Hello, </span><span class="nv">$name</span><span class="s2">!"</span>
+</code></pre></div></div><h4 id="expect-script-to-automate-it">
+        <a href="#expect-script-to-automate-it" class="anchor"><span>>>>></span></a><em>Expect</em> script to automate it
+      </h4>
+<p>The following script can automate the input for the program:</p>
+
+<p><a href="./tell_name.exp"><strong><code class="language-plaintext highlighter-rouge">tell_name.exp</code></strong></a></p>
+<div class="language-tcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/expect -f</span>
+
+<span class="c1"># Start the application to automate</span>
+spawn ./greet.sh
+
+<span class="c1"># Wait for the application to print the prompt</span>
+expect <span class="p">{</span>^What is your name<span class="se">\?</span><span class="p">}</span> <span class="p">{</span>
+    # If there is a match, respond to it
+    send -- <span class="s2">"Erasmus</span><span class="se">\r</span><span class="s2">"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And is run using the following command:</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>./tell_name.exp
+<span class="go">spawn ./greet.sh
+What is your name?
+</span></code></pre></div></div><h1 id="basic-commands">
+        <a href="#basic-commands" class="anchor"><span>></span></a>Basic commands
+      </h1>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">name</th>
+      <th style="text-align: left">function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="language-plaintext highlighter-rouge">spawn &lt;program&gt; [[arg0] arg1 ...]</code></td>
+      <td style="text-align: left">Start a program in the background. The output of this process can be <code class="language-plaintext highlighter-rouge">expect</code>-ed in the script.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="language-plaintext highlighter-rouge">expect pattern [command]</code> <br />   <code class="language-plaintext highlighter-rouge">[pattern [command] ...]</code></td>
+      <td style="text-align: left">Wait for program output that matches <code class="language-plaintext highlighter-rouge">pattern</code>, and then execute the <code class="language-plaintext highlighter-rouge">command</code>s.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="language-plaintext highlighter-rouge">set timeout &lt;seconds&gt;</code></td>
+      <td style="text-align: left">Number of seconds of timeout to use before issuing a timeout condition and continuing to the next command.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Regular tcl can be used as normal for passing arguments, using conditionals, printing etc.</p><h1 id="tips">
+        <a href="#tips" class="anchor"><span>></span></a>Tips
+      </h1><h2 id="expect-eof">
+        <a href="#expect-eof" class="anchor"><span>>></span></a><code class="language-plaintext highlighter-rouge">expect eof</code>
+      </h2>
+<p><em>Expect</em> stops printing the output of the program when there are no more <code class="language-plaintext highlighter-rouge">expect</code> commands left. This makes the printouts a bit non-intuitive. The solution is to just add</p>
+
+<div class="language-tcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code>expect eof
+</code></pre></div></div>
+
+<p>after the last interaction with the program.</p><h2 id="timeouts">
+        <a href="#timeouts" class="anchor"><span>>></span></a>Timeouts
+      </h2>
+<p>The global variable <code class="language-plaintext highlighter-rouge">timeout</code> can be used for setting a timeout for <em>expect</em> commands.</p>
+
+<div class="language-tcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Timeout as 1 second</span>
+set timeout 1
+
+<span class="c1"># No timeout</span>
+set timeout -1
+</code></pre></div></div>
+
+<p>The following commands will time out if it is configured, and the script will continue.</p>
+
+<div class="language-tcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code>expect <span class="p">{</span>pattern<span class="p">}</span> <span class="p">{</span>command<span class="p">}</span>
+<span class="c1"># If pattern never matches within the timeout, this line will be executed next</span>
+</code></pre></div></div><h3 id="expect-does-not-raise-an-error-upon-a-timeout">
+        <a href="#expect-does-not-raise-an-error-upon-a-timeout" class="anchor"><span>>>></span></a><em>Expect</em> does not raise an error upon a timeout
+      </h3>
+<p>However, one needs to check for a timeout by using the special timeout pattern:</p>
+
+<div class="language-tcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code>expect <span class="p">{</span>pattern<span class="p">}</span> <span class="p">{</span>
+    command
+<span class="p">}</span> timeout <span class="p">{</span>
+    # There was no match against *pattern* within the timeout
+    puts <span class="s2">"ERROR: No match"</span>
+    exit -1
+<span class="p">}</span>
+</code></pre></div></div><h1 id="updating-script-with-tips">
+        <a href="#updating-script-with-tips" class="anchor"><span>></span></a>Updating script with tips
+      </h1>
+
+<p>Let’s make a version of the program that takes a bit more time before actually printing anything. So, I added a sleep of 2 seconds:</p>
+
+<p><a href="./greet_slow.sh"><strong><code class="language-plaintext highlighter-rouge">greet_slow.sh</code></strong></a></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+
+<span class="nb">sleep </span>2
+<span class="nb">read</span> <span class="nt">-p</span> <span class="s2">"What is your name? "</span> name
+<span class="nb">echo</span> <span class="nt">-en</span> <span class="s2">"Hello, </span><span class="nv">$name</span><span class="s2">!"</span>
+</code></pre></div></div><h2 id="expect-script-to-automate-it-1">
+        <a href="#expect-script-to-automate-it-1" class="anchor"><span>>></span></a><em>Expect</em> script to automate it
+      </h2>
+<p>The expect script is updated with three things:</p>
+<ol>
+  <li>Setting the timeout from an input argument (so we can play with different timeouts)</li>
+  <li>Checking if a timeout occured when waiting for the input prompt</li>
+  <li>Printing the rest of the output of the program by <code class="language-plaintext highlighter-rouge">expect</code>-ing <code class="language-plaintext highlighter-rouge">eof</code>.</li>
+</ol>
+
+<p><a href="./tell_name_complete.exp"><strong><code class="language-plaintext highlighter-rouge">tell_name_complete.exp</code></strong></a></p>
+<div class="language-tcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/expect -f</span>
+
+<span class="c1"># Take the timeout as input argument</span>
+if <span class="p">{</span> $argc &gt; 0 <span class="p">}</span> <span class="p">{</span>
+    set timeout <span class="p">[</span>lindex $argv 0<span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># Start the application to automate</span>
+spawn ./greet_slow.sh
+
+<span class="c1"># Wait for the application to print the prompt</span>
+expect <span class="p">{</span>^What is your name<span class="se">\?</span><span class="p">}</span> <span class="p">{</span>
+    # If there is a match, respond to it
+    send -- <span class="s2">"Erasmus</span><span class="se">\r</span><span class="s2">"</span>
+<span class="p">}</span> timeout <span class="p">{</span>
+    puts <span class="s2">"Never found the input prompt during the </span><span class="nv">$timeout</span><span class="s2"> second timeout!"</span>
+    exit -1
+<span class="p">}</span>
+
+<span class="c1"># Make sure that the output from the program is printed</span>
+expect eof
+</code></pre></div></div><h2 id="running-the-program">
+        <a href="#running-the-program" class="anchor"><span>>></span></a>Running the program
+      </h2>
+
+<p>If we run the program with a timeout that is too short (shorter than the actual time before the input prompt appears) then the script times out:</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>./tell_name_complete.exp 1
+<span class="go">spawn ./greet_slow.sh
+Never found the input prompt during the 1 second timeout!
+</span></code></pre></div></div>
+
+<p>However, if we run the program with a longer timeout, then we find the input prompt, <em>and</em> print the rest of the program output after the last prompt.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>./tell_name_complete.exp 3
+<span class="go">spawn ./greet_slow.sh
+What is your name? Erasmus
+Hello, Erasmus!
+</span></code></pre></div></div>
+
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2021-06-custom-python-setup-commands/" rel="next" title="Custom Python setuptools commands">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2020-05-stream-video-from-rpi-camera/" rel="previous" title="Streaming video from a Raspberry Pi camera">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2021-06-10-using-expect/2021-06-10-using-expect.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

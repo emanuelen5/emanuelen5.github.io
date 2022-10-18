@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Frameworks for...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Frameworks for blogs
+
+      </h1>
+
+
+<p class="lead">Published:    2019-07-28 <br/>
+Last updated: 2020-06-09 20:36</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">blog</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">meta</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">tools</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2019-07-jekyll/" rel="next" title="Jekyll">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-07-cronjob-debugging/" rel="previous" title="Cronjobs - timely done">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>So you want to create your own blog/website, and need to decide what framework/tool to use for it? Me too, so here are the info I collected on some popular options: Hugo, <a href="https://jekyllrb.com/">Jekyll</a>, Pandoc, Pelican, Sphinx, Squarespace, Wordpress</p>
+
+<p>Honorable mentions: Hexo, Gatsby, Middleman, VuePress, Metalsmith, <a href="http://octopress.org/">Octopress</a>, DocPad</p>
+
+<p>I kid you not, there are so many alternatives! See <a href="https://stackshare.io/hugo_2/alternatives">stackshare’s listing of alternatives for different static web page generators</a>.</p><h2 id="static-vs-dynamic">
+        <a href="#static-vs-dynamic" class="anchor"><span>>></span></a>Static vs Dynamic
+      </h2>
+<p>A static site has pure HTML-files that are directly served to clients instead of say PHP or Python scripts that can dynamically create the pages before serving them. This has the advantage of being more light-weight for the server (meaning possibly faster) and more secure (almost no possibility to inject info to the server).</p>
+
+<p><strong>Static:</strong> Hugo, Jekyll, Pandoc, Sphinx <br />
+<strong>Dynamic:</strong> Squarespace, Wordpress</p><h2 id="hosted-vs-self-hosted">
+        <a href="#hosted-vs-self-hosted" class="anchor"><span>>></span></a>Hosted vs Self-hosted
+      </h2>
+<p>Hosting is its own issue. This is a cost issue, and possibly an updating issue when using dynamic websites and its plugins. Hosted pages tend to update plugins for you as well as the website engine, and thus solves the hassle for you. When you host it yourself, you’ll have to manage the updating yourself as well.</p>
+
+<p><strong>Hosted:</strong> Squarespace, Wordpress (via <em>Wordpress.com</em>) <br />
+<strong>Not hosted:</strong> Hugo, Jekyll, Pandoc, Sphinx, Wordpress</p><h2 id="coded-vs-gui">
+        <a href="#coded-vs-gui" class="anchor"><span>>></span></a>Coded vs GUI
+      </h2>
+<p>Most highly customizable types of website frameworks are codable, i.e. you can hold almost the whole configuration of the web site as text files. This makes it easy to version the website as well as redeploy it, but can be harder to make look as you want.</p>
+
+<p><strong>Coded:</strong> Hugo, Jekyll, Pandoc, Sphinx, Wordpress <br />
+<strong>GUI:</strong> Squarespace, Wordpress (through <em>Wordpress.com</em>)</p><h2 id="markdown-support">
+        <a href="#markdown-support" class="anchor"><span>>></span></a>Markdown support
+      </h2>
+<p>The Markdown language is truly splendid when it comes to documentation since it is easy to read, but can be rendered beautifully with good templates. Kind of like a basic variant of LaTeX that is much simpler to write (and read from source code).</p>
+
+<p><strong>Supports Markdown:</strong> Hugo, Jekyll, Pandoc, Pelican, Sphinx, Wordpress <br />
+<strong>No Markdown:</strong> Squarespace</p><h1 id="-pelican">
+        <a href="#-pelican" class="anchor"><span>></span></a><img style="height: 1em;" class="img-inline" alt="Pelican logo" title="Pelican logo" src="/assets/images/pelican_logo.png" /> Pelican
+      </h1>
+<p>Supports reStructuredText.</p>
+
+<p><a href="https://docs.getpelican.com/en/stable/">Pelican documentation</a></p><h1 id="-pandoc">
+        <a href="#-pandoc" class="anchor"><span>></span></a><img style="height: 1em;" class="img-inline" alt="Pandoc logo draft" title="Pandoc logo" src="/assets/images/pandoc_logo.svg" /> Pandoc
+      </h1>
+<p>Pandoc is really just a document conversion tool that can be used for creating static web sites from e.g. Markdown.</p>
+
+<p><a href="http://proven-inconclusive.com/blog/scientific_blogging_with_pelican_and_pandoc.html">Scientific blogging with Pelican and Pandoc</a></p><h1 id="-sphinx">
+        <a href="#-sphinx" class="anchor"><span>></span></a><img style="height: 1em;" class="img-inline" alt="Sphinx logo" title="Sphinx logo" src="/assets/images/sphinx_logo.png" /> Sphinx
+      </h1>
+<p>I ran into this on the documentation of the <a href="https://github.com/vunit/Vunit">VUnit project</a> (a great tool by the way for anyone writing VHDL - and SystemVerilog I guess).</p><h1 id="-jekyll">
+        <a href="#-jekyll" class="anchor"><span>></span></a><img style="height: 1em;" class="img-inline" alt="Jekyll logo" title="Jekyll logo" src="/assets/images/jekyll-test-tube.svg" /> Jekyll
+      </h1>
+<p>Jekyll is used for creating static websites from Markdown.</p>
+
+<p>Also see <a href="http://octopress.org/docs/">Octopress</a> for coding related setups with Jekyll. It’s basically an extension of it with several nice extra features.</p><h1 id="-hugo">
+        <a href="#-hugo" class="anchor"><span>></span></a><img style="height: 1em;" class="img-inline" alt="Hugo logo" title="Hugo logo" src="/assets/images/hugo_logo.png" /> Hugo
+      </h1>
+<p>Static site generator designed to be fast. Takes Markdown as input.</p><h1 id="-wordpress">
+        <a href="#-wordpress" class="anchor"><span>></span></a><img style="height: 1em;" class="img-inline" alt="Wordpress logo" title="Wordpress logo" src="/assets/images/wordpress_logo.png" /> Wordpress
+      </h1>
+<blockquote>
+  <p>Not to be confused with <em>Wordpress.com</em> which is the hosted variant.</p>
+</blockquote>
+
+<p>An open source framework for creating web sites with lots of plugins. This is quite tempting to use since it is so popular (<a href="https://trends.builtwith.com/cms">used by 32% of the Top 1 million websites as of July 2019 according to builtwith.com/cms</a>). This gives several pros: I might have use of it in other cases (can help others), there exists an active community (there is help to get), it gets regular updates (it stays secure and fresh).</p>
+
+<p>It also seems very customizable.</p><h1 id="-squarespace">
+        <a href="#-squarespace" class="anchor"><span>></span></a><img style="height: 1em;" class="img-inline" alt="Squarespace logo" title="Squarespace logo" src="/assets/images/squarespace_logo.png" /> Squarespace
+      </h1>
+<p>Hosted and managed by Squarespace themselves. This means that you can set up the page once and really stop caring about it. They will keep updating it for you. So goodbye security theats, and needs of manually updating.</p>
+
+<p>The probably most notable feature of Squarespace is its design, and <a href="https://www.squarespace.com/website-design">that’s their biggest sales pitch</a>:</p>
+
+<blockquote>
+  <p>Award-Winning Web Designs: <br />
+Stand out online with a professional website, online store, or portfolio. With Squarespace, you can turn any idea into a reality.</p>
+</blockquote>
+
+<p>They also have a lot of tools if you’re more serious with your website, such as search engine optimization (SEO), commerce tools, encryption (SSL), etc.</p>
+
+<p>However, Squarespace also lacks more advanced features which are nice for programmers, like fully customizing plugins, adding your own code etc. To get all of that goodness, you’ll have to stick to an open source platform, of course!</p>
+
+<p>Also, I believe that it is harder to version your website (if you’re into that kind of stuff) since it’s all click-and-drag types of GUI (WYSIWYG).</p>
+
+<p>Last but not least. It’s not free! Sure, you’ll need to find hosting for all of the other alternatives, which will cost, but if you host it yourself, then you can get it much cheaper. Starting price: $12/month (ouch). And all of the good stuff I mentioned above will cost extra. So: <em>mmk-bye</em>!</p><h2 id="sources">
+        <a href="#sources" class="anchor"><span>>></span></a>Sources
+      </h2>
+<ol>
+  <li><a href="https://docs.getpelican.com/en/stable/">Pelican documentation</a>.</li>
+  <li><a href="http://proven-inconclusive.com/blog/scientific_blogging_with_pelican_and_pandoc.html">Scientific blogging with Pelican and Pandoc</a>.</li>
+  <li><a href="https://www.squarespace.com/website-design">Squarespace sales pitch</a>.</li>
+  <li><a href="https://www.websitebuilderexpert.com/website-builders/comparisons/squarespace-vs-wordpress/">A quite nice rundown between Squarespace and Wordpress</a>.</li>
+</ol><h1 id="comments-on-blogs">
+        <a href="#comments-on-blogs" class="anchor"><span>></span></a>Comments on blogs
+      </h1>
+<blockquote>
+  <p>A blog without ability to comment is no true blog.</p>
+</blockquote>
+
+<p>Everybody loves to express their opinions on blogs. However, I will have to cover that in an entirely different episode. I’ve gotta focus!</p>
+
+<p><a href="https://alternativeto.net/software/disqus/">Sneak peak</a>.</p>
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2019-07-jekyll/" rel="next" title="Jekyll">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-07-cronjob-debugging/" rel="previous" title="Cronjobs - timely done">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2019-07-28-creating-your-own-blog.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

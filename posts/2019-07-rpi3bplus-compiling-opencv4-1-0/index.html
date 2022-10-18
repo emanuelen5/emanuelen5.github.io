@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Compiling OpenCV...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Compiling OpenCV 4.1 on Raspberry Pi Jessie for Python 3.7.3
+
+      </h1>
+
+
+<p class="lead">Published:    2019-07-21 <br/>
+Last updated: 2020-05-13 21:19</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">rpi</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">python</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">opencv</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">miniguide</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">build</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2019-07-cronjob-debugging/" rel="next" title="Cronjobs - timely done">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-07-rpi3bplus-controlling-leds/" rel="previous" title="Controlling Raspberry Pi LEDs">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>Download <a href="https://github.com/opencv/opencv/releases">OpenCV</a> and the <a href="https://github.com/opencv/opencv_contrib/releases">contributed functionality</a> (extra modules), and extract them (will be placed in <code class="language-plaintext highlighter-rouge">opencv-4.1.0</code> and <code class="language-plaintext highlighter-rouge">opencv_contrib-4.1.0</code>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">-O</span> opencv.zip https://github.com/opencv/opencv/releases/download/4.1.0/opencv-4.1.0-docs.zip
+unzip opencv.zip
+
+wget <span class="nt">-O</span> opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.1.0.zip
+unzip opencv_contrib.zip
+
+<span class="nb">cd</span> ~/opencv-4.1.0/
+</code></pre></div></div>
+
+<p>Create a directory <code class="language-plaintext highlighter-rouge">build</code> where the build artifacts will be placed, then configure the build with <em>cmake</em> and build:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir </span>build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build
+
+<span class="c"># This takes just a minute</span>
+cmake <span class="nt">-D</span> <span class="nv">CMAKE_BUILD_TYPE</span><span class="o">=</span>RELEASE <span class="se">\</span>
+    <span class="nt">-D</span> <span class="nv">ENABLE_PRECOMPILED_HEADERS</span><span class="o">=</span>OFF <span class="se">\</span>
+    <span class="nt">-D</span> <span class="nv">CMAKE_INSTALL_PREFIX</span><span class="o">=</span>/usr/local <span class="se">\</span>
+    <span class="nt">-D</span> <span class="nv">INSTALL_PYTHON_EXAMPLES</span><span class="o">=</span>ON <span class="se">\</span>
+    <span class="nt">-D</span> <span class="nv">OPENCV_EXTRA_MODULES_PATH</span><span class="o">=</span>~/opencv_contrib-4.1.0/modules <span class="se">\</span>
+    <span class="nt">-D</span> <span class="nv">BUILD_EXAMPLES</span><span class="o">=</span>ON ..
+
+<span class="c"># This takes many hours (7h on mine)</span>
+make
+<span class="c"># It is possible to run with several cores if you have good enough cooling</span>
+</code></pre></div></div>
+
+<p>The compilation got stuck at the “final” stage, where <code class="language-plaintext highlighter-rouge">cv2.cpp.o</code> was being built. The green LED which symbolizes mmc0/SD card activity was lit green constantly and the terminal hanged (most likely due to constant swapping). After some time the compilation failed with an error similar to the following:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span> 85%] Building CXX object modules/python3/CMakeFiles/opencv_python3.dir/__/src2/cv2.cpp.o
+c++: internal compiler error: Killed <span class="o">(</span>program cc1plus<span class="o">)</span>
+Please submit a full bug report,
+with preprocessed <span class="nb">source </span><span class="k">if </span>appropriate.
+See &lt;file: <span class="nv">usr</span><span class="o">=</span><span class="s2">""</span> <span class="nv">share</span><span class="o">=</span><span class="s2">""</span> <span class="nv">doc</span><span class="o">=</span><span class="s2">""</span> gcc-6<span class="o">=</span><span class="s2">""</span> readme.bugs<span class="o">=</span><span class="s2">""</span><span class="o">&gt;</span> <span class="k">for </span>instructions.
+modules/python3/CMakeFiles/opencv_python3.dir/build.make:62: recipe <span class="k">for </span>target <span class="s1">'modules/python3/CMakeFiles/opencv_python3.dir/__/src2/cv2.cpp.o'</span> failed
+make[2]: <span class="k">***</span> <span class="o">[</span>modules/python3/CMakeFiles/opencv_python3.dir/__/src2/cv2.cpp.o] Error 4
+CMakeFiles/Makefile2:24733: recipe <span class="k">for </span>target <span class="s1">'modules/python3/CMakeFiles/opencv_python3.dir/all'</span> failed
+make[1]: <span class="k">***</span> <span class="o">[</span>modules/python3/CMakeFiles/opencv_python3.dir/all] Error 2
+Makefile:160: recipe <span class="k">for </span>target <span class="s1">'all'</span> failed
+make: <span class="k">***</span> <span class="o">[</span>all] Error 2
+</code></pre></div></div>
+
+<p>I managed to solve it by increasing the swap file size (taken <a href="https://www.alatortsev.com/2018/11/21/installing-opencv-4-0-on-raspberry-pi-3-b/">from this tutorial</a>) from 100MB (default size) to twice the RAM-size (about 2GB). This is done by temporarily making a change in the file <code class="language-plaintext highlighter-rouge">/etc/dphys-swapfile</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># [...]</span>
+<span class="c">#CONF_SWAPSIZE=100</span>
+
+<span class="c"># [...]</span>
+<span class="nv">CONF_SWAPFACTOR</span><span class="o">=</span>2
+</code></pre></div></div>
+
+<p>The service that manages the swap file then has to be restarted:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo</span> /etc/init.d/dphys-swapfile stop
+<span class="nb">sudo</span> /etc/init.d/dphys-swapfile start
+</code></pre></div></div>
+
+<p>Typing the <code class="language-plaintext highlighter-rouge">free -m</code> command should then show something similar to:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>             total       used       free     shared    buffers     cached
+Mem:           859        621        238         43        117        416
+-/+ buffers/cache:         87        772
+Swap:         1718          0       1718
+
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>make <span class="nb">install
+sudo </span>ldconfig
+<span class="nb">sudo </span>apt-get update
+<span class="c"># Adding the newly compiled OpenCV library to a virtual environment</span>
+<span class="nb">ln</span> <span class="nt">-s</span> /usr/local/lib/python3.7/site-packages/cv2/python-3.7/cv2.cpython-37m-arm-linux-gnueabihf.so ~/venv/lib/python3.7/site-packages/cv2.so
+</code></pre></div></div>
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2019-07-cronjob-debugging/" rel="next" title="Cronjobs - timely done">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-07-rpi3bplus-controlling-leds/" rel="previous" title="Controlling Raspberry Pi LEDs">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2019-07-21-rpi3bplus-compiling-opencv4-1-0.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

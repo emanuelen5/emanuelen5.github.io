@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Emaus: Setting up...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+            <a class="nav-link " href="/recipes/">Recipes</a>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-control custom-control-input" id="darkSwitch">
+                    <label class="custom-control-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Setting up a proxy to a Linux server
+
+      </h1>
+
+
+<p class="lead">Published:    2020-05-04 <br/>
+Last updated: 2020-05-13 21:19</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">ssh</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">proxy</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">PuTTY</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">tools</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">security</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">guide</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2020-05-first-jekyll-plugin/" rel="next" title="Jekyll plugin for escaping Atom feed content and altering links">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2020-04-setting-up-new-raspberry-pi3bplus/" rel="previous" title="Setting up a Raspberry Pi 3B plus from scratch">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>It is really simple to set up a proxy through a Linux server that runs SSH. The simplest way is to use the SOCKS5 procol which utilizes an open SSH tunnel and forwards all traffic through it.</p>
+
+<p>The instructions below are split into separate parts depending on your host OS:</p>
+
+<ol>
+  <li><a href="#windows-local-machine">Local machine that runs Windows</a></li>
+  <li><a href="#linux-local-machine">Local machine that runs Linux</a>.</li>
+</ol><h2 id="windows-local-machine">
+        <a href="#windows-local-machine" class="anchor"><span>>></span></a>Windows local machine
+      </h2><h3 id="ssh-tunnel">
+        <a href="#ssh-tunnel" class="anchor"><span>>>></span></a>SSH tunnel
+      </h3>
+<ol>
+  <li>Install PuTTY</li>
+  <li>Configure a PuTTY session
+    <ol>
+      <li>Add a new PuTTY session that points to the public IP/host name and port of your server that runs SSH. <br />
+<img src="proxy-putty-session.png" alt="Adding a new PuTTY session" /></li>
+      <li>Set up the session to forward a port (e.g. 9001) to the server. Type in the local port that it should use, set it to dynamic (i.e. using the SSH tunnel’s IP), and press <strong>Add</strong>. <br />
+<img src="proxy-putty-tunnels.png" alt="Configuring the session tunnel" /></li>
+      <li>Make sure to save the session if you want to reuse it. Press <strong>Open</strong> to connect and authenticate. <br />
+<img src="proxy-putty-connected.png" alt="The session is now connected" /></li>
+      <li>The tunnel is now set up and will stay open for as long as the PuTTY session is alive.</li>
+    </ol>
+  </li>
+</ol><h3 id="global-proxy-setup">
+        <a href="#global-proxy-setup" class="anchor"><span>>>></span></a>Global proxy setup
+      </h3>
+<p>The proxy settings can be set globally through the <em>Internet Options</em> control panel</p>
+
+<ol>
+  <li>Open the start menu and type <strong>Internet Options</strong> to find it. <br />
+<img src="proxy-internet-properties.png" alt="Internet Options" /></li>
+  <li>Go to <strong>Connections</strong> ➡️ <strong>LAN settings</strong>.</li>
+  <li>Under <strong>Proxy server</strong>, check the box ☒ <strong>Use a proxy server for your LAN</strong>. <br />
+<img src="proxy-lan-settings.png" alt="Enable proxy server" /></li>
+  <li>Go to <strong>Advanced</strong>.</li>
+  <li>Uncheck the box ☐ <strong>Use the same proxy server for all protocols</strong> and remove all pre-filled fields under the other protocols. Add <code class="language-plaintext highlighter-rouge">localhost:&lt;port&gt;</code> (i.e. <code class="language-plaintext highlighter-rouge">localhost:9001</code> in our example) to the <strong>Socks</strong> row. <br />
+<img src="proxy-advanced-settings.png" alt="Proxy settings" /></li>
+</ol><h2 id="linux-local-machine">
+        <a href="#linux-local-machine" class="anchor"><span>>></span></a>Linux local machine
+      </h2><h3 id="ssh-tunnel-1">
+        <a href="#ssh-tunnel-1" class="anchor"><span>>>></span></a>SSH tunnel
+      </h3>
+<ol>
+  <li>Run the following command on your local machine:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ssh <span class="nt">-D</span> 9001 <span class="nt">-f</span> <span class="nt">-C</span> <span class="nt">-q</span> <span class="nt">-N</span> &lt;your_linux_server_that_runs_ssh&gt;
+</code></pre></div>    </div>
+  </li>
+  <li>The tunnel is now set up and will stay open for as long as the SSH session is alive.</li>
+</ol><h3 id="global-proxy-setup-1">
+        <a href="#global-proxy-setup-1" class="anchor"><span>>>></span></a>Global proxy setup
+      </h3>
+<p>How to do this varies from OS to OS. <a href="https://www.serverlab.ca/tutorials/linux/administration-linux/how-to-configure-proxy-on-ubuntu-18-04/">Here is a guide that covers Ubuntu 18.04</a>.</p>
+
+<p>A nice feature with that is the <code class="language-plaintext highlighter-rouge">NO_PROXY</code> environment variable that can be used for ignoring patterns where the proxy should not be used, e.g. the company intranet.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">NO_PROXY</span><span class="o">=</span>localhost,127.0.0.1,<span class="k">*</span>.my.lan.domain
+</code></pre></div></div><h2 id="sources">
+        <a href="#sources" class="anchor"><span>>></span></a>Sources
+      </h2>
+
+<p>[1] <a href="https://itblogsec.com/how-to-make-socks-proxy-server-by-using-raspberry-pi/">https://itblogsec.com/how-to-make-socks-proxy-server-by-using-raspberry-pi/</a> <br />
+[2] <a href="https://www.reddit.com/r/raspberry_pi/comments/5ltq3h/rpi_as_a_socks_proxy_and_ssh_file_server_tutorial/">https://www.reddit.com/r/raspberry_pi/comments/5ltq3h/rpi_as_a_socks_proxy_and_ssh_file_server_tutorial/</a> <br />
+[3] <a href="https://www.reddit.com/r/techsupport/comments/4j0l35/windows_10_route_all_traffic_through_socks5_proxy/">https://www.reddit.com/r/techsupport/comments/4j0l35/windows_10_route_all_traffic_through_socks5_proxy/</a> <br /></p>
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2020-05-first-jekyll-plugin/" rel="next" title="Jekyll plugin for escaping Atom feed content and altering links">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2020-04-setting-up-new-raspberry-pi3bplus/" rel="previous" title="Setting up a Raspberry Pi 3B plus from scratch">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2022 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2020-04-14-proxy/2020-04-14-proxy-from-windows-to-linux.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

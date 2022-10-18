@@ -1,0 +1,1133 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom">
+  <generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator>
+  <link href="https://blog.cedernaes.com/atom.xml" rel="self" type="application/atom+xml" />
+  <link href="https://blog.cedernaes.com/" rel="alternate" type="text/html"/>
+  <updated>2022-10-18T21:11:54+02:00</updated>
+  <id>https://blog.cedernaes.com/atom.xml</id><title type="html">Emaus’ blogsite</title>
+    <entry><title type="html">Installing Homeassistant in a Docker container (e.g. on Raspberry Pi)</title>
+      <link href="https://blog.cedernaes.com/posts/2021-09-installing-homeassistant-docker/" rel="alternate" type="text/html" title="Installing Homeassistant in a Docker container (e.g. on Raspberry Pi)" />
+      <published>2021-09-08T23:15:00+02:00</published>
+      <updated>2021-09-08T23:15:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/installing-homeassistant-docker</id><content type="html" xml:base="https://blog.cedernaes.com/posts/2021-09-installing-homeassistant-docker/">&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;This is the guide that I have followed for installing Home Assistant on Docker: &lt;a href=&quot;https://github.com/home-assistant/supervised-installer&quot;&gt;https://github.com/home-assistant/supervised-installer&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;It is split in X steps:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Install prerequisites. This means the libraries and programs that are needed for the installation, such as Docker, NetworkManager, etc. (&lt;a href=&quot;https://github.com/home-assistant/architecture/blob/master/adr/0014-home-assistant-supervised.md&quot;&gt;see here&lt;/a&gt;).&lt;/li&gt;
+  &lt;li&gt;Download the installer script:
+    &lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt; $&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;curl &lt;span class=&quot;nt&quot;&gt;-Lo&lt;/span&gt; installer.sh https://raw.githubusercontent.com/home-assistant/supervised-installer/master/installer.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Run the installer script for your specific machine configuration:
+    &lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt; $&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;bash installer.sh &lt;span class=&quot;nt&quot;&gt;--machine&lt;/span&gt; raspberrypi4  &lt;span class=&quot;c&quot;&gt;# Not rpi64(!)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;You should now see a truckload of containers running when you run the command &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker ps&lt;/code&gt; (except for the addons):&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;docker ps &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;CONTAINER ID   IMAGE                                                        COMMAND                  CREATED        STATUS                  PORTS                                                                                                                          NAMES
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;e4e74391821e   homeassistant/armv7-addon-nginx_proxy:3.0.2                  &quot;/init /run.sh&quot;          26 hours ago   Up 26 hours             0.0.0.0:80-&amp;gt;&lt;/span&gt;80/tcp, :::80-&amp;gt;80/tcp, 0.0.0.0:443-&amp;gt;443/tcp, :::443-&amp;gt;443/tcp                                                       addon_core_nginx_proxy
+&lt;span class=&quot;go&quot;&gt;e368bb8a7c82   homeassistant/armv7-addon-configurator:5.3.3                 &quot;/init&quot;                  26 hours ago   Up 26 hours                                                                                                                                            addon_core_configurator
+667f0bd06813   ghcr.io/hassio-addons/node-red/armv7:10.0.0                  &quot;/init&quot;                  26 hours ago   Up 26 hours                                                                                                                                            addon_a0d7b954_nodered
+5de96fd9b603   homeassistant/armhf-addon-deconz:6.10.0                      &quot;/init&quot;                  26 hours ago   Up 26 hours                                                                                                                                            addon_core_deconz
+7cec24a697d0   homeassistant/armv7-addon-duckdns:1.13.0                     &quot;/init /run.sh&quot;          26 hours ago   Up 26 hours                                                                                                                                            addon_core_duckdns
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;639745b0716b   homeassistant/armv7-addon-mosquitto:6.0.1                    &quot;/init&quot;                  26 hours ago   Up 26 hours             0.0.0.0:1883-1884-&amp;gt;&lt;/span&gt;1883-1884/tcp, :::1883-1884-&amp;gt;1883-1884/tcp, 0.0.0.0:8883-8884-&amp;gt;8883-8884/tcp, :::8883-8884-&amp;gt;8883-8884/tcp   addon_core_mosquitto
+&lt;span class=&quot;go&quot;&gt;7cb55f454264   homeassistant/armv7-hassio-multicast:2021.04.0               &quot;/init&quot;                  26 hours ago   Up 26 hours                                                                                                                                            hassio_multicast
+2b0d613fa555   ghcr.io/home-assistant/armv7-hassio-cli:2021.08.1            &quot;/init /bin/bash -c …&quot;   26 hours ago   Up 26 hours                                                                                                                                            hassio_cli
+4bdfdbf18f22   ghcr.io/home-assistant/armv7-hassio-audio:2021.07.0          &quot;/init&quot;                  26 hours ago   Up 26 hours                                                                                                                                            hassio_audio
+1037d933ec74   ghcr.io/home-assistant/armv7-hassio-dns:2021.06.0            &quot;/init&quot;                  26 hours ago   Up 26 hours                                                                                                                                            hassio_dns
+7bf259658e41   homeassistant/armv7-hassio-supervisor                        &quot;/init&quot;                  4 days ago     Up 26 hours                                                                                                                                            hassio_supervisor
+8ea5f06d0c1f   ghcr.io/home-assistant/raspberrypi4-homeassistant:2021.8.8   &quot;/init&quot;                  7 days ago     Up 26 hours                                                                                                                                            homeassistant
+1dddcf5c35d0   homeassistant/armv7-addon-check_config:3.8.0                 &quot;/init&quot;                  7 days ago     Exited (0) 7 days ago                                                                                                                                  addon_core_check_config
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;76315327b5ee   ghcr.io/home-assistant/armv7-hassio-observer:2021.06.0       &quot;/init&quot;                  2 months ago   Up 26 hours             0.0.0.0:4357-&amp;gt;&lt;/span&gt;80/tcp, :::4357-&amp;gt;80/tcp                                                                                          hassio_observer
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This might seem daunting at first. But, basically, each program runs in its own container: like Home Assistant; a supervisor that keeps track of updates and the home assistant state; other helper containers; and addons.
+Each container has its own version, state and log. All of which can be accessed either through Home Assistant (version and logs), or by using the docker commands.&lt;/p&gt;
+
+&lt;h2 id=&quot;migration&quot;&gt;Migration&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Before migrating the files, make sure to stop Home Assistant. This can be done with the command &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ha core stop&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker stop homeassistant&lt;/code&gt;. When done, start it again by replacing &lt;em&gt;stop&lt;/em&gt; with &lt;em&gt;start&lt;/em&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The configuration files for the Dockerized Home Assistant are located under &lt;em&gt;/usr/share/hassio/homeassistant&lt;/em&gt;. Make sure to move your existing files there, if you have any (e.g. &lt;em&gt;configuration.yaml&lt;/em&gt;, and possibly even login tokens).&lt;/p&gt;
+
+&lt;h2 id=&quot;install-some-addons&quot;&gt;Install some addons&lt;/h2&gt;
+&lt;p&gt;The next step would be to actually start using the supervised HA features, by for example, installing some addons:
+&lt;img src=&quot;./homeassistant-addons.png&quot; alt=&quot;Homeassistant addons&quot; /&gt;&lt;/p&gt;</content><author>
+          <name></name></author><category term="ha" /><category term="docker" /><category term="rpi" /><summary type="html">Installation</summary>
+    </entry>
+    <entry><title type="html">Reverse SSH tunnel for monitoring servers</title>
+      <link href="https://blog.cedernaes.com/posts/2021-08-reverse-ssh-tunnel/" rel="alternate" type="text/html" title="Reverse SSH tunnel for monitoring servers" />
+      <published>2021-08-16T22:54:00+02:00</published>
+      <updated>2021-08-16T22:54:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/reverse-ssh-tunnel</id><content type="html" xml:base="https://blog.cedernaes.com/posts/2021-08-reverse-ssh-tunnel/">&lt;p&gt;A reverse SSH tunnel can be used for securely keeping a connection open to a remote server, even if it does not have a fixed IP. The only requirement is that you have a separate server that you administer which you know the IP of, or which has a domain that points to it.&lt;/p&gt;
+
+&lt;h3 id=&quot;schematic-figure&quot;&gt;Schematic figure:&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;          Remote server           Local server
+          Unknown IP              Reachable at domain example.com
+          -------------           ------------
+
+AutoSSH, reverse tunnel
+that keps open to local  =======&amp;gt; SSH daemon
+server (example.com), 
+and restarts if it fails
+
+                                  On demand SSH to remote server
+              Connected! &amp;lt;==SSH== by connecting to local server,
+                                  and connecting through the tunnel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;on-the-local-server&quot;&gt;On the local server&lt;/h1&gt;
+&lt;p&gt;Begin by setting up the local server. It will need a dedicated user that only is allowed to open tunnels on a specific port, and also the public key that shall be allowed to connect to the server.&lt;/p&gt;
+
+&lt;h2 id=&quot;ssh-daemon-config&quot;&gt;SSH daemon config&lt;/h2&gt;
+&lt;ol&gt;
+  &lt;li&gt;First create a separate user called e.g. &lt;em&gt;tunnel-user&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;Configure the SSH daemon to only allow &lt;em&gt;that&lt;/em&gt; user to create reverse SSH tunnels on specific ports (4567 in the example below):&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-ssh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;## /etc/ssh/sshd_config&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;Match&lt;/span&gt; User tunnel-user
+        &lt;span class=&quot;k&quot;&gt;AllowAgentForwarding&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;no&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;PasswordAuthentication&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;no&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;X11Forwarding&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;no&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;GatewayPorts&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;no&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;PermitTunnel&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;no&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;ForceCommand&lt;/span&gt; echo 'This account can only be used for reverse-ssh'
+        &lt;span class=&quot;k&quot;&gt;AllowStreamLocalForwarding&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;no&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;AllowTcpForwarding&lt;/span&gt; remote
+        &lt;span class=&quot;k&quot;&gt;PermitOpen&lt;/span&gt; localhost:4567
+        &lt;span class=&quot;c1&quot;&gt;# Don't think these make any difference&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;ClientAliveInterval&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;ClientAliveCountMax&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;300&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;public-key&quot;&gt;Public key&lt;/h2&gt;
+&lt;p&gt;Add a public key that shall be allowed to connect to the local server. This assumes that you have already copied the key to the server to a file &lt;em&gt;remote_key.id_rsa.pub&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# On the local server, if it is already copied to the file system&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;local&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;su tunnel-user
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;local&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat &lt;/span&gt;remote_key.id_rsa.pub &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; ~/.ssh/authorized_keys
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;ssh-configuration&quot;&gt;SSH configuration&lt;/h2&gt;
+&lt;p&gt;This is just a nice feature that I like to use. Instead of setting all of the parameters in the SSH command, they can be specified as targets, called &lt;em&gt;Hosts&lt;/em&gt;. Each target has a combination of parameters, like what &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ip:port&lt;/code&gt; to connect to, what SSH key to use, etc.&lt;/p&gt;
+
+&lt;div class=&quot;language-ssh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;## ~/.ssh/config&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# The name of the target becomes my-tunnel&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;Host&lt;/span&gt; my-tunnel
+    &lt;span class=&quot;c1&quot;&gt;# What to connect to (domain and username)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;Hostname&lt;/span&gt;      example.com
+    &lt;span class=&quot;k&quot;&gt;User&lt;/span&gt;          tunnel-user
+    &lt;span class=&quot;c1&quot;&gt;# The external port on the local server&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;Port&lt;/span&gt;          &lt;span class=&quot;m&quot;&gt;22&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# The SSH key that has been added to the local server&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;IdentityFile&lt;/span&gt;  ~/.ssh/reverse_ssh_example.id_rsa
+    &lt;span class=&quot;c1&quot;&gt;# Do not try password authentication&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;IdentitiesOnly&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;yes&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# The port on the local server that is used for initiating the connection (4567), and&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# the destination when connecting to that port (localhost:22)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;RemoteForward&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;4567&lt;/span&gt; localhost:22
+
+    &lt;span class=&quot;c1&quot;&gt;# TTY is disabled for the port&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;RequestTTY&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;no&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# To make sure that it restarts within reasonable time&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;ServerAliveInterval&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;60&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;ServerAliveCountMax&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;30&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# This makes sure that AutoSSH can retry the connection&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;ExitOnForwardFailure&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;yes&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;One can then connect to the target with all of the preconfigured settings, by just specifying the name:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;remote&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ssh &lt;span class=&quot;nt&quot;&gt;-N&lt;/span&gt; my-tunnel
+&lt;span class=&quot;c&quot;&gt;# Equivalent to&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;remote&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ssh &lt;span class=&quot;nt&quot;&gt;-N&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 22 &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; ~/.ssh/reverse_ssh_example.id_rsa &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;IdentitiesOnly&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; 4567:localhost:22 &lt;span class=&quot;nt&quot;&gt;-T&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ServerAliveInterval&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;60 &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; ServerAliveCountMax 30 &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ExitOnForwardFailure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes &lt;/span&gt;tunnel-user@example.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Note that we still needed the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-N&lt;/code&gt; option since it is &lt;a href=&quot;https://superuser.com/questions/518888/setup-n-parameter-in-ssh-config-file&quot;&gt;not settable in the SSH config file&lt;/a&gt;. It makes sure that we do try not execute a remote command (like starting a terminal) since we have disallowed it in the SSH server configuration.&lt;/p&gt;
+
+&lt;h1 id=&quot;on-the-remote-server&quot;&gt;On the remote server&lt;/h1&gt;
+
+&lt;h2 id=&quot;service-that-starts-the-reverse-ssh-tunnel&quot;&gt;Service that starts the reverse SSH tunnel&lt;/h2&gt;
+&lt;p&gt;Create a service on the remote server that continously tries to connects to your local server, using the helper program &lt;em&gt;autossh&lt;/em&gt; (installable on many systems with the command &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;apt install autossh&lt;/code&gt;).&lt;/p&gt;
+
+&lt;div class=&quot;language-ini highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;## /etc/systemd/system/autossh.service
+&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[Unit]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;Description&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;AutoSSH tunnel service for maintenance, connection according to .ssh/config&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;After&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;network-online.target&lt;/span&gt;
+
+&lt;span class=&quot;nn&quot;&gt;[Service]&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Choose a user that exists. Doesn't matter much
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;pi&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;Type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;simple&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;Restart&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;always&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;Environment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;AUTOSSH_GATETIME=0&quot;&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;ExecStart&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/usr/bin/autossh -M 0 -N my-tunnel&lt;/span&gt;
+
+&lt;span class=&quot;nn&quot;&gt;[Install]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;WantedBy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;multi-user.target&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;use-the-reverse-ssh-tunnel&quot;&gt;Use the reverse SSH tunnel&lt;/h1&gt;
+&lt;p&gt;To connect to the remote server, you can now issue the following command on the local server:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;local&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ssh &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 4567 localhost
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;which will connect through the tunnel to the remote server, and prompt for user, password, and key.&lt;/p&gt;</content><author>
+          <name></name></author><category term="linux" /><category term="ssh" /><summary type="html">A reverse SSH tunnel can be used for securely keeping a connection open to a remote server, even if it does not have a fixed IP. The only requirement is that you have a separate server that you administer which you know the IP of, or which has a domain that points to it.</summary>
+    </entry>
+    <entry><title type="html">Custom Python setuptools commands</title>
+      <link href="https://blog.cedernaes.com/posts/2021-06-custom-python-setup-commands/" rel="alternate" type="text/html" title="Custom Python setuptools commands" />
+      <published>2021-06-22T21:50:00+02:00</published>
+      <updated>2021-06-22T21:50:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/custom-python-setup-commands</id><content type="html" xml:base="https://blog.cedernaes.com/posts/2021-06-custom-python-setup-commands/">&lt;p&gt;Let say you have a simple install script for a package:&lt;/p&gt;
+
+&lt;h4 id=&quot;setuppy&quot;&gt;&lt;a href=&quot;./setup.py&quot;&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;setup.py&lt;/code&gt;&lt;/strong&gt;&lt;/a&gt;&lt;/h4&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;setuptools&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setup&lt;/span&gt;
+
+
+&lt;span class=&quot;n&quot;&gt;setup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;package_name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1.0.0&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;emaus&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And you want to add a custom command to be run during the install process. This is actually very easy to achieve!&lt;/p&gt;
+
+&lt;h2 id=&quot;modified-setuppy&quot;&gt;Modified setup.py&lt;/h2&gt;
+
+&lt;p&gt;You simply need to:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Import the command class&lt;/li&gt;
+  &lt;li&gt;Create a class that inherits from that class, but overrides the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;run&lt;/code&gt; method to do what you like instead.&lt;/li&gt;
+  &lt;li&gt;Then, let the setup package know of the custom command override that you want to use.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;setup_overriddenpy&quot;&gt;&lt;a href=&quot;./setup_overridden.py&quot;&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;setup_overridden.py&lt;/code&gt;&lt;/strong&gt;&lt;/a&gt;&lt;/h4&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;setuptools&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setup&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;setuptools.command.install&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;custom_command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Here we can run anything that we like
+&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Running custom command!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;c1&quot;&gt;# Inherit from the command class
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InstallWrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;install&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Override the run method
+&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;custom_command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# Run the original install command as well, if you want to extend original behaviour
+&lt;/span&gt;        &lt;span class=&quot;nb&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+
+&lt;span class=&quot;n&quot;&gt;setup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;package_name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1.0.0&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;emaus&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Specify that we want to use our override for the install command
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;cmdclass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InstallWrapper&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Other commands can be overridden in an anologous way (subsituting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;install&lt;/code&gt; for another command, like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build_py&lt;/code&gt;, etc.). See &lt;a href=&quot;https://docs.python.org/3/distutils/apiref.html#module-distutils.command&quot;&gt;https://docs.python.org/3/distutils/apiref.html#module-distutils.command&lt;/a&gt; for details on the different commands available.&lt;/p&gt;
+
+&lt;h3 id=&quot;install&quot;&gt;Install&lt;/h3&gt;
+&lt;p&gt;Installing the modified package however shows no sign of of the modifications (&lt;em&gt;Running custom command!&lt;/em&gt; is never printed)!&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;pip &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;Processing /tmp/test
+Building wheels for collected packages: package-name
+  Building wheel for package-name (setup.py) ... done
+  Created wheel for package-name: filename=package_name-1.0.0-py3-none-any.whl size=1045 sha256=1e6ebf07649a28a42fd3ce41077f0abbed4e9e0593175776444d42aff4cf6fb7
+  Stored in directory: /tmp/pip-ephem-wheel-cache-riywfbyt/wheels/88/36/8d/03b070db53bc124488b9daa3226de7abdcc759470790b534d1
+Successfully built package-name
+Installing collected packages: package-name
+  Attempting uninstall: package-name
+    Found existing installation: package-name 1.0.0
+    Uninstalling package-name-1.0.0:
+      Successfully uninstalled package-name-1.0.0
+Successfully installed package-name-1.0.0
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;WARNING: You are using pip version 20.3.3;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;however, version 21.1.2 is available.
+&lt;span class=&quot;go&quot;&gt;You should consider upgrading via the '/tmp/venv/bin/python -m pip install --upgrade pip' command.
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is due to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pip&lt;/code&gt; swallowing the standard output. To show them, we need to increase the verbosity.&lt;/p&gt;
+
+&lt;h1 id=&quot;debug-with-pip&quot;&gt;Debug with pip&lt;/h1&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;pip &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This prints all of the steps that are run when installing the Python package, and can help in debugging your own extensions.&lt;/p&gt;
+
+&lt;p&gt;Running that will produce the following output:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Using pip 20.3.3 from /tmp/venv/lib/python3.9/site-packages/pip (python 3.9)
+Non-user install because user site-packages disabled
+Created temporary directory: /tmp/pip-ephem-wheel-cache-fmba4u1y
+Created temporary directory: /tmp/pip-req-tracker-yoxvk28o
+Initialized build tracking at /tmp/pip-req-tracker-yoxvk28o
+Created build tracker: /tmp/pip-req-tracker-yoxvk28o
+Entered build tracker: /tmp/pip-req-tracker-yoxvk28o
+Created temporary directory: /tmp/pip-install-841rcwae
+Processing /tmp/test
+  Created temporary directory: /tmp/pip-req-build-9v5go3l3
+  Added file:///tmp/test to build tracker '/tmp/pip-req-tracker-yoxvk28o'
+    Running setup.py (path:/tmp/pip-req-build-9v5go3l3/setup.py) egg_info for package from file:///tmp/test
+    Created temporary directory: /tmp/pip-pip-egg-info-ktedvm95
+    Running command python setup.py egg_info
+    running egg_info
+    creating /tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info
+    writing /tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info/PKG-INFO
+    writing dependency_links to /tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info/dependency_links.txt
+    writing top-level names to /tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info/top_level.txt
+    writing manifest file '/tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info/SOURCES.txt'
+    reading manifest file '/tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info/SOURCES.txt'
+    writing manifest file '/tmp/pip-pip-egg-info-ktedvm95/package_name.egg-info/SOURCES.txt'
+  Source in /tmp/pip-req-build-9v5go3l3 has version 1.0.0, which satisfies requirement package-name==1.0.0 from file:///tmp/test
+  Removed package-name==1.0.0 from file:///tmp/test from build tracker '/tmp/pip-req-tracker-yoxvk28o'
+Created temporary directory: /tmp/pip-unpack-2ciz7m_r
+Building wheels for collected packages: package-name
+  Created temporary directory: /tmp/pip-wheel-je2yu2f3
+  Building wheel for package-name (setup.py) ...   Destination directory: /tmp/pip-wheel-je2yu2f3
+  Running command /tmp/venv/bin/python -u -c 'import sys, setuptools, tokenize; sys.argv[0] = '&quot;'&quot;'/tmp/pip-req-build-9v5go3l3/setup.py'&quot;'&quot;'; __file__='&quot;'&quot;'/tmp/pip-req-build-9v5go3l3/setup.py'&quot;'&quot;';f=getattr(tokenize, '&quot;'&quot;'open'&quot;'&quot;', open)(__file__);code=f.read().replace('&quot;'&quot;'\r\n'&quot;'&quot;', '&quot;'&quot;'\n'&quot;'&quot;');f.close();exec(compile(code, __file__, '&quot;'&quot;'exec'&quot;'&quot;'))' bdist_wheel -d /tmp/pip-wheel-je2yu2f3
+  running bdist_wheel
+  running build
+  installing to build/bdist.linux-x86_64/wheel
+  running install
+  Running custom command!
+  running install_egg_info
+  running egg_info
+  creating package_name.egg-info
+  writing package_name.egg-info/PKG-INFO
+  writing dependency_links to package_name.egg-info/dependency_links.txt
+  writing top-level names to package_name.egg-info/top_level.txt
+  writing manifest file 'package_name.egg-info/SOURCES.txt'
+  reading manifest file 'package_name.egg-info/SOURCES.txt'
+  writing manifest file 'package_name.egg-info/SOURCES.txt'
+  Copying package_name.egg-info to build/bdist.linux-x86_64/wheel/package_name-1.0.0-py3.9.egg-info
+  running install_scripts
+  creating build/bdist.linux-x86_64/wheel/package_name-1.0.0.dist-info/WHEEL
+  creating '/tmp/pip-wheel-je2yu2f3/package_name-1.0.0-py3-none-any.whl' and adding 'build/bdist.linux-x86_64/wheel' to it
+  adding 'package_name-1.0.0.dist-info/METADATA'
+  adding 'package_name-1.0.0.dist-info/WHEEL'
+  adding 'package_name-1.0.0.dist-info/top_level.txt'
+  adding 'package_name-1.0.0.dist-info/RECORD'
+  removing build/bdist.linux-x86_64/wheel
+done
+  Created wheel for package-name: filename=package_name-1.0.0-py3-none-any.whl size=1045 sha256=bacf8fa6a6c63156f3c42902cc48f51e87eb03c51b142b111b93a7e3348c13cc
+  Stored in directory: /tmp/pip-ephem-wheel-cache-fmba4u1y/wheels/88/36/8d/03b070db53bc124488b9daa3226de7abdcc759470790b534d1
+Successfully built package-name
+Installing collected packages: package-name
+  Attempting uninstall: package-name
+    Found existing installation: package-name 1.0.0
+    Uninstalling package-name-1.0.0:
+      Created temporary directory: /tmp/venv/lib/python3.9/site-packages/~ackage_name-1.0.0.dist-info
+      Removing file or directory /tmp/venv/lib/python3.9/site-packages/package_name-1.0.0.dist-info/
+      Successfully uninstalled package-name-1.0.0
+
+Successfully installed package-name-1.0.0
+WARNING: You are using pip version 20.3.3; however, version 21.1.2 is available.
+You should consider upgrading via the '/tmp/venv/bin/python -m pip install --upgrade pip' command.
+Removed build tracker: '/tmp/pip-req-tracker-yoxvk28o'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Note two things:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Our custom command is run (&lt;strong&gt;Running custom command!&lt;/strong&gt; is printed)&lt;/li&gt;
+  &lt;li&gt;Also, it prints out all of the setuptools steps that are run during the installation. In this case:
+    &lt;ol&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;egg_info&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bdist_wheel&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;install&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;install_egg_info&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;egg_info&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;install_scripts&lt;/code&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;sources-of-information&quot;&gt;Sources of information&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://setuptools.readthedocs.io/en/latest/userguide/package_discovery.html&quot;&gt;https://setuptools.readthedocs.io/en/latest/userguide/package_discovery.html&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.anomaly.net.au/blog/running-pre-and-post-install-jobs-for-your-python-packages/&quot;&gt;https://www.anomaly.net.au/blog/running-pre-and-post-install-jobs-for-your-python-packages/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author>
+          <name></name></author><category term="python" /><category term="setuptools" /><category term="pip" /><summary type="html">Let say you have a simple install script for a package:</summary>
+    </entry>
+    <entry><title type="html">Expect scripting language</title>
+      <link href="https://blog.cedernaes.com/posts/2021-06-using-expect/" rel="alternate" type="text/html" title="Expect scripting language" />
+      <published>2021-06-10T21:52:00+02:00</published>
+      <updated>2021-06-10T21:52:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/using-expect</id><content type="html" xml:base="https://blog.cedernaes.com/posts/2021-06-using-expect/">&lt;p&gt;The expect scripting language is an extension to &lt;em&gt;tcl&lt;/em&gt; that can automate applications that have user input prompts. If you haven’t already, then read &lt;a href=&quot;https://likegeeks.com/expect-command/&quot;&gt;likegeeks&lt;/a&gt; article about it, which is quite comprehensive for starters.&lt;/p&gt;
+
+&lt;h2 id=&quot;example-scenario&quot;&gt;Example scenario&lt;/h2&gt;
+&lt;p&gt;Let’s say we have an application that we know requires specific keyboard input, like filling in forms or pressing &lt;em&gt;Continue&lt;/em&gt; at prompts.&lt;/p&gt;
+
+&lt;p&gt;We can then write an expect script that waits for a printout by the application that matches specific &lt;em&gt;patterns&lt;/em&gt; and then react to them.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-program-to-automate&quot;&gt;Example program to automate&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;./greet.sh&quot;&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;greet.sh&lt;/code&gt;&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env bash&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;read&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;What is your name? &quot;&lt;/span&gt; name
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-en&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hello, &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$name&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;!&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;expect-script-to-automate-it&quot;&gt;&lt;em&gt;Expect&lt;/em&gt; script to automate it&lt;/h4&gt;
+&lt;p&gt;The following script can automate the input for the program:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;./tell_name.exp&quot;&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tell_name.exp&lt;/code&gt;&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&quot;language-tcl highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/expect -f&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Start the application to automate&lt;/span&gt;
+spawn ./greet.sh
+
+&lt;span class=&quot;c1&quot;&gt;# Wait for the application to print the prompt&lt;/span&gt;
+expect &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;^What is your name&lt;span class=&quot;se&quot;&gt;\?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    # If there is a match, respond to it
+    send -- &lt;span class=&quot;s2&quot;&gt;&quot;Erasmus&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\r&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And is run using the following command:&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;./tell_name.exp
+&lt;span class=&quot;go&quot;&gt;spawn ./greet.sh
+What is your name?
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;basic-commands&quot;&gt;Basic commands&lt;/h1&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;name&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;function&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;spawn &amp;lt;program&amp;gt; [[arg0] arg1 ...]&lt;/code&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Start a program in the background. The output of this process can be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;expect&lt;/code&gt;-ed in the script.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;expect pattern [command]&lt;/code&gt; &lt;br /&gt;   &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[pattern [command] ...]&lt;/code&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Wait for program output that matches &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pattern&lt;/code&gt;, and then execute the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;command&lt;/code&gt;s.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;set timeout &amp;lt;seconds&amp;gt;&lt;/code&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Number of seconds of timeout to use before issuing a timeout condition and continuing to the next command.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Regular tcl can be used as normal for passing arguments, using conditionals, printing etc.&lt;/p&gt;
+
+&lt;h1 id=&quot;tips&quot;&gt;Tips&lt;/h1&gt;
+
+&lt;h2 id=&quot;expect-eof&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;expect eof&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;Expect&lt;/em&gt; stops printing the output of the program when there are no more &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;expect&lt;/code&gt; commands left. This makes the printouts a bit non-intuitive. The solution is to just add&lt;/p&gt;
+
+&lt;div class=&quot;language-tcl highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;expect eof
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;after the last interaction with the program.&lt;/p&gt;
+
+&lt;h2 id=&quot;timeouts&quot;&gt;Timeouts&lt;/h2&gt;
+&lt;p&gt;The global variable &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;timeout&lt;/code&gt; can be used for setting a timeout for &lt;em&gt;expect&lt;/em&gt; commands.&lt;/p&gt;
+
+&lt;div class=&quot;language-tcl highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Timeout as 1 second&lt;/span&gt;
+set timeout 1
+
+&lt;span class=&quot;c1&quot;&gt;# No timeout&lt;/span&gt;
+set timeout -1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The following commands will time out if it is configured, and the script will continue.&lt;/p&gt;
+
+&lt;div class=&quot;language-tcl highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;expect &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;pattern&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;command&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# If pattern never matches within the timeout, this line will be executed next&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;expect-does-not-raise-an-error-upon-a-timeout&quot;&gt;&lt;em&gt;Expect&lt;/em&gt; does not raise an error upon a timeout&lt;/h3&gt;
+&lt;p&gt;However, one needs to check for a timeout by using the special timeout pattern:&lt;/p&gt;
+
+&lt;div class=&quot;language-tcl highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;expect &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;pattern&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    command
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; timeout &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    # There was no match against *pattern* within the timeout
+    puts &lt;span class=&quot;s2&quot;&gt;&quot;ERROR: No match&quot;&lt;/span&gt;
+    exit -1
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;updating-script-with-tips&quot;&gt;Updating script with tips&lt;/h1&gt;
+
+&lt;p&gt;Let’s make a version of the program that takes a bit more time before actually printing anything. So, I added a sleep of 2 seconds:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;./greet_slow.sh&quot;&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;greet_slow.sh&lt;/code&gt;&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env bash&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;sleep &lt;/span&gt;2
+&lt;span class=&quot;nb&quot;&gt;read&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;What is your name? &quot;&lt;/span&gt; name
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-en&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hello, &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$name&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;!&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;expect-script-to-automate-it-1&quot;&gt;&lt;em&gt;Expect&lt;/em&gt; script to automate it&lt;/h2&gt;
+&lt;p&gt;The expect script is updated with three things:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Setting the timeout from an input argument (so we can play with different timeouts)&lt;/li&gt;
+  &lt;li&gt;Checking if a timeout occured when waiting for the input prompt&lt;/li&gt;
+  &lt;li&gt;Printing the rest of the output of the program by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;expect&lt;/code&gt;-ing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eof&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&quot;./tell_name_complete.exp&quot;&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tell_name_complete.exp&lt;/code&gt;&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&quot;language-tcl highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/expect -f&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Take the timeout as input argument&lt;/span&gt;
+if &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; $argc &amp;gt; 0 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    set timeout &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;lindex $argv 0&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Start the application to automate&lt;/span&gt;
+spawn ./greet_slow.sh
+
+&lt;span class=&quot;c1&quot;&gt;# Wait for the application to print the prompt&lt;/span&gt;
+expect &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;^What is your name&lt;span class=&quot;se&quot;&gt;\?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    # If there is a match, respond to it
+    send -- &lt;span class=&quot;s2&quot;&gt;&quot;Erasmus&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\r&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; timeout &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    puts &lt;span class=&quot;s2&quot;&gt;&quot;Never found the input prompt during the &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$timeout&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; second timeout!&quot;&lt;/span&gt;
+    exit -1
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Make sure that the output from the program is printed&lt;/span&gt;
+expect eof
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;running-the-program&quot;&gt;Running the program&lt;/h2&gt;
+
+&lt;p&gt;If we run the program with a timeout that is too short (shorter than the actual time before the input prompt appears) then the script times out:&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;./tell_name_complete.exp 1
+&lt;span class=&quot;go&quot;&gt;spawn ./greet_slow.sh
+Never found the input prompt during the 1 second timeout!
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;However, if we run the program with a longer timeout, then we find the input prompt, &lt;em&gt;and&lt;/em&gt; print the rest of the program output after the last prompt.&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;./tell_name_complete.exp 3
+&lt;span class=&quot;go&quot;&gt;spawn ./greet_slow.sh
+What is your name? Erasmus
+Hello, Erasmus!
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author>
+          <name></name></author><category term="tcl" /><category term="expect" /><category term="tips" /><summary type="html">The expect scripting language is an extension to tcl that can automate applications that have user input prompts. If you haven’t already, then read likegeeks article about it, which is quite comprehensive for starters.</summary>
+    </entry>
+    <entry><title type="html">Streaming video from a Raspberry Pi camera</title>
+      <link href="https://blog.cedernaes.com/posts/2020-05-stream-video-from-rpi-camera/" rel="alternate" type="text/html" title="Streaming video from a Raspberry Pi camera" />
+      <published>2020-05-30T21:25:00+02:00</published>
+      <updated>2020-05-30T21:25:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/stream-video-from-rpi-camera</id><content type="html" xml:base="https://blog.cedernaes.com/posts/2020-05-stream-video-from-rpi-camera/">&lt;h1 id=&quot;python-web-server&quot;&gt;Python web server&lt;/h1&gt;
+&lt;p&gt;The bulk of the code is taken from &lt;a href=&quot;https://randomnerdtutorials.com/video-streaming-with-raspberry-pi-camera/&quot;&gt;random nerd tutorials: Video Streaming with Raspberry Pi Camera&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+&lt;p&gt;You need to install the Python package for accessing the Pi camera.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;picamera
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;the-script&quot;&gt;&lt;a href=&quot;surv.py&quot;&gt;The script&lt;/a&gt;&lt;/h2&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# surv.py 
+&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# Web streaming example
+# Source code from the official PiCamera package
+# http://picamera.readthedocs.io/en/latest/recipes2.html#web-streaming
+&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;io&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;picamera&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;logging&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;socketserver&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;threading&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Condition&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;http&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;server&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;argparse&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argparse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ArgumentParser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_argument&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;--size&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nargs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;640&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;480&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;help&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Size of captured images&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_argument&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;--frame-rate&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;-r&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;help&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Frame rate of camera capture&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_argument&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;--port&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;-p&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;help&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Port to serve website on&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_argument&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;--rotation&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;180&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;help&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Rotation of camera&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parse_args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;height&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;PAGE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;title&amp;gt;Raspberry Pi - Surveillance Camera&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;center&amp;gt;&amp;lt;h1&amp;gt;Raspberry Pi - Surveillance Camera&amp;lt;/h1&amp;gt;&amp;lt;/center&amp;gt;
+&amp;lt;center&amp;gt;&amp;lt;img src=&quot;stream.mjpg&quot; style=&quot;max-width: 1024px; width: 100%;&quot;&amp;gt;&amp;lt;/center&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&quot;&quot;&quot;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StreamingOutput&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;buffer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BytesIO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;condition&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Condition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;startswith&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\xff\xd8&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;# New frame, copy the existing buffer's content and notify all
+&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;# clients it's available
+&lt;/span&gt;            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;truncate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;condition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getvalue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+                &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;condition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;notify_all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;seek&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StreamingHandler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BaseHTTPRequestHandler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;do_GET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;301&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Location'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/index.html'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end_headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/index.html'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PAGE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'utf-8'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Content-Type'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'text/html'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Content-Length'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end_headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wfile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/stream.mjpg'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Age'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Cache-Control'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'no-cache, private'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Pragma'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'no-cache'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Content-Type'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'multipart/x-mixed-replace; boundary=FRAME'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end_headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;condition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;condition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wait&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt;
+                    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wfile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'--FRAME&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\r\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Content-Type'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'image/jpeg'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Content-Length'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+                    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end_headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+                    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wfile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wfile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\r\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;logging&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;warning&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+                    &lt;span class=&quot;s&quot;&gt;'Removed streaming client %s: %s'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;client_address&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;404&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end_headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StreamingServer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;socketserver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ThreadingMixIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTPServer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;allow_reuse_address&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;daemon_threads&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;picamera&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PiCamera&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resolution&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;height&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;framerate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame_rate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;camera&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;output&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StreamingOutput&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;camera&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rotation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rotation&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;camera&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_recording&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'mjpeg'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;address&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;''&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;server&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StreamingServer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;address&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StreamingHandler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;serve_forever&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;finally&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;camera&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stop_recording&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;running&quot;&gt;Running&lt;/h2&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;python surv.py &lt;span class=&quot;nt&quot;&gt;--help&lt;/span&gt;
+usage: surv.py &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;--size&lt;/span&gt; SIZE SIZE] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;--frame-rate&lt;/span&gt; FRAME_RATE] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;--port&lt;/span&gt; PORT]
+               &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;--rotation&lt;/span&gt; ROTATION]
+
+optional arguments:
+  &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--help&lt;/span&gt;            show this &lt;span class=&quot;nb&quot;&gt;help &lt;/span&gt;message and &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;--size&lt;/span&gt; SIZE SIZE      Size of captured images
+  &lt;span class=&quot;nt&quot;&gt;--frame-rate&lt;/span&gt; FRAME_RATE, &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; FRAME_RATE
+                        Frame rate of camera capture
+  &lt;span class=&quot;nt&quot;&gt;--port&lt;/span&gt; PORT, &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; PORT  Port to serve website on
+  &lt;span class=&quot;nt&quot;&gt;--rotation&lt;/span&gt; ROTATION   Rotation of camera
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;python surv.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Before changing video settings, make sure to &lt;a href=&quot;https://picamera.readthedocs.io/en/latest/fov.html#sensor-modes&quot;&gt;Picamera’s page on sensor modes&lt;/a&gt;. There are some connections between frame rate and resolution which would take time to figure out empirically. This was important for me, because I wanted the native aspect ratio and as high frame rate as possible.&lt;/p&gt;
+
+&lt;p&gt;Here is an excerpt for the V2 camera module with the settings I preferred:&lt;/p&gt;
+
+&lt;table class=&quot;table table-responsive&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;#&lt;/th&gt;
+      &lt;th&gt;Resolution&lt;/th&gt;
+      &lt;th&gt;Aspect Ratio&lt;/th&gt;
+      &lt;th&gt;Framerates&lt;/th&gt;
+      &lt;th&gt;Video&lt;/th&gt;
+      &lt;th&gt;Image&lt;/th&gt;
+      &lt;th&gt;FoV&lt;/th&gt;
+      &lt;th&gt;Binning&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;1640x1232&lt;/td&gt;
+      &lt;td&gt;4:3&lt;/td&gt;
+      &lt;td&gt;1/10 &amp;lt;= fps &amp;lt;= 40&lt;/td&gt;
+      &lt;td&gt;x&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Full&lt;/td&gt;
+      &lt;td&gt;2x2&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;And the corresponding invocation:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;python surv.py &lt;span class=&quot;nt&quot;&gt;--size&lt;/span&gt; 1640 1232 &lt;span class=&quot;nt&quot;&gt;--frame-rate&lt;/span&gt; 40 &lt;span class=&quot;nt&quot;&gt;--rotation&lt;/span&gt; 180 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 8000
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;result&quot;&gt;Result&lt;/h2&gt;
+&lt;p&gt;Using your favorite web browser, you can then go to the IP address (or hostname if you have the luxury of mDNS) of the server:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;surv_img.png&quot; alt=&quot;Surveillance web page accessed at http://emaus-pi3:8000 with Firefox&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I was quite astonished at the low latency of the stream! It is well under a second. Awesome! 🎉&lt;/p&gt;
+
+&lt;h3 id=&quot;monitoring-traffic&quot;&gt;Monitoring traffic&lt;/h3&gt;
+&lt;p&gt;I thought it would be possible to monitor the network traffic using the built-in developer tools in Firefox (accessed by pressing &lt;kbd&gt;F12&lt;/kbd&gt;). However, the network logger does not update its stats until after an “image” has been downloaded completely. So we will only be able to get the statistics when the stream has ended. This is what is looks like while it is streaming:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;network_traffic.png&quot; alt=&quot;Network logger tool in Firefox showing no activity for the stream&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;vlc-server&quot;&gt;VLC server&lt;/h1&gt;
+&lt;p&gt;VLC can be used from the command line to stream video with RTP (Real-Time Protocol) through RTMP (Real-Time Messaging Protocol). It’s quite neat. 😊&lt;/p&gt;
+
+&lt;p&gt;There are several example on how to use this. See for example &lt;a href=&quot;https://chriscarey.com/blog/2017/04/30/achieving-high-frame-rate-with-a-raspberry-pi-camera-system/&quot;&gt;Chis Carey’s blog&lt;/a&gt;, and &lt;a href=&quot;https://sammit.net/raspberry-pi-camera-streaming-to-vlc-player/&quot;&gt;Sammit&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;installation-1&quot;&gt;Installation&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;raspivid&lt;/code&gt; should already be installed, so you only need to install VLC.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;vlc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;running-1&quot;&gt;Running&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.raspberrypi.org/documentation/usage/camera/raspicam/raspivid.md&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;raspivid&lt;/code&gt;&lt;/a&gt; has a bunch of flags that can be used for tweaking its output. It can rotate the video, apply video filters, change stream settings etc. Use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;raspivid 2&amp;gt;&amp;amp;1 | less&lt;/code&gt; for viewing its help with a pager.&lt;/p&gt;
+
+&lt;h3 id=&quot;h264&quot;&gt;H.264&lt;/h3&gt;
+&lt;p&gt;To set up an H264 video stream, use the following command:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;raspivid &lt;span class=&quot;nt&quot;&gt;-rot&lt;/span&gt; 180 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; 0 &lt;span class=&quot;nt&quot;&gt;-fps&lt;/span&gt; 20 &lt;span class=&quot;nt&quot;&gt;-w&lt;/span&gt; 640 &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; 480 &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; - |
+    cvlc &lt;span class=&quot;nt&quot;&gt;-vvv&lt;/span&gt; stream:///dev/stdin &lt;span class=&quot;nt&quot;&gt;--sout&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'#rtp{access=udp,sdp=rtsp://:8554/stream}'&lt;/span&gt; :demux&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;h264
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;raspivid-flags&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;raspivid&lt;/code&gt; flags&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;The most important flag to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;raspivid&lt;/code&gt; is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-t 0&lt;/code&gt;, which makes the stream continue forever. Otherwise it would stop almost immediately.&lt;/li&gt;
+  &lt;li&gt;If you want to decrease the video bandwidth (possibly at the cost of latency), you can increase the GOP (Group Of Pictures) number. I.e. by adding the flag &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-g 100&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;You can directly decrease the maximum bandwidth (at the cost of quality) by using the flag &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-b&lt;/code&gt;. E.g. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-b 200000&lt;/code&gt; for setting it to 200 kb/s.&lt;/li&gt;
+  &lt;li&gt;The framerate can be set (within limits, of course) using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-fps&lt;/code&gt;-flag. Note however that this increases the bandwidth, and possibly also the latency.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I didn’t notice much change in latency when playing around with the settings. It was quite constant around 2-4 seconds depending on when the stream was started. Except for possibly when increasing the framerate.&lt;/p&gt;
+
+&lt;h3 id=&quot;m-jpeg&quot;&gt;M-JPEG&lt;/h3&gt;
+&lt;p&gt;VLC can also be used for setting up a Motion-JPEG stream using the following flags:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;raspivid &lt;span class=&quot;nt&quot;&gt;-cd&lt;/span&gt; MJPEG &lt;span class=&quot;nt&quot;&gt;-rot&lt;/span&gt; 180 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; 0 &lt;span class=&quot;nt&quot;&gt;-fps&lt;/span&gt; 20 &lt;span class=&quot;nt&quot;&gt;-w&lt;/span&gt; 640 &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; 480 &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; - |
+    cvlc &lt;span class=&quot;nt&quot;&gt;-vvv&lt;/span&gt; stream:///dev/stdin &lt;span class=&quot;nt&quot;&gt;--sout&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'#rtp{access=udp,sdp=rtsp://:8554/stream}'&lt;/span&gt; :demux&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;mjpeg
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;result-1&quot;&gt;Result&lt;/h2&gt;
+&lt;p&gt;Open the stream in VLC by going to &lt;em&gt;Media&lt;/em&gt; ➥ &lt;em&gt;Open Network Stream…&lt;/em&gt; (&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;N&lt;/kbd&gt;):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;setting_up_stream.png&quot; alt=&quot;Opening a stream in VLC&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;vlc_stream.png&quot; alt=&quot;Viewing the stream&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The latency of this stream is way higher than the &lt;a href=&quot;#python-web-server&quot;&gt;picamera stream&lt;/a&gt;. For me it is at least 2 seconds, and can go up to around 6 seconds.&lt;/p&gt;
+
+&lt;h3 id=&quot;monitoring-traffic-1&quot;&gt;Monitoring traffic&lt;/h3&gt;
+&lt;p&gt;You can monitor the actual bitrate of the stream in VLC by going to &lt;em&gt;Tools&lt;/em&gt; ➥ &lt;em&gt;Media information&lt;/em&gt; (&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;I&lt;/kbd&gt;), and then switching to the &lt;em&gt;Statistics&lt;/em&gt; tab. This can be useful while tweaking the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;raspivid&lt;/code&gt; settings:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;stream_statistics.png&quot; alt=&quot;Stream statistics in VLC&quot; /&gt;&lt;/p&gt;</content><author>
+          <name></name></author><category term="rpi" /><category term="vlc" /><category term="picamera" /><summary type="html">Python web server The bulk of the code is taken from random nerd tutorials: Video Streaming with Raspberry Pi Camera.</summary>
+    </entry>
+    <entry><title type="html">Setting locale and date on Raspberry Pi</title>
+      <link href="https://blog.cedernaes.com/posts/2020-05-setting-locale-and-date/" rel="alternate" type="text/html" title="Setting locale and date on Raspberry Pi" />
+      <published>2020-05-26T20:54:00+02:00</published>
+      <updated>2020-05-26T20:54:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/setting-locale-and-date</id><content type="html" xml:base="https://blog.cedernaes.com/posts/2020-05-setting-locale-and-date/">&lt;h1 id=&quot;setting-locale&quot;&gt;Setting locale:&lt;/h1&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;root@emaus-pi0:~#&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;localectl status
+&lt;span class=&quot;go&quot;&gt;   System Locale: LANG=C.UTF-8
+       VC Keymap: n/a
+      X11 Layout: gb
+       X11 Model: pc105
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;root@emaus-pi0:~#&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;localectl set-locale &lt;span class=&quot;nv&quot;&gt;LANG&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;en_US.UTF-8
+&lt;span class=&quot;gp&quot;&gt;root@emaus-pi0:~#&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;vim /etc/default/locale
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Change locale:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;LANG=en_US.UTF-8
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Update locale and set X11 layout:&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;root@emaus-pi0:~#&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;update-locale
+&lt;span class=&quot;gp&quot;&gt;root@emaus-pi0:~#&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;localectl status
+&lt;span class=&quot;go&quot;&gt;   System Locale: LANG=en_US.UTF-8
+       VC Keymap: n/a
+      X11 Layout: gb
+       X11 Model: pc105
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;root@emaus-pi0:~#&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;localectl set-x11-keymap us
+&lt;span class=&quot;gp&quot;&gt;root@emaus-pi0:~#&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;localectl
+&lt;span class=&quot;go&quot;&gt;   System Locale: LANG=en_US.UTF-8
+       VC Keymap: us
+      X11 Layout: us
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;setting-timezone&quot;&gt;Setting timezone:&lt;/h1&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;root@emaus-pi0:~#&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;timedatectl
+&lt;span class=&quot;go&quot;&gt;               Local time: Tue 2020-05-26 19:52:20 BST
+           Universal time: Tue 2020-05-26 18:52:20 UTC
+                 RTC time: n/a
+                Time zone: Europe/London (BST, +0100)
+System clock synchronized: yes
+              NTP service: active
+          RTC in local TZ: no
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;root@emaus-pi0:~#&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; /etc/localtime
+&lt;span class=&quot;gp&quot;&gt;lrwxrwxrwx 1 root root 33 Feb 13 15:58 /etc/localtime -&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;/usr/share/zoneinfo/Europe/London
+&lt;span class=&quot;gp&quot;&gt;root@emaus-pi0:~#&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;timedatectl list-timezones | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; stockholm
+&lt;span class=&quot;go&quot;&gt;Europe/Stockholm
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;root@emaus-pi0:~#&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;timedatectl set-timezone Europe/Stockholm
+&lt;span class=&quot;gp&quot;&gt;root@emaus-pi0:~#&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;Tue May 26 20:53:08 CEST 2020
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author>
+          <name></name></author><category term="rpi" /><category term="locale" /><category term="timezone" /><summary type="html">Setting locale: root@emaus-pi0:~# localectl status System Locale: LANG=C.UTF-8 VC Keymap: n/a X11 Layout: gb X11 Model: pc105 root@emaus-pi0:~# localectl set-locale LANG=en_US.UTF-8 root@emaus-pi0:~# vim /etc/default/locale</summary>
+    </entry>
+    <entry><title type="html">Testing IR thermometer for body temperature measurement</title>
+      <link href="https://blog.cedernaes.com/posts/2020-05-ir-thermometer/" rel="alternate" type="text/html" title="Testing IR thermometer for body temperature measurement" />
+      <published>2020-05-17T17:36:00+02:00</published>
+      <updated>2020-05-17T17:36:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/ir-thermometer</id><content type="html" xml:base="https://blog.cedernaes.com/posts/2020-05-ir-thermometer/">&lt;p&gt;My grandpa wanted a thermometer to be able to easily find out if he had got a fever during the suites of Covid-19. However, he could not get a hold of a thermometer made for measuring body temperature, so he settled with a regular IR thermometer from Clas Ohlson (&lt;a href=&quot;https://www.clasohlson.com/se/IR-termometer-mini/p/36-6891&quot;&gt;IR thermometer mini&lt;/a&gt;). It’s a quite neat little package with a button that, when pressed, takes a continuous measurement, and a small LCD display that shows the result.&lt;/p&gt;
+
+&lt;p&gt;The product would not start at first when he opened the package, so he sent it to me so that I could take a look at it. I found that the batteries were mounted backwards (!) and had been completely drained (probably of the same reason). But this was not a big problem since there was an extra set of batteries in the package. So I just switched them out. Et voilà!&lt;/p&gt;
+
+&lt;p&gt;After having “fixed” the thermometer, I decided to test it out to see how easy/accurate the measurement can be.&lt;/p&gt;
+
+&lt;h2 id=&quot;measurements&quot;&gt;Measurements&lt;/h2&gt;
+&lt;p&gt;I made several measurements of several parts of my body (mouth, forehead, inside of hand, under cheek, throad, inside of head and navel) in quick succession. These measurements were retaken 20 times under a period of about 15 minutes. Then I let the thermometer rest for 5 minutes. Finally I made one last measurement.&lt;/p&gt;
+
+&lt;h3 id=&quot;result&quot;&gt;Result&lt;/h3&gt;
+&lt;p&gt;The code snippet below contains the measurement data and creates a plot with it (&lt;a href=&quot;#result-figure&quot;&gt;the figure below&lt;/a&gt;).&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# measurements.py
+&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;labels&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mouth&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;forehead&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;hand&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;under cheek&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;throat&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;ear&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;navel&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;measurements&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;27.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;26.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;31.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;27.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;31.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;31.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;34.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;26.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;25.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;27.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;26.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;27.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;27.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;34.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;25.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;26.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;27.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;27.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;32.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;25.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;25.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;26.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;26.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;27.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;27.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;27.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;34.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;25.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;25.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;26.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;26.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;27.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;34.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;23.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;27.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;31.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;35.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;26.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;27.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;28.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;30.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;29.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;35.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]])&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;meas_count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;measurements&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;fig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;figure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;meas&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;zip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;measurements&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;meas&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'.-'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;legend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Body temperature measurement with IR surface thermometer&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Temperature [C]&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Measurement&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xticks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;meas_count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;meas_count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;meas_count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;X&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;result.png&quot; alt=&quot;Graph of measurements taken&quot; id=&quot;result-figure&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;observationslearnings&quot;&gt;Observations/learnings&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The observed temperature is far lower than my actual body temperature. I made a reference measurement with a stool thermometer that showed 36.9 degrees celsius.&lt;/li&gt;
+  &lt;li&gt;The measured temperature increases after a couple of minutes of use. The thermometer itself probably gets warm, which results in the drift of temperature in the readings.&lt;/li&gt;
+  &lt;li&gt;There are a couple of outliers (ear[1], mouth[2] and mouth[11]), probably due to faulty measurements. I should have performed several measurements and taken the maximum readout to filter out any bad measurements. Bad measurements were mostly due to me forgetting to let go of the &lt;em&gt;measure&lt;/em&gt; button when removing the thermometer.&lt;/li&gt;
+  &lt;li&gt;The last jump upwards was a bit surprising. I do not think it was due to the change in working temperature, but rather a drift in the sensor since I got similar readings 15 minutes later as well. Unfortunately, I did not have time to perform any more control measurements before returning the thermometer to my grandfather.&lt;/li&gt;
+&lt;/ul&gt;</content><author>
+          <name></name></author><category term="ir" /><category term="temperature" /><category term="matplotlib" /><category term="python" /><summary type="html">My grandpa wanted a thermometer to be able to easily find out if he had got a fever during the suites of Covid-19. However, he could not get a hold of a thermometer made for measuring body temperature, so he settled with a regular IR thermometer from Clas Ohlson (IR thermometer mini). It’s a quite neat little package with a button that, when pressed, takes a continuous measurement, and a small LCD display that shows the result.</summary>
+    </entry>
+    <entry><title type="html">Setting up Nginx for Jekyll</title>
+      <link href="https://blog.cedernaes.com/posts/2020-05-nginx-for-jekyll/" rel="alternate" type="text/html" title="Setting up Nginx for Jekyll" />
+      <published>2020-05-16T10:33:00+02:00</published>
+      <updated>2020-05-16T10:33:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/nginx-for-jekyll</id><content type="html" xml:base="https://blog.cedernaes.com/posts/2020-05-nginx-for-jekyll/">&lt;h1 id=&quot;installing&quot;&gt;Installing&lt;/h1&gt;
+&lt;p&gt;Is easy on Ubuntu:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;nginx
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;configuring&quot;&gt;Configuring&lt;/h1&gt;
+&lt;p&gt;Then add a configuration file for the site under &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/etc/nginx/conf.d/&lt;/code&gt;. I’ve use the following configuration for my blog:&lt;/p&gt;
+
+&lt;div class=&quot;language-nginx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# /etc/nginx/conf.d/blog.conf&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;server&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# Port to serve on&lt;/span&gt;
+  &lt;span class=&quot;kn&quot;&gt;listen&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+ 
+  &lt;span class=&quot;c1&quot;&gt;# Where the build output is located (that should be served)&lt;/span&gt;
+  &lt;span class=&quot;kn&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;/home/emaus/blog/.build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;# Custom 404 page&lt;/span&gt;
+  &lt;span class=&quot;kn&quot;&gt;error_page&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;404&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;/404.html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;# If you're using permalink configuration without .html extension, use&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# this to make sure that the links are served correctly&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# found on https://stackoverflow.com/a/38238001/4713758&lt;/span&gt;
+  &lt;span class=&quot;kn&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$request_uri&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;^/(.*)\.html$)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;kn&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;302&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# Try to find file with different endings, otherwise send to 404 page&lt;/span&gt;
+  &lt;span class=&quot;kn&quot;&gt;try_files&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$uri&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$uri&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;.html&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$uri&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;404&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;update-the-configuration&quot;&gt;Update the configuration&lt;/h2&gt;
+&lt;p&gt;Remember to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nginx -s reload&lt;/code&gt; after updating the configuration files!&lt;/p&gt;</content><author>
+          <name></name></author><category term="nginx" /><summary type="html">Installing Is easy on Ubuntu:</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://blog.cedernaes.com/assets/images/nginx_logo.svg" />
+        <media:content medium="image" url="https://blog.cedernaes.com/assets/images/nginx_logo.svg" xmlns:media="http://search.yahoo.com/mrss/" />
+    </entry>
+    <entry><title type="html">Jekyll plugin for escaping Atom feed content and altering links</title>
+      <link href="https://blog.cedernaes.com/posts/2020-05-first-jekyll-plugin/" rel="alternate" type="text/html" title="Jekyll plugin for escaping Atom feed content and altering links" />
+      <published>2020-05-04T20:01:00+02:00</published>
+      <updated>2020-05-04T20:01:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/first-jekyll-plugin</id><content type="html" xml:base="https://blog.cedernaes.com/posts/2020-05-first-jekyll-plugin/">&lt;p&gt;So I had some trouble getting correct links in my Atom feed. The links are written as relative in my posts, while feed apps expect them to be absolute.&lt;/p&gt;
+
+&lt;p&gt;I was looking for any plugins that would transform them easily to absolute links, but fell short. I therefore started looking at how hard it would be to develop my own Ruby plugin to Jekyll. Having no previous experience with Ruby, than typing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bundle install&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bundle exec jekyll serve&lt;/code&gt;, I felt that I had some reading to do.&lt;/p&gt;
+
+&lt;h2 id=&quot;ruby-example&quot;&gt;Ruby example&lt;/h2&gt;
+&lt;p&gt;The following script opens up the final Atom feed XML file, prepends each url with the values &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;base_url&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;page_url&lt;/code&gt;, and then HTML escapes the contents of the entries.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'nokogiri'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'cgi'&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Parse document&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Nokogiri&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;HTML&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'atom.xml'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;contents&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xpath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'//feed//entry//content'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Fix URLs for images and links&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xpath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'//img'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;img&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;img&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'src'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;base_url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page_url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;img&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'src'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xpath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'//a'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'href'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;base_url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page_url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'href'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Escape the content of each each entry&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;children&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CGI&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;escapeHTML&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;unexpected-solution&quot;&gt;Unexpected solution&lt;/h2&gt;
+
+&lt;p&gt;The actual problem with the feed seemed to be with the atom feed URL not being absolute, which was fixed by adding the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;absolute_url&lt;/code&gt; filter to the url:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{{ page.url | absolute_url }}&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;self&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;application/atom+xml&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;which then turns into&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://blog.cedernaes.com/atom.xml&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;self&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;application/atom+xml&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author>
+          <name></name></author><category term="jekyll" /><category term="ruby" /><category term="nokogiri" /><category term="xpath" /><summary type="html">So I had some trouble getting correct links in my Atom feed. The links are written as relative in my posts, while feed apps expect them to be absolute.</summary>
+    </entry>
+    <entry><title type="html">Setting up a proxy to a Linux server</title>
+      <link href="https://blog.cedernaes.com/posts/2020-05-proxy-from-windows-to-linux/" rel="alternate" type="text/html" title="Setting up a proxy to a Linux server" />
+      <published>2020-05-04T20:01:00+02:00</published>
+      <updated>2020-05-04T20:01:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/proxy-from-windows-to-linux</id><content type="html" xml:base="https://blog.cedernaes.com/posts/2020-05-proxy-from-windows-to-linux/">&lt;p&gt;It is really simple to set up a proxy through a Linux server that runs SSH. The simplest way is to use the SOCKS5 procol which utilizes an open SSH tunnel and forwards all traffic through it.&lt;/p&gt;
+
+&lt;p&gt;The instructions below are split into separate parts depending on your host OS:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;#windows-local-machine&quot;&gt;Local machine that runs Windows&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#linux-local-machine&quot;&gt;Local machine that runs Linux&lt;/a&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;windows-local-machine&quot;&gt;Windows local machine&lt;/h2&gt;
+
+&lt;h3 id=&quot;ssh-tunnel&quot;&gt;SSH tunnel&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;Install PuTTY&lt;/li&gt;
+  &lt;li&gt;Configure a PuTTY session
+    &lt;ol&gt;
+      &lt;li&gt;Add a new PuTTY session that points to the public IP/host name and port of your server that runs SSH. &lt;br /&gt;
+&lt;img src=&quot;proxy-putty-session.png&quot; alt=&quot;Adding a new PuTTY session&quot; /&gt;&lt;/li&gt;
+      &lt;li&gt;Set up the session to forward a port (e.g. 9001) to the server. Type in the local port that it should use, set it to dynamic (i.e. using the SSH tunnel’s IP), and press &lt;strong&gt;Add&lt;/strong&gt;. &lt;br /&gt;
+&lt;img src=&quot;proxy-putty-tunnels.png&quot; alt=&quot;Configuring the session tunnel&quot; /&gt;&lt;/li&gt;
+      &lt;li&gt;Make sure to save the session if you want to reuse it. Press &lt;strong&gt;Open&lt;/strong&gt; to connect and authenticate. &lt;br /&gt;
+&lt;img src=&quot;proxy-putty-connected.png&quot; alt=&quot;The session is now connected&quot; /&gt;&lt;/li&gt;
+      &lt;li&gt;The tunnel is now set up and will stay open for as long as the PuTTY session is alive.&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;global-proxy-setup&quot;&gt;Global proxy setup&lt;/h3&gt;
+&lt;p&gt;The proxy settings can be set globally through the &lt;em&gt;Internet Options&lt;/em&gt; control panel&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Open the start menu and type &lt;strong&gt;Internet Options&lt;/strong&gt; to find it. &lt;br /&gt;
+&lt;img src=&quot;proxy-internet-properties.png&quot; alt=&quot;Internet Options&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Go to &lt;strong&gt;Connections&lt;/strong&gt; ➡️ &lt;strong&gt;LAN settings&lt;/strong&gt;.&lt;/li&gt;
+  &lt;li&gt;Under &lt;strong&gt;Proxy server&lt;/strong&gt;, check the box ☒ &lt;strong&gt;Use a proxy server for your LAN&lt;/strong&gt;. &lt;br /&gt;
+&lt;img src=&quot;proxy-lan-settings.png&quot; alt=&quot;Enable proxy server&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Go to &lt;strong&gt;Advanced&lt;/strong&gt;.&lt;/li&gt;
+  &lt;li&gt;Uncheck the box ☐ &lt;strong&gt;Use the same proxy server for all protocols&lt;/strong&gt; and remove all pre-filled fields under the other protocols. Add &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;localhost:&amp;lt;port&amp;gt;&lt;/code&gt; (i.e. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;localhost:9001&lt;/code&gt; in our example) to the &lt;strong&gt;Socks&lt;/strong&gt; row. &lt;br /&gt;
+&lt;img src=&quot;proxy-advanced-settings.png&quot; alt=&quot;Proxy settings&quot; /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;linux-local-machine&quot;&gt;Linux local machine&lt;/h2&gt;
+
+&lt;h3 id=&quot;ssh-tunnel-1&quot;&gt;SSH tunnel&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;Run the following command on your local machine:
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ssh &lt;span class=&quot;nt&quot;&gt;-D&lt;/span&gt; 9001 &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-N&lt;/span&gt; &amp;lt;your_linux_server_that_runs_ssh&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;The tunnel is now set up and will stay open for as long as the SSH session is alive.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;global-proxy-setup-1&quot;&gt;Global proxy setup&lt;/h3&gt;
+&lt;p&gt;How to do this varies from OS to OS. &lt;a href=&quot;https://www.serverlab.ca/tutorials/linux/administration-linux/how-to-configure-proxy-on-ubuntu-18-04/&quot;&gt;Here is a guide that covers Ubuntu 18.04&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;A nice feature with that is the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NO_PROXY&lt;/code&gt; environment variable that can be used for ignoring patterns where the proxy should not be used, e.g. the company intranet.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;NO_PROXY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;localhost,127.0.0.1,&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.my.lan.domain
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;sources&quot;&gt;Sources&lt;/h2&gt;
+
+&lt;p&gt;[1] &lt;a href=&quot;https://itblogsec.com/how-to-make-socks-proxy-server-by-using-raspberry-pi/&quot;&gt;https://itblogsec.com/how-to-make-socks-proxy-server-by-using-raspberry-pi/&lt;/a&gt; &lt;br /&gt;
+[2] &lt;a href=&quot;https://www.reddit.com/r/raspberry_pi/comments/5ltq3h/rpi_as_a_socks_proxy_and_ssh_file_server_tutorial/&quot;&gt;https://www.reddit.com/r/raspberry_pi/comments/5ltq3h/rpi_as_a_socks_proxy_and_ssh_file_server_tutorial/&lt;/a&gt; &lt;br /&gt;
+[3] &lt;a href=&quot;https://www.reddit.com/r/techsupport/comments/4j0l35/windows_10_route_all_traffic_through_socks5_proxy/&quot;&gt;https://www.reddit.com/r/techsupport/comments/4j0l35/windows_10_route_all_traffic_through_socks5_proxy/&lt;/a&gt; &lt;br /&gt;&lt;/p&gt;</content><author>
+          <name></name></author><category term="ssh" /><category term="proxy" /><category term="PuTTY" /><summary type="html">It is really simple to set up a proxy through a Linux server that runs SSH. The simplest way is to use the SOCKS5 procol which utilizes an open SSH tunnel and forwards all traffic through it.</summary>
+    </entry>
+    <entry><title type="html">Setting up a Raspberry Pi 3B plus from scratch</title>
+      <link href="https://blog.cedernaes.com/posts/2020-04-setting-up-new-raspberry-pi3bplus/" rel="alternate" type="text/html" title="Setting up a Raspberry Pi 3B plus from scratch" />
+      <published>2020-04-06T00:00:00+02:00</published>
+      <updated>2020-04-06T00:00:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/setting-up-new-raspberry-pi3bplus</id><author>
+          <name></name></author><category term="rpi" /><category term="ssh" /><category term="fail2ban" /><summary type="html">Here I will show you basically all of the steps that are needed for installing a Raspberry Pi and setting up a new user on it. I will set it up to have a user called emaus and hostname as emaus-pi3, but you can modify that to whatever you want and follow along.</summary>
+    </entry>
+    <entry><title type="html">Backing up an SD card from a crashed Raspberry Pi</title>
+      <link href="https://blog.cedernaes.com/posts/2020-04-backing-up-sd-card-from-crashed-pi/" rel="alternate" type="text/html" title="Backing up an SD card from a crashed Raspberry Pi" />
+      <published>2020-04-05T00:00:00+02:00</published>
+      <updated>2020-04-05T00:00:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/backing-up-sd-card-from-crashed-pi</id><author>
+          <name></name></author><category term="backup" /><category term="virtualbox" /><category term="rpi" /><summary type="html">So, yay. The Raspberry Pi has had a kernel panic and won’t start again. So, I guess I’ll have to just recover the files and copy them to a new SD card.</summary>
+    </entry>
+    <entry><title type="html">Resizing a Virtual Box image</title>
+      <link href="https://blog.cedernaes.com/posts/2019-10-resize-virtualbox-image/" rel="alternate" type="text/html" title="Resizing a Virtual Box image" />
+      <published>2019-10-27T00:00:00+02:00</published>
+      <updated>2019-10-27T00:00:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/resize-virtualbox-image</id><author>
+          <name></name></author><category term="virtualbox" /><category term="parted" /><category term="ubuntu" /><summary type="html">I decided to upgrade my Ubuntu installation from 16 to 18 but realized I had quite limited memory left on the disk. So I had to inevitably increase the size of the disk :)</summary>
+    </entry>
+    <entry><title type="html">Controlling Google cast devices programmatically (Chromecast and Home)</title>
+      <link href="https://blog.cedernaes.com/posts/2019-10-programatically-controlling-cast-device/" rel="alternate" type="text/html" title="Controlling Google cast devices programmatically (Chromecast and Home)" />
+      <published>2019-10-02T00:00:00+02:00</published>
+      <updated>2019-10-02T00:00:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/programatically-controlling-cast-device</id><author>
+          <name></name></author><category term="google" /><category term="cast" /><category term="ha" /><summary type="html">pychromecast has the code for controlling the cast device. It becomes very simple with it, just install it from pip pip install pychromecast and then follow along:</summary>
+    </entry>
+    <entry><title type="html">Sphinx</title>
+      <link href="https://blog.cedernaes.com/posts/2019-08-sphinx/" rel="alternate" type="text/html" title="Sphinx" />
+      <published>2019-08-02T00:00:00+02:00</published>
+      <updated>2019-08-02T00:00:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/sphinx</id><author>
+          <name></name></author><category term="sphinx" /><category term="python" /><category term="blog" /><summary type="html">In this post I’m testing Sphinx!</summary>
+    </entry>
+    <entry><title type="html">Jekyll</title>
+      <link href="https://blog.cedernaes.com/posts/2019-07-jekyll/" rel="alternate" type="text/html" title="Jekyll" />
+      <published>2019-07-30T00:00:00+02:00</published>
+      <updated>2019-07-30T00:00:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/jekyll</id><author>
+          <name></name></author><category term="jekyll" /><category term="ruby" /><category term="blog" /><summary type="html">In this post I am going to test Jekyll! I will go through how to install it and some things I have learned on the way, such as how to use the Liquid preprocessor and how Jekyll structures its build output.</summary>
+    </entry>
+    <entry><title type="html">Frameworks for blogs</title>
+      <link href="https://blog.cedernaes.com/posts/2019-07-creating-your-own-blog/" rel="alternate" type="text/html" title="Frameworks for blogs" />
+      <published>2019-07-28T00:00:00+02:00</published>
+      <updated>2019-07-28T00:00:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/creating-your-own-blog</id><author>
+          <name></name></author><category term="blog" /><summary type="html">So you want to create your own blog/website, and need to decide what framework/tool to use for it? Me too, so here are the info I collected on some popular options: Hugo, Jekyll, Pandoc, Pelican, Sphinx, Squarespace, Wordpress</summary>
+    </entry>
+    <entry><title type="html">Cronjobs - timely done</title>
+      <link href="https://blog.cedernaes.com/posts/2019-07-cronjob-debugging/" rel="alternate" type="text/html" title="Cronjobs - timely done" />
+      <published>2019-07-22T00:00:00+02:00</published>
+      <updated>2019-07-22T00:00:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/cronjob-debugging</id><author>
+          <name></name></author><category term="cron" /><category term="bash" /><category term="linux" /><category term="debugging" /><summary type="html">If you want something done at a specific time (down to a minute’s resolution) with a repetition, then cron is the best.</summary>
+    </entry>
+    <entry><title type="html">Compiling OpenCV 4.1 on Raspberry Pi Jessie for Python 3.7.3</title>
+      <link href="https://blog.cedernaes.com/posts/2019-07-rpi3bplus-compiling-opencv4-1-0/" rel="alternate" type="text/html" title="Compiling OpenCV 4.1 on Raspberry Pi Jessie for Python 3.7.3" />
+      <published>2019-07-21T00:00:00+02:00</published>
+      <updated>2019-07-21T00:00:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/rpi3bplus-compiling-opencv4-1-0</id><author>
+          <name></name></author><category term="rpi" /><category term="python" /><category term="opencv" /><summary type="html">Download OpenCV and the contributed functionality (extra modules), and extract them (will be placed in opencv-4.1.0 and opencv_contrib-4.1.0: ```bash wget -O opencv.zip https://github.com/opencv/opencv/releases/download/4.1.0/opencv-4.1.0-docs.zip unzip opencv.zip</summary>
+    </entry>
+    <entry><title type="html">Controlling Raspberry Pi LEDs</title>
+      <link href="https://blog.cedernaes.com/posts/2019-07-rpi3bplus-controlling-leds/" rel="alternate" type="text/html" title="Controlling Raspberry Pi LEDs" />
+      <published>2019-07-18T00:00:00+02:00</published>
+      <updated>2019-07-18T00:00:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/rpi3bplus-controlling-leds</id><author>
+          <name></name></author><category term="rpi" /><category term="linux" /><summary type="html">Taken from Jeff Geerling: Controlling PWR and ACT LEDs on the Raspberry Pi. I have tested this on my Raspberry Pi B+.</summary>
+    </entry>
+    <entry><title type="html">Compiling Python 3.7.3 on Raspberry Pi Jessie</title>
+      <link href="https://blog.cedernaes.com/posts/2019-07-rpi3bplus-compiling-python-373/" rel="alternate" type="text/html" title="Compiling Python 3.7.3 on Raspberry Pi Jessie" />
+      <published>2019-07-18T00:00:00+02:00</published>
+      <updated>2019-07-18T00:00:00+02:00</updated>
+      <id>https://blog.cedernaes.com/posts/rpi3bplus-compiling-python-373</id><author>
+          <name></name></author><category term="rpi" /><category term="python" /><summary type="html">Building Python can be a breeze! This guide has helped me in the past. sudo apt install libffi-dev libbz2-dev liblzma-dev libsqlite3-dev libncurses5-dev libgdbm-dev zlib1g-dev libreadline-dev libssl-dev tk-dev build-essential libncursesw5-dev libc6-dev openssl git</summary>
+    </entry>
+    <entry><title type="html"></title>
+      <link href="" rel="alternate" type="text/html" title="" />
+      <published></published>
+      <updated></updated>
+      <id></id><author>
+          <name></name></author>
+    </entry>
+</feed>
+
