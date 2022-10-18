@@ -4,7 +4,7 @@ what: |
     ```bash
     ssh -J jump target
     ```
-why: SSH to a *target* host via a *jump* host
+why: SSH to a <em>target</em> host via a <em>jump</em> host
 date: 2022-10-16
 tags: [ssh]
 ---
@@ -79,7 +79,7 @@ Host target jump.target  # Note the added Host (jump.target)
 
 An arbitrary number of additional jumps can be configured by chaining the *jump* host to go via another exactly like for *target* host.
 
-# Reference
+# References
 From the man pages:
 
 ## [ssh(1): `-J`](https://man7.org/linux/man-pages/man1/ssh.1.html)
