@@ -15,7 +15,8 @@ GEM
     eventmachine (1.2.7)
     ffi (1.15.1)
     forwardable-extended (2.6.0)
-    git (1.8.1)
+    git (1.13.0)
+      addressable (~> 2.8)
       rchardet (~> 1.8)
     html-proofer (3.19.1)
       addressable (~> 2.3)
@@ -100,7 +101,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  git (~> 1.7)
+  git (~> 1.13)
   html-proofer (~> 3.15)
   jekyll
   jekyll-postfiles
