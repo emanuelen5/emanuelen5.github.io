@@ -11,6 +11,7 @@ ingredients:
   - ett dussin blad basilika
 tags: [tomat, pasta]
 categories: [huvudrätt, vegetarisk]
+date: 2022-01-05
 ---
 
 {% include card_list.html heading="Ingredienser" list=page.ingredients %}

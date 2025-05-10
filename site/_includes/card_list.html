@@ -1,0 +1,15 @@
+{%- if include.list -%}
+<div class="card mb-3">
+	<div class="card-body">
+        {% if include.heading -%}
+		<h5 class="card-title">{{ include.heading }}</h5>
+        {% endif -%}
+
+        <ul class="mb-0">
+        {% for ingredient in include.list %}
+            <li>{{ingredient}}</li>
+            {% endfor %}
+        </ul>
+	</div>
+</div>
+{%- endif %}
