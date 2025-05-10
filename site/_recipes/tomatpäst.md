@@ -13,6 +13,8 @@ tags: [tomat, pasta]
 categories: [huvudrätt, vegetarisk]
 ---
 
+{% include card_list.html heading="Ingredienser" list=page.ingredients %}
+
 Det finns många variationer på detta recept. T.ex. kan man byta ut pastan till bröd, göra hela rätten i ugn, eller använda crème fraîche istället för färskost.
 
 1. Koka pasta eller rosta bröd till. Om man kokar pasta så kan det vara bra att spara 1 dl pastavatten som man kan använda i såsen vid behov.
