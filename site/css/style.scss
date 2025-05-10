@@ -260,6 +260,10 @@ a {
 		border-left: 0.25em solid #504d4b;
 	}
 
+	kbd {
+		--bs-body-color: rgb(214, 187, 182) !important;
+	}
+
 	figure {
 		text-align: center;
 		margin: auto;
