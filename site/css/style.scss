@@ -290,4 +290,9 @@ a {
 	.table-bordered td {
 		color: rgb(198, 183, 159);
 	}
+
+	img.invert-dark {
+		// Make it reddish if it's black
+		filter: invert(0.5) sepia(0.5) saturate(2);
+	}
 }

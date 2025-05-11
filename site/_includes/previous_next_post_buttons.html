@@ -1,7 +1,7 @@
 <div class="w-50 previous-post post-navigation">
 	{%- unless page.next == nil -%}
 	<a href="{{page.next.url}}" rel="next" title="{{ page.next.title }}">
-		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		<img class="invert-dark" src="/assets/images/arrow-left.svg" alt="Left arrow">
 		newer
 	</a>
 	{%- endunless -%}
@@ -10,7 +10,7 @@
 	{%- unless page.previous == nil -%}
 	<a href="{{page.previous.url}}" rel="previous" title="{{ page.previous.title }}">
 		older
-		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+		<img class="invert-dark" src="/assets/images/arrow-right.svg" alt="Right arrow">
 	</a>
 	{%- endunless -%}
 </div>
