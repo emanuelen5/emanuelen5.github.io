@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Emaus: Backing up...</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand-sm bg-body-tertiary">
+    <div class="container-fluid">
+        <div class="navbar-brand">Emaus</div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            
+            <li class="nav-item">
+                <a class="nav-link " aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " aria-current="page" href="/posts/">Posts</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " aria-current="page" href="/tips/">Tips</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " aria-current="page" href="/recipes/">Recipes</a>
+            </li>
+            <!-- Dark mode switch -->
+            <div class="nav-link">
+                <div class="form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="darkSwitch">
+                    <label class="form-check-label" for="darkSwitch">Dark mode</label>
+                </div>
+                <script src="/assets/dark-mode/dark-mode-switch.js"></script>
+            </div>
+        </ul>
+        </div>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+                <h1 class="display-8">
+        
+	
+	Backing up an SD card from a crashed Raspberry Pi
+
+      </h1>
+
+
+<p class="lead">Published:    2020-04-05 <br/>
+Last updated: 2020-05-13 21:19</p>
+
+<div class="row g-0 justify-content-center justify-content-md-start"><div class="col-auto">
+			<div class="badge bg-dark tag mini-margin">backup</div>
+		</div><div class="col-auto">
+			<div class="badge bg-dark tag mini-margin">virtualbox</div>
+		</div><div class="col-auto">
+			<div class="badge bg-dark tag mini-margin">rpi</div>
+		</div><div class="col-auto">
+			<div class="badge bg-info category mini-margin">miniguide</div>
+		</div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2020-04-setting-up-new-raspberry-pi3bplus/" rel="next" title="Setting up a Raspberry Pi 3B plus from scratch">
+		<img class="invert-dark" src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-10-resize-virtualbox-image/" rel="previous" title="Resizing a Virtual Box image">
+		older
+		<img class="invert-dark" src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>So, yay. The Raspberry Pi has had a kernel panic and won’t start again. So, I guess I’ll have to just recover the files and copy them to a new SD card.</p>
+
+<p>The first problem is that I’m running Windows on my regular computer and therefore cannot read the root file system partition of the SD card without any tools. And this wasn’t as easy as I’d imagined…</p><h2 id="reading-the-ext4-file-system-on-windows">
+        <a href="#reading-the-ext4-file-system-on-windows" class="anchor me-2"><span>>></span></a>Reading the ext4 file system on Windows
+      </h2>
+<p>I used Virtualbox together with an USB SD card reader. The hard thing was to manage to get my Ubuntu virtual machine to get access to the USB stick. Turns out that the reader would only mount if I had the Virtualbox Extension package installed. <strong>But</strong>, note that it has to be the exact same version as the version of Virtualbox that is installed. Otherwise Virtualbox will report errors after it has been installed that it cannot load the main .dll-file in the extension package. And, if you got on and try to fire up the virtual machine and pass over the USB drive to it, then it will fire an error:</p>
+
+<blockquote>
+  <p>Virtualbox failed to attach usb device […] to the virtual machine (with error name: <code class="language-plaintext highlighter-rouge">VERR_PDM_NO_USB_PORTS</code>)</p>
+</blockquote>
+
+<p>After that was fixed, I could really just do the regular mount procedure and lift off my files! Oh happy days :)</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nv">$mountpoint</span>
+mount /dev/sda2 <span class="nv">$mountpoint</span>
+<span class="nb">cd</span> <span class="nv">$mountpoint</span>
+scp ... emaus@otherpi.local:/home/emaus/location
+</code></pre></div></div>
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+            </div>
+    </body>
+
+    <!-- Make sure that footer is at bottom of page -->
+    <div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2020-04-setting-up-new-raspberry-pi3bplus/" rel="next" title="Setting up a Raspberry Pi 3B plus from scratch">
+		<img class="invert-dark" src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2019-10-resize-virtualbox-image/" rel="previous" title="Resizing a Virtual Box image">
+		older
+		<img class="invert-dark" src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <footer>
+        <div class="container-fluid navbar-expand-sm bg-body-tertiary py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center align-self-center">&copy; 2025 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2020-04-05-backing-up-sd-card-from-crashed-pi.md">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Source code icon" class="filter-color-inactive-link" style="filter: invert() grayscale(100%) brightness(70%)" src="/assets/images/code.svg"/>
+                        <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ms-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" src="/assets/images/github_icon.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Github icon" class="filter-color-inactive-link" style="filter: contrast(50%) brightness(50%)" src="/assets/images/github_icon.svg"/>
+                        <img alt="Github icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%) contrast(100%) hue-rotate(268deg)" src="/assets/images/github_icon.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ms-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:blogsite@emaus.dev">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Email icon" class="filter-color-inactive-link" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" style="filter: grayscale(100%) invert(100%)" src="/assets/images/email.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Email icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/email.svg"/>
+                        <img alt="Email icon" class="filter-color-active-link" src="/assets/images/email.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ms-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(50%) brightness(50%)" src="/assets/images/linkedin_logo.svg"/>
+                        <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ms-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <div class="show-when-light">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                    </div>
+                    <div class="show-when-dark">
+                        <img alt="Atom feed icon" class="filter-color-inactive-link" style="filter: invert() contrast(50%) brightness(50%)" src="/assets/images/atom_inactive.svg"/>
+                        <img alt="Atom feed icon" class="filter-color-active-link" style="filter: contrast(43%) brightness(152%) saturate(274%) hue-rotate(307deg)" src="/assets/images/atom.svg"/>
+                    </div>
+                </div><span class="align-middle d-none d-md-inline-block ms-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+        <script src="/assets/js/shell.js" async></script>
+    </footer>
+</html>

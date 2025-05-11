@@ -1,0 +1,10 @@
+#!/usr/bin/expect -f
+
+# Start the application to automate
+spawn ./greet.sh
+
+# Wait for the application to print the prompt
+expect {^What is your name\?} {
+    # If there is a match, respond to it
+    send -- "Erasmus\r"
+}
